@@ -10,4 +10,5 @@
             <%= link_to "Yes", { :controller => "admin_field",:action=>"delete_asset_type", :asset_type_id=>asset_type.id }, :id => 'asset_type' , :class => "btn btn-danger"  %>
             <a data-toggle="modal" href="#myModal<%= asset_type.id %>" class="btn secondary">No</a>
           </div>
-        </div>
+</div>
+<a class="btn" data-toggle="modal" href="#myModal<%= asset_type.id %>" >Delete</a>

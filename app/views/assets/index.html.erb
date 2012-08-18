@@ -1,0 +1,29 @@
+<%= render :template => 'shared/navbar' %>
+
+<%= render :template => 'assets/create_asset' %>
+
+<div align="right">
+  <a class="btn btn-primary" data-toggle="modal" href="#myCreateAssetModal">Create Asset</a>
+</div>
+<table class="table table-striped">
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Actions</th>
+  </tr>
+  <% @assets.each do |asset| %>
+      <tr>
+        <td>
+          <%= asset.name %>
+        </td>
+
+        <td>
+          <%= asset.description %>
+        </td>
+        <td>
+
+        </td>
+      </tr>
+  <% end %>
+</table>
+

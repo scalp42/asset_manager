@@ -1,0 +1,14 @@
+<div class="modal hide fade in" id="myConfigureScreenModal<%= asset_type.id %>" style="display: none;">
+  <div class="modal-header">
+    <button class="close" data-toggle="modal" href="#myConfigureScreenModal<%= asset_type.id %>">×</button>
+    <h3>Configure Screen</h3>
+  </div>
+  <div class="modal-body">
+
+  </div>
+  <div class="modal-footer">
+    <%= link_to "Update", { :controller => "admin_field",:action=>"configure_asset_type_screen", :asset_type_id=>asset_type.id }, :id => 'asset_type' , :class => "btn"  %>
+    <a data-toggle="modal" href="#myConfigureScreenModal<%= asset_type.id %>" class="btn secondary">No</a>
+  </div>
+</div>
+<a class="btn" data-toggle="modal" href="#myConfigureScreenModal<%= asset_type.id %>" >Configure Asset Screen</a>
