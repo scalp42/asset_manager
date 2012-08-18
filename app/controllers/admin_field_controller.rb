@@ -1,0 +1,2 @@
+class AdminFieldController < ApplicationController
+end

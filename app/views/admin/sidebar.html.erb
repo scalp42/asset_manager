@@ -1,0 +1,23 @@
+<div class="member-box round-all">
+  <a><img src="images/member_ph.png" class="member-box-avatar"></a>
+              <span>
+                  <strong>Administrator</strong><br>
+                  <a>John Doe</a><br>
+                  <span class="member-box-links"><a>Settings</a> | <a>Logout</a></span>
+              </span>
+</div>
+</br>
+<div class="sidebar-nav">
+  <div class="well" style="padding: 8px 0;">
+    <ul class="nav nav-list">
+      <li class="nav-header">Main</li>
+      <li><%= link_to 'Users',:action => ''  %></li>
+      <li><%= link_to 'Groups', admin_groups_path %></li>
+      <li><%= link_to 'Memberships', admin_memberships_path %></li>
+      <li class="nav-header">Settings</li>
+      <li><a class="cookie-delete" href="#"><i class="icon-wrench"></i>Delete Cookies</a></li>
+      <li><a class="cookie-delete" href="#"><i class="icon-align-left"></i>System Info</a></li>
+    </ul>
+  </div>
+</div>
+
