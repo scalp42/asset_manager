@@ -11,7 +11,34 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120818201033) do
+ActiveRecord::Schema.define(:version => 20120818230405) do
+
+  create_table "asset_screens", :force => true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.integer  "asset_id"
+    t.integer  "field_id"
+    t.integer  "position"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "asset_types", :force => true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.integer  "parent"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "assets", :force => true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.integer  "parent_id"
+    t.integer  "field_value_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
 
   create_table "field_option", :force => true do |t|
     t.integer  "field_id"

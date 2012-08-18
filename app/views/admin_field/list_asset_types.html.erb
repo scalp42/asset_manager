@@ -1,0 +1,30 @@
+<%= render :template => 'shared/navbar' %>
+
+<%= render :template => 'admin_field/create_asset_type' %>
+
+<div align="right">
+  <a class="btn btn-primary" data-toggle="modal" href="#myCreateAssetTypeModal">Create Asset Type</a>
+</div>
+<table class="table table-striped">
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Actions</th>
+  </tr>
+  <% @asset_types.each do |asset_type| %>
+      <tr>
+        <td>
+          <%= asset_type.name %>
+        </td>
+
+        <td>
+          <%= asset_type.description %>
+        </td>
+        <td>
+            <%= render :template => 'shared/delete_asset_type' ,:locals => { :asset_type => asset_type }%>
+            <a class="btn" data-toggle="modal" href="#myModal<%= asset_type.id %>" >Delete</a>
+        </td>
+      </tr>
+  <% end %>
+</table>
+

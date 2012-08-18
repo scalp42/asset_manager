@@ -26,36 +26,11 @@
           <%= FieldType.find(field.field_type_id).type_name %>
         </td>
         <td>
-          <div class="modal hide fade in" id="myModal<%= field.id %>" style="display: none;">
-                    <div class="modal-header">
-                      <button class="close" data-toggle="modal" href="#myModal<%= field.id %>">×</button>
-                      <h3>Delete Record</h3>
-                    </div>
-                    <div class="modal-body">
-                      <p>Are you sure?</p>
-                    </div>
-                    <div class="modal-footer">
-                      <%= link_to "Yes", { :controller => "admin_field",:action=>"delete", :field_id=>field.id }, :id => 'field' , :class => "btn btn-danger"  %>
-                      <a data-toggle="modal" href="#myModal<%= field.id %>" class="btn secondary">No</a>
-                    </div>
-                  </div>
-
-          <div class="modal hide fade in" id="myConfigureModal<%= field.id %>" style="display: none;">
-                    <div class="modal-header">
-                      <button class="close" data-toggle="modal" href="#myConfigureModal<%= field.id %>">×</button>
-                      <h3>Configure Field</h3>
-                    </div>
-                    <div class="modal-body">
-                      <%= render :template => 'shared/'+FieldType.find(field.field_type_id).type_name.to_s.downcase.gsub(' ','_')+'_configure' %>
-                    </div>
-                    <div class="modal-footer">
-                      <%= link_to "Update", { :controller => "admin_field",:action=>"update_options", :field_id=>field.id }, :id => 'field' , :class => "btn"  %>
-                      <a data-toggle="modal" href="#myConfigureModal<%= field.id %>" class="btn secondary">No</a>
-                    </div>
-                  </div>
-                  <a class="btn" data-toggle="modal" href="#myConfigureModal<%= field.id %>" >Configure</a>
-                  <a class="btn" data-toggle="modal" href="#myEditModal<%= field.id %>" >Edit</a>
-                  <a class="btn" data-toggle="modal" href="#myModal<%= field.id %>" >Delete</a>
+          <%= render :template => 'shared/delete_field' ,:locals => { :field => field }%>
+          <%= render :template => 'shared/configure_field' ,:locals => { :field => field }%>
+          <a class="btn" data-toggle="modal" href="#myConfigureModal<%= field.id %>" >Configure</a>
+          <a class="btn" data-toggle="modal" href="#myEditModal<%= field.id %>" >Edit</a>
+          <a class="btn" data-toggle="modal" href="#myModal<%= field.id %>" >Delete</a>
         </td>
       </tr>
   <% end %>
