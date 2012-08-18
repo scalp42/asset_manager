@@ -1,3 +1,4 @@
 class Field < ActiveRecord::Base
-  attr_accessible :description, :name, :type
+  has_one :field_type
+  attr_accessible :description, :name, :field_type_id
 end

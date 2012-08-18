@@ -1,6 +1,6 @@
 class CreateFieldValues < ActiveRecord::Migration
   def change
-    create_table :field_values do |t|
+    create_table :field_value do |t|
       t.integer :field_id
       t.integer :field_option_id
       t.string  :text_value

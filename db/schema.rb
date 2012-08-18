@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120818200531) do
+ActiveRecord::Schema.define(:version => 20120818201033) do
 
   create_table "field_option", :force => true do |t|
     t.integer  "field_id"
@@ -21,7 +21,13 @@ ActiveRecord::Schema.define(:version => 20120818200531) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "field_values", :force => true do |t|
+  create_table "field_types", :force => true do |t|
+    t.string   "type_name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "field_value", :force => true do |t|
     t.integer  "field_id"
     t.integer  "field_option_id"
     t.string   "text_value"
@@ -33,9 +39,9 @@ ActiveRecord::Schema.define(:version => 20120818200531) do
   create_table "fields", :force => true do |t|
     t.string   "name"
     t.string   "description"
-    t.integer  "type"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer  "field_type_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
 end

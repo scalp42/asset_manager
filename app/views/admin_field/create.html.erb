@@ -1,0 +1,28 @@
+<div class="modal hide fade in" id="myCreateFieldModal" style="display: none;">
+  <div class="modal-header">
+    <button class="close" data-toggle="modal" href="#myCreateFieldModal">×</button>
+    <h3>Create Field</h3>
+  </div>
+  <div class="modal-body" align="center">
+
+    <form method="post" class="well" action="create">
+        <table>
+          <tr>
+            <td><%=  text_field("name","field_type_name") %> </td>
+          </tr>
+          <tr>
+            <td>  <%= text_field("description","field_type_description") %> </td>
+          </tr>
+          <tr>
+            <td> <%=  select("field_type", "field_type_id", FieldType.all.collect {|p| [ p.type_name, p.id ] }, {:prompt => 'Select Field Type'}) %> </td>
+          </tr>
+        </table>
+        <div class="modal-footer">
+
+          <%= submit_tag "Create" ,:class => 'btn btn-primary'%>
+          <a data-toggle="modal" href="#myCreateFieldModal" class="btn secondary">No</a>
+        </div>
+    </form>
+  </div>
+
+</div>
