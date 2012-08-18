@@ -8,6 +8,15 @@
 </head>
 <body>
 <%= yield :head %>
-<%= yield %>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span2 container">
+        <%= render :template => 'admin/sidebar' %>
+    </div>
+    <div class="span10 container">
+      <%= yield %>
+    </div>
+  </div>
+</div>
 </body>
 </html>
