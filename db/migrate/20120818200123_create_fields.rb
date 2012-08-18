@@ -3,7 +3,7 @@ class CreateFields < ActiveRecord::Migration
     create_table :fields do |t|
       t.string :name
       t.string :description
-      t.int :type
+      t.integer :type
 
       t.timestamps
     end
