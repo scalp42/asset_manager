@@ -49,10 +49,19 @@ class AdminFieldController < ApplicationController
   end
 
   def configure_field
-    @field = Field.find(params['id'])
+    if(params['value'].present?)
+      @field = Field.find(params['field_id']['field_id'])
+      fieldOption = FieldOption.new(:option => params['value']['select_field_value'],:field_id => @field.id)
+      fieldOption.save
+    else
+     @field = Field.find(params['id'])
+    end
   end
 
-  def create_select_field_option
-    redirect_to :back
+  def delete_option
+    if FieldOption.destroy(params['option_id'])
+      redirect_to :back
+    end
   end
+
 end

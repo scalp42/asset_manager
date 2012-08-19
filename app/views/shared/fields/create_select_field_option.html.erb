@@ -5,10 +5,12 @@
   </div>
   <div class="modal-body" align="center">
 
-    <form method="post" class="well" action="create_select_field_option">
+    <form method="post" class="well" action="configure_field" >
         <table>
           <tr>
-            <td><%=  text_field("value","asset_type_name") %> </td>
+            <td><%=  text_field("value","select_field_value") %> </td>
+
+            <%= hidden_field('field_id', 'field_id',:value=>field.id) %>
           </tr>
         </table>
         <div class="modal-footer">
