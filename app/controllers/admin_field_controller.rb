@@ -21,12 +21,27 @@ class AdminFieldController < ApplicationController
   end
 
   def list_asset_screen_fields
-     @assetScreens = AssetScreen.find_all_by_asset_id(params[:id])
-     @asset = AssetType.find(params[:id])
+    @assetScreens = AssetScreen.find_all_by_asset_id(params[:id])
+    @asset = AssetType.find(params[:id])
+
+    fields = Array.new
+    @assetScreens.each do |assetScreen|
+        fields.push(Field.find(assetScreen.field_id).name)
+    end
+
+    puts fields.inspect
+    @fieldToBeAdded = Array.new
+    Field.all.each do |field|
+      if(!fields.include?(field.name))
+        @fieldToBeAdded.push(field)
+      end
+    end
+
   end
 
   def update_asset_type_screen
-    newAssetScreen = AssetScreen.new(:field_id => params[:field_type][:field_type_id] ,:asset_id => params[:asset_type_id])
+    puts params.inspect
+    newAssetScreen = AssetScreen.new(:field_id => params[:field][:field_id] ,:asset_id => params[:asset_type][:asset_type_id])
 
     if newAssetScreen.save
       redirect_to :back
@@ -43,13 +58,13 @@ class AdminFieldController < ApplicationController
 
   def delete
     if Field.destroy(params['field_id'])
-         redirect_to :back
-       end
+      redirect_to :back
+    end
   end
 
   def delete_asset_type
     if AssetType.delete(params['asset_type_id'])
-        redirect_to :back
+      redirect_to :back
     end
   end
 
@@ -59,7 +74,7 @@ class AdminFieldController < ApplicationController
       fieldOption = FieldOption.new(:option => params['value']['select_field_value'],:field_id => @field.id)
       fieldOption.save
     else
-     @field = Field.find(params['id'])
+      @field = Field.find(params['id'])
     end
   end
 
@@ -71,8 +86,8 @@ class AdminFieldController < ApplicationController
 
   def delete_asset_screen
     if AssetScreen.destroy(params['asset_screen_id'])
-         redirect_to :back
-       end
+      redirect_to :back
+    end
   end
 
 end

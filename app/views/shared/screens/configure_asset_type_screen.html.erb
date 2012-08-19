@@ -1,16 +1,16 @@
-<div class="modal hide fade in" id="#myCreateAssetFieldScreenModal" style="display: none;">
+<div class="modal hide fade in" id="myCreateAssetFieldScreenModal" style="display: none;">
   <div class="modal-header">
     <button class="close" data-toggle="modal" href="#myCreateAssetFieldScreenModal">×</button>
     <h3>Add Field To Screen</h3>
   </div>
   <div class="modal-body" align="center">
 
-    <form method="post" class="well" action="configure_screen" >
+    <form method="post" class="well" action="/admin_field/update_asset_type_screen" >
         <table>
           <tr>
-            <td><%=  text_field("value","select_field_value") %> </td>
+          <td> <%=  select("field", "field_id", fieldsToBeAdded.collect {|p| [ p.name, p.id ] }, {:prompt => 'Select Field'}) %> </td>
 
-
+            <%= hidden_field('asset_type', 'asset_type_id',:value=>asset.id) %>
           </tr>
         </table>
         <div class="modal-footer">

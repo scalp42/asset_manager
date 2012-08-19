@@ -1,6 +1,6 @@
 <%= render :template => 'shared/navbar' %>
-<h2>Asset Screen</h2>
-<%= render :template => 'admin_field/configure_asset_type_screen' , :locals => { :asset => @asset} %>
+<h2>Asset Screen for <%= @asset.name %></h2>
+<%= render :template => 'shared/screens/configure_asset_type_screen' , :locals => { :asset => @asset,:fieldsToBeAdded => @fieldToBeAdded} %>
 <div align="right">
   <a class="btn btn-primary" data-toggle="modal" href="#myCreateAssetFieldScreenModal">Add Field To Screen</a>
 </div>
