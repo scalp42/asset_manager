@@ -1,0 +1,9 @@
+<td><%= field_name %></td>
+<td> <%= text_field(field_name,field_name)     %>
+
+</td>
+<script type="text/javascript">
+    $('#<%= field_name -%>_<%= field_name -%>').datepicker({
+        format: 'yyyy-mm-dd'
+    });
+</script>

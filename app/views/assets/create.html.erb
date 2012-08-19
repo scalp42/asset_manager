@@ -11,7 +11,7 @@
          </tr>
            <%  AssetScreen.find_all_by_asset_id(@asset_type.id).each do |assetScreenField| %>
              <tr>
-                <%= render :template => 'shared/fields/'+FieldType.find(Field.find(assetScreenField.field_id).field_type_id).type_name.downcase.gsub(' ','_')+'_display' ,
+                <%= render :template => 'shared/fields/create/'+FieldType.find(Field.find(assetScreenField.field_id).field_type_id).type_name.downcase.gsub(' ','_')+'_create' ,
                                :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id} %>
              </tr>
            <% end%>

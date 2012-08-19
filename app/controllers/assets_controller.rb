@@ -9,7 +9,7 @@ class AssetsController < ApplicationController
   end
 
   def save
-    asset = Asset.new(:name =>params[:name][:name],:description => params[:description][:description])
+    asset = Asset.new(:name =>params[:name][:name],:description => params[:description][:description],:asset_type_id => params[:asset_type][:asset_type_id])
     asset.save
 
     AssetScreen.find_all_by_asset_id(params[:asset_type][:asset_type_id]).each do |field|
@@ -37,5 +37,13 @@ class AssetsController < ApplicationController
     Asset.destroy(params[:asset_id])
 
     redirect_to :back
+  end
+
+  def edit
+    @asset = Asset.find(params[:id])
+  end
+
+  def update
+
   end
 end

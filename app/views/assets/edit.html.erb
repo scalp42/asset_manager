@@ -1,0 +1,26 @@
+<%= render :template => 'shared/navbar' %>
+
+<h2 style="text-align: center;">Edit <%= @asset.name %> Asset</h2>
+<form method="post" class="well" action="/assets/update">
+       <table class="table table-striped" width="100%">
+         <tr><td>Name</td>
+         <td><%=  text_field('name','name' ,{:value => @asset.name}) %></td>
+           </tr>
+         <tr>
+         <td>Description</td>
+         <td><%=  text_area('description','description',{:rows => 15,:cols => 40,:value => @asset.name}) %></td>
+         </tr>
+         <%  AssetScreen.find_all_by_asset_id(@asset.asset_type_id).each do |assetScreenField| %>
+            <tr>
+               <%= render :template => 'shared/fields/edit/'+FieldType.find(Field.find(assetScreenField.field_id).field_type_id).type_name.downcase.gsub(' ','_')+'_edit' ,
+                              :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id,
+                                           :value => FieldValue.find(:first, :conditions => ["asset_id = ? and field_id = ?", @asset.id, assetScreenField.field_id])} %>
+            </tr>
+          <% end%>
+       </table>
+       <div class="modal-footer" style="text-align: center;">
+
+         <%= submit_tag "Update" ,:class => 'btn btn-primary'%>
+         <a data-toggle="modal" href="#myCreateAssetModal" class="btn secondary">No</a>
+       </div>
+   </form>

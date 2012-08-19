@@ -5,6 +5,7 @@ namespace :bootstrap do
         FieldType.create(:type_name => 'Multi Line Text Field')
         FieldType.create(:type_name => 'Select Field')
         FieldType.create(:type_name => 'Multi Select Field')
+        FieldType.create(:type_name => 'Date Field')
       end
 
       desc "Run all bootstrapping tasks"

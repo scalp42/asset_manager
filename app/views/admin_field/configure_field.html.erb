@@ -1,4 +1,4 @@
 <%= render :template => 'shared/navbar' %>
 
-<%= render :template => 'shared/'+FieldType.find(@field.field_type_id).type_name.to_s.downcase.gsub(' ','_')+'_configure',
+<%= render :template => 'shared/fields/configure/'+FieldType.find(@field.field_type_id).type_name.to_s.downcase.gsub(' ','_')+'_configure',
            :locals => { :field => @field } %>

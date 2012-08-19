@@ -31,6 +31,7 @@
           <%= asset.description %>
         </td>
         <td>
+          <%= link_to 'Edit',:controller => 'assets', :action => 'edit' ,:id => asset.id  %>
           <%= render :template => 'assets/delete', :locals => {:asset => asset} %>
         </td>
       </tr>

@@ -6,6 +6,8 @@ class CreateFieldValues < ActiveRecord::Migration
       t.string  :text_value
       t.float   :numeric_value
       t.integer :asset_id
+      t.date    :date
+      t.datetime :datetime
       t.timestamps
     end
   end
