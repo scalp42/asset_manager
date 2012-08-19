@@ -27,10 +27,10 @@ class AssetsController < ApplicationController
                                         :field_id => fieldObj.id)
             fieldValue.save
           when 'date'
-            fieldValue = FieldValue.new(:asset_id => asset.id,
-                                        :date => params[fieldObj.name][fieldObj.name],
-                                        :field_id => fieldObj.id)
-            fieldValue.save
+            # fieldValue = FieldValue.new(:asset_id => asset.id,
+            #                             :date => params[fieldObj.name][fieldObj.name],
+            #                             :field_id => fieldObj.id)
+            #fieldValue.save
           else
             puts "field not found"
         end
@@ -52,5 +52,49 @@ class AssetsController < ApplicationController
 
   def update
 
+    asset = Asset.find(params[:asset][:asset_id])
+    if(params[:name][:name] != nil)
+      asset.name = params[:name][:name]
+    else
+      asset.name = ''
+    end
+
+    if(params[:description][:description] != nil)
+      asset.description = params[:description][:description]
+    else
+      asset.description = ''
+    end
+
+    asset.save
+
+    AssetScreen.find_all_by_asset_id(asset.asset_type_id).each do |field|
+      fieldObj = Field.find(field)
+      if params[fieldObj.name][fieldObj.name] != nil
+        case params[fieldObj.name][fieldObj.name+'_type']
+          when 'option'
+            fieldValue = FieldValue.first(:conditions => ['asset_id=?  and field_id=?',asset.id,fieldObj.id])
+            fieldValue.field_option_id = params[fieldObj.name][fieldObj.name]
+            fieldValue.save
+          when 'text'
+            fieldValue = FieldValue.first(:conditions => ['asset_id=?  and field_id=?',asset.id,fieldObj.id])
+            if params[fieldObj.name][fieldObj.name] != ''
+              fieldValue.text_value = params[fieldObj.name][fieldObj.name]
+              fieldValue.save
+            else
+              fieldValue.destroy
+            end
+          when 'date'
+            #  fieldValue = FieldValue.first(:conditions => ['asset_id=?  and field_id=?',asset.id,fieldObj.id])
+            #  fieldValue.date = params[fieldObj.name][fieldObj.name]
+            #  fieldValue.save
+          else
+            puts "field not found"
+        end
+      elsif params[fieldObj.name][fieldObj.name] == nil and  FieldValue.first(:conditions => ['asset_id=?  and field_id=?',asset.id,fieldObj.id]) != nil
+        FieldValue.destroy(FieldValue.first(:conditions => ['asset_id=?  and field_id=?',asset.id,fieldObj.id]).id)
+      end
+    end
+
+    redirect_to :action => 'index'
   end
 end

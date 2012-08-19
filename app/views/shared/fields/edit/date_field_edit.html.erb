@@ -1,6 +1,11 @@
 <td><%= field_name %></td>
-<td> <%= text_field(field_name,field_name, {:value => value})     %>
-  <%= value %>
+<td>
+  <% if value != nil %>
+      <%= text_field(field_name,field_name, {:value => value})     %>
+  <% else %>
+      <%= text_field(field_name,field_name)     %>
+  <% end %>
+  <%= hidden_field(field_name, field_name+'_type',:value=> 'date') %>
 </td>
 <script type="text/javascript">
     $('#<%= field_name -%>_<%= field_name -%>').datepicker({

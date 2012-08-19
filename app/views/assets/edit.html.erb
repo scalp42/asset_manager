@@ -16,6 +16,7 @@
                               :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id,
                                            :value => FieldValue.find(:first, :conditions => ["asset_id = ? and field_id = ?", @asset.id, assetScreenField.field_id])} %>
             </tr>
+             <%= hidden_field('asset', 'asset_id',:value=> @asset.id) %>
           <% end%>
        </table>
        <div class="modal-footer" style="text-align: center;">
