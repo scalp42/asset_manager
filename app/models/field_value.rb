@@ -1,3 +1,5 @@
 class FieldValue < ActiveRecord::Base
-  attr_accessible :numeric_value, :field_option_id, :field_id, :text_value
+  has_one :asset
+  belongs_to :asset
+  attr_accessible :numeric_value, :field_option_id, :field_id, :text_value , :asset_id
 end

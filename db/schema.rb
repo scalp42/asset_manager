@@ -35,9 +35,8 @@ ActiveRecord::Schema.define(:version => 20120818230405) do
     t.string   "name"
     t.string   "description"
     t.integer  "parent_id"
-    t.integer  "field_value_id"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "field_options", :force => true do |t|
@@ -54,11 +53,12 @@ ActiveRecord::Schema.define(:version => 20120818230405) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "field_value", :force => true do |t|
+  create_table "field_values", :force => true do |t|
     t.integer  "field_id"
     t.integer  "field_option_id"
     t.string   "text_value"
     t.float    "numeric_value"
+    t.integer  "asset_id"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end

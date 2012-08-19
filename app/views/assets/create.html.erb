@@ -1,0 +1,25 @@
+<%= render :template => 'shared/navbar' %>
+<h2 style="text-align: center;">Create <%= @asset_type.name %> Asset</h2>
+<form method="post" class="well" action="/assets/save">
+       <table class="table table-striped" width="100%">
+         <tr><td>Name</td>
+         <td><%=  text_field('name','name') %></td>
+           </tr>
+         <tr>
+         <td>Description</td>
+         <td><%=  text_area('description','description',{:rows => 15,:cols => 40}) %></td>
+         </tr>
+           <%  AssetScreen.find_all_by_asset_id(@asset_type.id).each do |assetScreenField| %>
+             <tr>
+                <%= render :template => 'shared/fields/'+FieldType.find(Field.find(assetScreenField.field_id).field_type_id).type_name.downcase.gsub(' ','_')+'_display' ,
+                               :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id} %>
+             </tr>
+           <% end%>
+       </table>
+       <div class="modal-footer" style="text-align: center;">
+
+         <%= hidden_field('asset_type', 'asset_type_id',:value=>@asset_type.id) %>
+         <%= submit_tag "Create" ,:class => 'btn btn-primary'%>
+         <a data-toggle="modal" href="#myCreateAssetModal" class="btn secondary">No</a>
+       </div>
+   </form>

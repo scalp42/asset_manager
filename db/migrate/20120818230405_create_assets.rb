@@ -4,8 +4,6 @@ class CreateAssets < ActiveRecord::Migration
       t.string :name
       t.string :description
       t.integer :parent_id
-      t.integer :field_value_id
-
       t.timestamps
     end
   end
