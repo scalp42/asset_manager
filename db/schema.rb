@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(:version => 20120818230405) do
     t.datetime "updated_at",     :null => false
   end
 
-  create_table "field_option", :force => true do |t|
+  create_table "field_options", :force => true do |t|
     t.integer  "field_id"
     t.string   "option"
     t.integer  "parent"

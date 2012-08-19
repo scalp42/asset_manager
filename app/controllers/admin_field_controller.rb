@@ -8,7 +8,6 @@ class AdminFieldController < ApplicationController
 
   def list_asset_types
     @asset_types = AssetType.all
-    puts "JKSDJFKLSDJLKF"+@asset_types.inspect
     render :template => 'admin_field/list_asset_types'
   end
 
@@ -19,6 +18,14 @@ class AdminFieldController < ApplicationController
       redirect_to :back
     end
 
+  end
+
+  def update_asset_type_screen
+    newAssetScreen = AssetScreen.new(:field_id => params[:field_type][:field_type_id] ,:asset_id => params[:asset_type_id])
+
+    if newAssetScreen.save
+      redirect_to :back
+    end
   end
 
   def create_asset_type
