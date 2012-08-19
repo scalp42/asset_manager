@@ -4,8 +4,8 @@
     <% FieldOption.find_all_by_field_id(field_id).each do |field| %>
         <tr>
           <td><%= field.option %></td>
-          <% if value.option == field.option %>
-              <td><%= radio_button(field_name,field_name, field.id) %></td>
+          <% if value.field_option_id == field.id %>
+              <td><%= radio_button(field_name,field_name, field.id,{:checked => true}) %></td>
           <% else %>
               <td><%= radio_button(field_name,field_name, field.id) %></td>
           <% end %>
