@@ -27,10 +27,10 @@ class AssetsController < ApplicationController
                                         :field_id => fieldObj.id)
             fieldValue.save
           when 'date'
-            # fieldValue = FieldValue.new(:asset_id => asset.id,
-            #                             :date => params[fieldObj.name][fieldObj.name],
-            #                             :field_id => fieldObj.id)
-            #fieldValue.save
+            fieldValue = FieldValue.new(:asset_id => asset.id,
+                                        :date => params[fieldObj.name][fieldObj.name],
+                                        :field_id => fieldObj.id)
+            fieldValue.save
           else
             puts "field not found"
         end
@@ -77,16 +77,29 @@ class AssetsController < ApplicationController
             fieldValue.save
           when 'text'
             fieldValue = FieldValue.first(:conditions => ['asset_id=?  and field_id=?',asset.id,fieldObj.id])
-            if params[fieldObj.name][fieldObj.name] != ''
+            if fieldValue == nil
+              fieldValue = FieldValue.new(:asset_id => asset.id,
+                                          :text_value => params[fieldObj.name][fieldObj.name],
+                                          :field_id => fieldObj.id)
+              fieldValue.save
+            elsif params[fieldObj.name][fieldObj.name] != ''
               fieldValue.text_value = params[fieldObj.name][fieldObj.name]
               fieldValue.save
-            else
+            elsif fieldValue != nil
               fieldValue.destroy
             end
           when 'date'
-            #  fieldValue = FieldValue.first(:conditions => ['asset_id=?  and field_id=?',asset.id,fieldObj.id])
-            #  fieldValue.date = params[fieldObj.name][fieldObj.name]
-            #  fieldValue.save
+            fieldValue = FieldValue.first(:conditions => ['asset_id=?  and field_id=?',asset.id,fieldObj.id])
+            if fieldValue != nil
+              fieldValue.date = params[fieldObj.name][fieldObj.name]
+              fieldValue.save
+            else
+              fieldValue = FieldValue.new(:asset_id => asset.id,
+                                          :date => params[fieldObj.name][fieldObj.name],
+                                          :field_id => fieldObj.id)
+              fieldValue.save
+            end
+
           else
             puts "field not found"
         end
