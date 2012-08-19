@@ -37,7 +37,7 @@ class AdminFieldController < ApplicationController
   end
 
   def delete
-    if Field.delete(params['field_id'])
+    if Field.destroy(params['field_id'])
          redirect_to :back
        end
   end
