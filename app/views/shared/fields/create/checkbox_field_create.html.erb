@@ -1,0 +1,6 @@
+<td xmlns="http://www.w3.org/1999/html"><%= field_name %></td>
+<td>
+   <%=  check_box(field_name,field_name, FieldOption.find_all_by_field_id(field_id).collect {|p| [ p.option, p.id ] }) %>
+
+</td>
+<%= hidden_field(field_name, field_name+'_type',:value=> 'option') %>
