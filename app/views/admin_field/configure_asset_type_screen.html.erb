@@ -1,0 +1,24 @@
+<div class="modal hide fade in" id="#myCreateAssetFieldScreenModal" style="display: none;">
+  <div class="modal-header">
+    <button class="close" data-toggle="modal" href="#myCreateAssetFieldScreenModal">×</button>
+    <h3>Add Field To Screen</h3>
+  </div>
+  <div class="modal-body" align="center">
+
+    <form method="post" class="well" action="configure_screen" >
+        <table>
+          <tr>
+            <td><%=  text_field("value","select_field_value") %> </td>
+
+
+          </tr>
+        </table>
+        <div class="modal-footer">
+
+          <%= submit_tag "Create" ,:class => 'btn btn-primary'%>
+          <a data-toggle="modal" href="#myCreateAssetFieldScreenModal" class="btn secondary">No</a>
+        </div>
+    </form>
+  </div>
+
+</div>

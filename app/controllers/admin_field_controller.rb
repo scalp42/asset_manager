@@ -20,6 +20,11 @@ class AdminFieldController < ApplicationController
 
   end
 
+  def list_asset_screen_fields
+     @assetScreens = AssetScreen.find_all_by_asset_id(params[:id])
+     @asset = AssetType.find(params[:id])
+  end
+
   def update_asset_type_screen
     newAssetScreen = AssetScreen.new(:field_id => params[:field_type][:field_type_id] ,:asset_id => params[:asset_type_id])
 
@@ -62,6 +67,12 @@ class AdminFieldController < ApplicationController
     if FieldOption.destroy(params['option_id'])
       redirect_to :back
     end
+  end
+
+  def delete_asset_screen
+    if AssetScreen.destroy(params['asset_screen_id'])
+         redirect_to :back
+       end
   end
 
 end

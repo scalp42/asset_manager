@@ -1,0 +1,14 @@
+<div class="modal hide fade in" id="myModal<%= asset_screen.id %>" style="display: none;">
+          <div class="modal-header">
+            <button class="close" data-toggle="modal" href="#myModal<%= asset_screen.id %>">×</button>
+            <h3>Delete Record</h3>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure?</p>
+          </div>
+          <div class="modal-footer">
+            <%= link_to "Yes", { :controller => "admin_field",:action=>"delete_asset_screen", :asset_screen_id=>asset_screen.id }, :id => 'asset_screen' , :class => "btn btn-danger"  %>
+            <a data-toggle="modal" href="#myModal<%= asset_screen.id %>" class="btn secondary">No</a>
+          </div>
+</div>
+<a class="btn" data-toggle="modal" href="#myModal<%= asset_screen.id %>" >Delete</a>

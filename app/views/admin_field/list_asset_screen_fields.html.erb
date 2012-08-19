@@ -1,0 +1,24 @@
+<%= render :template => 'shared/navbar' %>
+<h2>Asset Screen</h2>
+<%= render :template => 'admin_field/configure_asset_type_screen' , :locals => { :asset => @asset} %>
+<div align="right">
+  <a class="btn btn-primary" data-toggle="modal" href="#myCreateAssetFieldScreenModal">Add Field To Screen</a>
+</div>
+<table class="table table-striped">
+  <tr>
+    <th>Name</th>
+    <th>Actions</th>
+  </tr>
+  <% @assetScreens.each do |asset_screen| %>
+      <tr>
+        <td>
+          <%= Field.find(asset_screen.field_id).name %>
+        </td>
+
+        <td>
+            <%= render :template => 'shared/delete_asset_screen' ,:locals => { :asset_screen => asset_screen }%>
+        </td>
+      </tr>
+  <% end %>
+</table>
+
