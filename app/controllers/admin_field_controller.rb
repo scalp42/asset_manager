@@ -47,4 +47,12 @@ class AdminFieldController < ApplicationController
         redirect_to :back
     end
   end
+
+  def configure_field
+    @field = Field.find(params['id'])
+  end
+
+  def create_select_field_option
+    redirect_to :back
+  end
 end

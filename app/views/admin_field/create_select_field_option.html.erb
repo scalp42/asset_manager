@@ -1,0 +1,22 @@
+<div class="modal hide fade in" id="myCreateSelectFieldOptionModal" style="display: none;">
+  <div class="modal-header">
+    <button class="close" data-toggle="modal" href="#myCreateSelectFieldOptionModal">×</button>
+    <h3>Create Option</h3>
+  </div>
+  <div class="modal-body" align="center">
+
+    <form method="post" class="well" action="create_select_field_option">
+        <table>
+          <tr>
+            <td><%=  text_field("value","asset_type_name") %> </td>
+          </tr>
+        </table>
+        <div class="modal-footer">
+
+          <%= submit_tag "Create" ,:class => 'btn btn-primary'%>
+          <a data-toggle="modal" href="#myCreateSelectFieldOptionModal" class="btn secondary">No</a>
+        </div>
+    </form>
+  </div>
+
+</div>

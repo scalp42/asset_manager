@@ -27,8 +27,7 @@
         </td>
         <td>
           <%= render :template => 'shared/delete_field' ,:locals => { :field => field }%>
-          <%= render :template => 'shared/configure_field' ,:locals => { :field => field }%>
-          <a class="btn" data-toggle="modal" href="#myConfigureModal<%= field.id %>" >Configure</a>
+          <%= link_to 'Configure',:controller => 'admin_field', :action => 'configure_field' ,:id => field.id  %>
           <a class="btn" data-toggle="modal" href="#myEditModal<%= field.id %>" >Edit</a>
           <a class="btn" data-toggle="modal" href="#myModal<%= field.id %>" >Delete</a>
         </td>

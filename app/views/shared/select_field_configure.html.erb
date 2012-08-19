@@ -1,0 +1,18 @@
+<h2>Configure Field <%= field.name %></h2>
+<%= render :template => 'admin_field/create_select_field_option' ,:locals => { :field => field }%>
+<div align="right">
+  <a class="btn btn-primary" data-toggle="modal" href="#myCreateSelectFieldOptionModal">Add Select Option</a>
+</div>
+<table class="table table-striped">
+  <tr>
+    <th>Name</th>
+    <th>Actions</th>
+  </tr>
+  <% FieldOption.find_all_by_field_id(field.id).each do |options| %>
+      <tr>
+        <td>
+          <%= options.option %>
+        </td>
+      </tr>
+  <% end %>
+</table>
