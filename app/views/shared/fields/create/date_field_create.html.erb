@@ -1,5 +1,6 @@
 <td><%= field_name %></td>
 <td> <%= text_field(field_name,field_name)     %>
+  <%= hidden_field(field_name, field_name+'_type',:value=> 'date') %>
 
 </td>
 <script type="text/javascript">

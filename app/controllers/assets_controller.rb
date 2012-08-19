@@ -15,18 +15,25 @@ class AssetsController < ApplicationController
     AssetScreen.find_all_by_asset_id(params[:asset_type][:asset_type_id]).each do |field|
       fieldObj = Field.find(field)
       if params[fieldObj.name][fieldObj.name] != nil
-        if FieldType.find(fieldObj.field_type_id).type_name.include? 'Select'
-          fieldValue = FieldValue.new(:asset_id => asset.id ,
-                                      :field_option_id => params[fieldObj.name][fieldObj.name],
-                                      :field_id => fieldObj.id)
-          fieldValue.save
-        elsif FieldType.find(fieldObj.field_type_id).type_name.include? 'Text Field'
-          fieldValue = FieldValue.new(:asset_id => asset.id,
-                                      :text_value => params[fieldObj.name][fieldObj.name],
-                                      :field_id => fieldObj.id)
-          fieldValue.save
+        case params[fieldObj.name][fieldObj.name+'_type']
+          when 'option'
+            fieldValue = FieldValue.new(:asset_id => asset.id ,
+                                        :field_option_id => params[fieldObj.name][fieldObj.name],
+                                        :field_id => fieldObj.id)
+            fieldValue.save
+          when 'text'
+            fieldValue = FieldValue.new(:asset_id => asset.id,
+                                        :text_value => params[fieldObj.name][fieldObj.name],
+                                        :field_id => fieldObj.id)
+            fieldValue.save
+          when 'date'
+            fieldValue = FieldValue.new(:asset_id => asset.id,
+                                        :date => params[fieldObj.name][fieldObj.name],
+                                        :field_id => fieldObj.id)
+            fieldValue.save
+          else
+            puts "field not found"
         end
-
       end
     end
 
