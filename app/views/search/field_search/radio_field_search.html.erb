@@ -1,0 +1,8 @@
+<table border="0">
+  <% FieldOption.find_all_by_field_id(field.id).each do |fieldOption| %>
+      <tr>
+        <td><%= fieldOption.option %></td>
+        <td><%= radio_button(field.name,field.name, fieldOption.id) %></td>
+      </tr>
+  <% end %>
+</table>

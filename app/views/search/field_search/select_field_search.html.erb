@@ -1,0 +1,1 @@
+<%=  select(field.name,field.name,FieldOption.find_all_by_field_id(field.id).collect {|p| [ p.option, p.id ] },{},{:multiple => true}) %>

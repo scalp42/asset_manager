@@ -1,0 +1,25 @@
+<% content_for :sidebar do %>
+    <div class="sidebar-nav">
+      <div class="well" style="padding: 8px 0;">
+        <ul class="nav nav-list">
+          <li class="nav-header">Search</li>
+          <form method="post" action="/search/search">
+            <div style="text-align: right;">
+              <%= submit_tag "Search" ,:class => 'btn btn-primary' %>
+            </div>
+            <table class="table table-striped">
+              <tr><li><td>Asset Type: </td><td><%=  select('asset_type','asset_type_id', AssetType.all().collect {|p| [ p.name, p.id ] },{},{:multiple => true}) %></td></li></tr>
+              <tr><li><td>Name: </td><td><%=  text_field('name','name') %></td></li></tr>
+              <tr><li><td>Description: </td><td><%=  text_field('description','description',) %></td></li></tr>
+              <% Field.all.each do |field| %>
+                  <tr><li><td><%= field.name %>: </td><td><%= render :template => 'search/field_search/'+FieldType.find(field.field_type_id).type_name.downcase.gsub(' ','_')+'_search',:locals =>{:field => field} %></td></li></tr>
+              <% end %>
+            </table>
+            <div style="text-align: right;">
+              <%= submit_tag "Search" ,:class => 'btn btn-primary'%>
+            </div>
+          </form>
+        </ul>
+      </div>
+    </div>
+<% end %>
