@@ -5,9 +5,16 @@ class SearchController < ApplicationController
   end
 
   def search
-    if params[:asset_type][:asset_type_id] != nil
 
+    puts params.inspect
+
+    results = Sunspot.search [Asset,FieldOption,FieldValue,AssetType] do
+      fulltext params[:name][:name]
+      fulltext params[:description][:description]
     end
+
+    @assets = results.results
+
   end
 
 end

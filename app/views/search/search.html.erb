@@ -2,4 +2,21 @@
 
 <%= render :template => 'search/sidebar'  %>
 
-sdf
+<table class="table table-striped">
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Actions</th>
+  </tr>
+  <% @assets.each do |asset| %>
+      <tr>
+        <td>
+          <%= asset.name %>
+        </td>
+
+        <td>
+          <%= asset.description %>
+        </td>
+      </tr>
+  <% end %>
+</table>
