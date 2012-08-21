@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120818230405) do
+ActiveRecord::Schema.define(:version => 20120820192527) do
 
   create_table "asset_screens", :force => true do |t|
     t.string   "name"
@@ -72,6 +72,22 @@ ActiveRecord::Schema.define(:version => 20120818230405) do
     t.integer  "field_type_id"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
+  end
+
+  create_table "filter_details", :force => true do |t|
+    t.integer  "filter_id"
+    t.integer  "field_id"
+    t.string   "text_search"
+    t.date     "date_search"
+    t.integer  "field_option_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  create_table "filters", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
 end

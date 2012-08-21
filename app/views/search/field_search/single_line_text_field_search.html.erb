@@ -1,1 +1,5 @@
-<%=  text_field(field.name,field.name) %>
+<% if value != nil %>
+    <%=  text_field(field.name,field.name ,{:value => value}) %>
+<% else %>
+    <%=  text_field(field.name,field.name) %>
+<% end %>

@@ -8,11 +8,35 @@
               <%= submit_tag "Search" ,:class => 'btn btn-primary' %>
             </div>
             <table class="table table-striped">
-              <tr><li><td>Asset Type: </td><td><%=  select('asset_type','asset_type_id', AssetType.all().collect {|p| [ p.name, p.id ] },{},{:multiple => true}) %></td></li></tr>
-              <tr><li><td>Name: </td><td><%=  text_field('name','name') %></td></li></tr>
-              <tr><li><td>Description: </td><td><%=  text_field('description','description',) %></td></li></tr>
+              <tr><li><td>Asset Type: </td><td>
+                <% if @searchCriteria != nil && @searchCriteria.asset_types != nil %>
+                    <%=  select('asset_type','asset_type_id', AssetType.all().collect {|p| [ p.name, p.id ] },{:selected => @searchCriteria.asset_types},{:multiple => true}) %>
+                <% else %>
+                    <%=  select('asset_type','asset_type_id', AssetType.all().collect {|p| [ p.name, p.id ] },{},{:multiple => true}) %>
+                <% end %>
+              </td></li></tr>
+              <tr><li><td>Name: </td><td>
+                <% if @searchCriteria != nil && @searchCriteria.name != nil %>
+                    <%=  text_field('name','name' ,{:value => @searchCriteria.name}) %>
+                <% else %>
+                    <%=  text_field('name','name' ) %>
+                <% end %>
+              </td></li></tr>
+              <tr><li><td>Description: </td><td>
+                <% if @searchCriteria != nil && @searchCriteria.description != nil %>
+                    <%=  text_field('description','description' ,{:value => @searchCriteria.description}) %>
+                <% else %>
+                    <%=  text_field('description','description' ) %>
+                <% end %>
+              </td></li></tr>
               <% Field.all.each do |field| %>
-                  <tr><li><td><%= field.name %>: </td><td><%= render :template => 'search/field_search/'+FieldType.find(field.field_type_id).type_name.downcase.gsub(' ','_')+'_search',:locals =>{:field => field} %></td></li></tr>
+                  <tr><li><td><%= field.name %>: </td><td>
+                    <% if @searchCriteria != nil && @searchCriteria.fields[field.id] != nil %>
+                        <%= render :template => 'search/field_search/'+FieldType.find(field.field_type_id).type_name.downcase.gsub(' ','_')+'_search',:locals =>{:field => field, :value => @searchCriteria.fields[field.id]} %>
+                    <% else %>
+                        <%= render :template => 'search/field_search/'+FieldType.find(field.field_type_id).type_name.downcase.gsub(' ','_')+'_search',:locals =>{:field => field, :value => nil} %>
+                    <% end %>
+                  </td></li></tr>
               <% end %>
             </table>
             <div style="text-align: right;">

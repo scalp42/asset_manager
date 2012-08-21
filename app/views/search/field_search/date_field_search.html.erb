@@ -1,0 +1,10 @@
+<% if value != nil %>
+    <%= text_field(field.name,field.name, {:value => value})     %>
+<% else %>
+    <%= text_field(field.name,field.name)     %>
+<% end %>
+<script type="text/javascript">
+    $('#<%= field.name -%>_<%= field.name -%>').datepicker({
+        format: 'yyyy-mm-dd'
+    });
+</script>
