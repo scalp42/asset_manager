@@ -1,4 +1,5 @@
 class SearchController < ApplicationController
+  include SearchHelper
 
   def index
 
@@ -30,18 +31,20 @@ class SearchController < ApplicationController
 
     @searchCriteria.fields = fields
 
-    results = Sunspot.search [Asset] do
 
+    createFilter(params,fields)
+    results = Sunspot.search [Asset] do
+      #if params[:asset_type][:asset_type_id] != nil and params[:asset_type][:asset_type_id].count > 1
+      #   with(:asset_type_id,params[:asset_type][:asset_type_id]  )
+      #end
     end
 
     @assets = results.results
 
-  end
+    @filters = Filter.find_all_by_available(true)
 
-  def create_filter
+    @showCreateFilter = true
 
-    puts "KJSDLKFJSLKDJF"
-    puts params.inspect
   end
 
 end

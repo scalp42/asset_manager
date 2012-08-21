@@ -6,7 +6,9 @@ class CreateFilterDetails < ActiveRecord::Migration
       t.string :text_search
       t.date :date_search
       t.integer :field_option_id
-
+      t.integer :asset_type_id
+      t.string :name
+      t.string  :description
       t.timestamps
     end
   end

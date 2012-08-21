@@ -4,6 +4,7 @@ class Asset < ActiveRecord::Base
 
   searchable do
       text :name, :description
+      integer :asset_type_id
   end
 
 end

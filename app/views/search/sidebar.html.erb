@@ -2,47 +2,64 @@
     <div class="sidebar-nav">
       <div class="well" style="padding: 8px 0;">
         <ul class="nav nav-list">
-          <li class="nav-header">Search</li>
-          <form method="post" action="/search/search">
-            <div style="text-align: right;">
-              <%= submit_tag "Search" ,:class => 'btn btn-primary' %>
-            </div>
-            <table class="table table-striped">
-              <tr><li><td>Asset Type: </td><td>
-                <% if @searchCriteria != nil && @searchCriteria.asset_types != nil %>
-                    <%=  select('asset_type','asset_type_id', AssetType.all().collect {|p| [ p.name, p.id ] },{:selected => @searchCriteria.asset_types},{:multiple => true}) %>
-                <% else %>
-                    <%=  select('asset_type','asset_type_id', AssetType.all().collect {|p| [ p.name, p.id ] },{},{:multiple => true}) %>
-                <% end %>
-              </td></li></tr>
-              <tr><li><td>Name: </td><td>
-                <% if @searchCriteria != nil && @searchCriteria.name != nil %>
-                    <%=  text_field('name','name' ,{:value => @searchCriteria.name}) %>
-                <% else %>
-                    <%=  text_field('name','name' ) %>
-                <% end %>
-              </td></li></tr>
-              <tr><li><td>Description: </td><td>
-                <% if @searchCriteria != nil && @searchCriteria.description != nil %>
-                    <%=  text_field('description','description' ,{:value => @searchCriteria.description}) %>
-                <% else %>
-                    <%=  text_field('description','description' ) %>
-                <% end %>
-              </td></li></tr>
-              <% Field.all.each do |field| %>
-                  <tr><li><td><%= field.name %>: </td><td>
-                    <% if @searchCriteria != nil && @searchCriteria.fields[field.id] != nil %>
-                        <%= render :template => 'search/field_search/'+FieldType.find(field.field_type_id).type_name.downcase.gsub(' ','_')+'_search',:locals =>{:field => field, :value => @searchCriteria.fields[field.id]} %>
-                    <% else %>
-                        <%= render :template => 'search/field_search/'+FieldType.find(field.field_type_id).type_name.downcase.gsub(' ','_')+'_search',:locals =>{:field => field, :value => nil} %>
-                    <% end %>
-                  </td></li></tr>
+          <div class="tabbable"> <!-- Only required for left/right tabs -->
+            <ul class="nav nav-tabs">
+              <li class="active"><a href="#tab1" data-toggle="tab">Search</a></li>
+              <%  if @filters != nil && @filters.size > 0 %>
+                 <li><a href="#tab2" data-toggle="tab">Filters</a></li>
               <% end %>
-            </table>
-            <div style="text-align: right;">
-              <%= submit_tag "Search" ,:class => 'btn btn-primary'%>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane active" id="tab1">
+                <form method="post" action="/search/search">
+                  <% if @showCreateFilter %>
+                     <%= render :template => 'search/create_filter' %>
+                  <% end %>
+                  <div style="text-align: right;">
+                    <%= submit_tag "Search" ,:class => 'btn btn-primary' %>
+                  </div>
+                  <table class="table table-striped">
+                    <tr><li><td>Asset Type: </td><td>
+                      <% if @searchCriteria != nil && @searchCriteria.asset_types != nil %>
+                          <%=  select('asset_type','asset_type_id', AssetType.all().collect {|p| [ p.name, p.id ] },{:selected => @searchCriteria.asset_types},{:multiple => true}) %>
+                      <% else %>
+                          <%=  select('asset_type','asset_type_id', AssetType.all().collect {|p| [ p.name, p.id ] },{},{:multiple => true}) %>
+                      <% end %>
+                    </td></li></tr>
+                    <tr><li><td>Name: </td><td>
+                      <% if @searchCriteria != nil && @searchCriteria.name != nil %>
+                          <%=  text_field('name','name' ,{:value => @searchCriteria.name}) %>
+                      <% else %>
+                          <%=  text_field('name','name' ) %>
+                      <% end %>
+                    </td></li></tr>
+                    <tr><li><td>Description: </td><td>
+                      <% if @searchCriteria != nil && @searchCriteria.description != nil %>
+                          <%=  text_field('description','description' ,{:value => @searchCriteria.description}) %>
+                      <% else %>
+                          <%=  text_field('description','description' ) %>
+                      <% end %>
+                    </td></li></tr>
+                    <% Field.all.each do |field| %>
+                        <tr><li><td><%= field.name %>: </td><td>
+                          <% if @searchCriteria != nil && @searchCriteria.fields[field.id] != nil %>
+                              <%= render :template => 'search/field_search/'+FieldType.find(field.field_type_id).type_name.downcase.gsub(' ','_')+'_search',:locals =>{:field => field, :value => @searchCriteria.fields[field.id]} %>
+                          <% else %>
+                              <%= render :template => 'search/field_search/'+FieldType.find(field.field_type_id).type_name.downcase.gsub(' ','_')+'_search',:locals =>{:field => field, :value => nil} %>
+                          <% end %>
+                        </td></li></tr>
+                    <% end %>
+                  </table>
+                  <div style="text-align: right;">
+                    <%= submit_tag "Search" ,:class => 'btn btn-primary'%>
+                  </div>
+                </form>
+              </div>
+              <div class="tab-pane" id="tab2">
+                <p>Howdy, I'm in Section 2.</p>
+              </div>
             </div>
-          </form>
+              </div>
         </ul>
       </div>
     </div>

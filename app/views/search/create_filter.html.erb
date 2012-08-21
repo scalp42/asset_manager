@@ -1,15 +1,34 @@
-<div style="text-align: left;">
-  <form action="/search/create_filter" method="post">
-    <input type="hidden" id="searchCriteria" name="searchCriteria" value=<%= @searchCriteria %>/>
-    <%= submit_tag "Create Filter" ,:class => 'btn btn-primary' %>
-  </form>
-  <script type="text/javascript">
-      $.ajax({
-           url: '/search/create_filter',
-           dataType: 'json',
-           data : { search: <%= @searchCriteria.to_json %>},
-           type: "POST"
-       });
+<div class="modal hide" id="myFilterModal1" style="display: none;">
+  <div class="modal-header">
+    <button class="close" data-toggle="modal" href="#myFilterModal1">×</button>
+    <h3>Create Filter</h3>
+  </div>
 
-  </script>
+    <div class="modal-body">
+
+      <table>
+      <tr><td>Filter Name:</td><td><input type="'text" id="filter_name" name="filter_value"/> </td></tr>
+      </table>
+
+    </div>
+    <div class="modal-footer">
+
+      <%= submit_tag "Create Filter" ,:class => 'btn btn-primary' %>
+      <a data-toggle="modal" href="#myFilterModal1" class="btn secondary">No</a>
+    </div>
+
 </div>
+<a class="btn btn-primary" data-toggle="modal" href="#myFilterModal1" >Create Filter</a>
+
+<script type="text/javascript">
+
+    $.ajax({
+            type: "POST",
+            url: "/search/create_filter",
+            dataType: "json",
+            data: {searchCriteria : <%= @searchCriteria.to_json %> },
+            success: function(msg){
+            alert(msg);
+            }
+    });
+</script>
