@@ -1,0 +1,15 @@
+<div style="text-align: left;">
+  <form action="/search/create_filter" method="post">
+    <input type="hidden" id="searchCriteria" name="searchCriteria" value=<%= @searchCriteria %>/>
+    <%= submit_tag "Create Filter" ,:class => 'btn btn-primary' %>
+  </form>
+  <script type="text/javascript">
+      $.ajax({
+           url: '/search/create_filter',
+           dataType: 'json',
+           data : { search: <%= @searchCriteria.to_json %>},
+           type: "POST"
+       });
+
+  </script>
+</div>

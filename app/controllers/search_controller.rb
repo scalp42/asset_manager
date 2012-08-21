@@ -30,15 +30,18 @@ class SearchController < ApplicationController
 
     @searchCriteria.fields = fields
 
-    puts @searchCriteria.inspect
     results = Sunspot.search [Asset] do
 
     end
 
-   # @filter = Filter.new(:name=> 'temp filter')
-
     @assets = results.results
 
+  end
+
+  def create_filter
+
+    puts "KJSDLKFJSLKDJF"
+    puts params.inspect
   end
 
 end
