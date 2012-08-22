@@ -1,0 +1,4 @@
+<% if value != nil %>
+    <td><%= field_name %></td>
+    <td><%=  FieldOption.find(value.field_option_id).option %></td>
+<% end %>

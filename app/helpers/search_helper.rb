@@ -43,5 +43,83 @@ module SearchHelper
         end
       end
     end
+
+  end
+
+  def buildSearchCriteria(filter_id)
+
+    filter = Filter.find(filter_id)
+    @searchCriteria = SearchCriteria.new
+
+    filterDetails = FilterDetails.all(:conditions["asset_type_id is ? and filter_id= ?"], nil,filter.id)
+
+    if(filterDetails != nil)
+      asset_types = Array.new
+      filterDetails.each do |filterDetail|
+        asset_types.push(filterDetail.asset_type_id)
+      end
+      @searchCriteria.asset_types = asset_types
+    end
+
+
+    filterDetails = FilterDetails.first(:conditions["name is ? and filter_id= ?"], nil,filter.id)
+    if filterDetails != nil
+      @searchCriteria.name = filterDetails.name
+    end
+
+    filterDetails = FilterDetails.first(:conditions["description is ? and filter_id=?"],nil,filter.id)
+    if filterDetails.name != nil
+      @searchCriteria.description = filterDetails.description
+    end
+
+    fields = Hash.new
+
+    filterDetails = FilterDetails.all(:conditions["field_id is not ? and filter_id= ? "],nil, filter.id)
+
+    filterDetails.each do |filterDetail|
+      if filterDetail.field_id != nil and FieldType.find(Field.find(filterDetail.field_id).field_type_id).use_option?
+        if fields.has_key?(filterDetail.field_id)
+          options = fields[filterDetail.field_id]
+          options.push(filterDetail.field_option_id)
+          fields[filterDetail.field_id] = options
+        else
+          options = Array.new
+          options.push(filterDetail.field_option_id)
+          fields[filterDetail.field_id] = options
+        end
+      elsif filterDetail.field_id != nil and FieldType.find(Field.find(filterDetail.field_id).field_type_id).use_text?
+        fields[filterDetail.field_id] = filterDetail.text_search
+      elsif filterDetail.field_id != nil and FieldType.find(Field.find(filterDetail.field_id).field_type_id).use_date?
+        fields[filterDetail.field_id] = filterDetail.date_search
+      end
+    end
+
+    @searchCriteria.fields = fields
+
+  end
+
+  def search_solr(searchCriteria)
+
+    fields = searchCriteria.fields
+
+    results = Sunspot.search [Asset] do
+      if searchCriteria.asset_types != nil and searchCriteria.asset_types.count > 0
+        with(:asset_type_id,searchCriteria.asset_types  )
+      end
+
+      if searchCriteria.name != nil
+        fulltext searchCriteria.name do
+          fields(:name)
+        end
+      end
+
+      if searchCriteria.description != nil
+        fulltext searchCriteria.description do
+          fields(:description)
+        end
+      end
+    end
+
+    @assets = results.results
   end
 end

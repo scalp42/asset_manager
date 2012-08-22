@@ -17,6 +17,7 @@
 </div>
 <table class="table table-striped">
   <tr>
+    <th>Type</th>
     <th>Name</th>
     <th>Description</th>
     <th>Actions</th>
@@ -24,11 +25,14 @@
   <% @assets.each do |asset| %>
       <tr>
         <td>
-          <%= asset.name %>
+          <%= link_to AssetType.find(asset.asset_type_id).name, :controller => 'assets', :action => 'view', :id => asset.id %>
+        </td>
+        <td>
+          <%= link_to asset.name, :controller => 'assets', :action => 'view', :id => asset.id %>
         </td>
 
         <td>
-          <%= asset.description %>
+          <%= link_to asset.description, :controller => 'assets', :action => 'view', :id => asset.id %>
         </td>
         <td>
           <%= link_to 'Edit',:controller => 'assets', :action => 'edit' ,:id => asset.id  %>

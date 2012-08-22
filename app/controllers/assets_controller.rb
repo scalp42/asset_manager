@@ -110,4 +110,8 @@ class AssetsController < ApplicationController
 
     redirect_to :action => 'index'
   end
+
+  def view
+    @asset = Asset.find(params[:id])
+  end
 end

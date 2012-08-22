@@ -3,6 +3,7 @@ class SearchController < ApplicationController
 
   def index
 
+    @filters = Filter.find_all_by_available(true)
   end
 
   def search
@@ -31,8 +32,19 @@ class SearchController < ApplicationController
 
     @searchCriteria.fields = fields
 
-
     createFilter(params,fields)
+
+    search_solr(@searchCriteria)
+
+    @filters = Filter.find_all_by_available(true)
+
+    @showCreateFilter = true
+
+  end
+
+  def load_filter
+    buildSearchCriteria(params[:filter_id])
+
     results = Sunspot.search [Asset] do
       #if params[:asset_type][:asset_type_id] != nil and params[:asset_type][:asset_type_id].count > 1
       #   with(:asset_type_id,params[:asset_type][:asset_type_id]  )
@@ -44,6 +56,8 @@ class SearchController < ApplicationController
     @filters = Filter.find_all_by_available(true)
 
     @showCreateFilter = true
+
+    render :template => 'search/search'
 
   end
 
