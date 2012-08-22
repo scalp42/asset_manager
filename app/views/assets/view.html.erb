@@ -12,17 +12,18 @@
   </tr>
 </table>
 <br>
-<h2>Custom Fields</h2>
-<table class="table table-striped table-bordered" width="100%">
-  <%  AssetScreen.find_all_by_asset_id(@asset.asset_type_id).each do |assetScreenField| %>
-      <tr>
-        <%= render :template => 'shared/fields/view/'+FieldType.find(Field.find(assetScreenField.field_id).field_type_id).type_name.downcase.gsub(' ','_')+'_view' ,
-                   :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id,
-                                :value => FieldValue.find(:first, :conditions => ["asset_id = ? and field_id = ?", @asset.id, assetScreenField.field_id])} %>
-      </tr>
-      <%= hidden_field('asset', 'asset_id',:value=> @asset.id) %>
-  <% end%>
-</table>
+<% if FieldValue.find_all_by_asset_id(@asset.id).count() > 0 %>
+    <h2>Custom Fields</h2>
+    <table class="table table-striped table-bordered" width="100%">
+      <%  AssetScreen.find_all_by_asset_id(@asset.asset_type_id).each do |assetScreenField| %>
+          <tr>
+            <%= render :template => 'shared/fields/view/'+FieldType.find(Field.find(assetScreenField.field_id).field_type_id).type_name.downcase.gsub(' ','_')+'_view' ,
+                       :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id,
+                                    :value => FieldValue.first(:conditions => ["asset_id = ? and field_id = ?", @asset.id, assetScreenField.field_id])} %>
+          </tr>
+      <% end%>
+    </table>
+<% end %>
 <div class="modal-footer" style="text-align: center;">
 
   <%= link_to 'Edit',:controller => 'assets', :action =>'edit', :id => @asset.id%>

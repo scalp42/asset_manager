@@ -52,29 +52,38 @@ class AssetsController < ApplicationController
 
   def update
 
+    puts params.inspect
     asset = Asset.find(params[:asset][:asset_id])
+
     if(params[:name][:name] != nil)
       asset.name = params[:name][:name]
     else
-      asset.name = ''
+      asset.name = nil
     end
 
     if(params[:description][:description] != nil)
       asset.description = params[:description][:description]
     else
-      asset.description = ''
+      asset.description = nil
     end
 
     asset.save
 
     AssetScreen.find_all_by_asset_id(asset.asset_type_id).each do |field|
-      fieldObj = Field.find(field)
+      fieldObj = Field.find(field.field_id)
       if params[fieldObj.name][fieldObj.name] != nil
         case params[fieldObj.name][fieldObj.name+'_type']
           when 'option'
             fieldValue = FieldValue.first(:conditions => ['asset_id=?  and field_id=?',asset.id,fieldObj.id])
+            if fieldValue != nil
             fieldValue.field_option_id = params[fieldObj.name][fieldObj.name]
+            else
+              fieldValue = FieldValue.new(:asset_id => asset.id ,
+                                          :field_option_id => params[fieldObj.name][fieldObj.name],
+                                          :field_id => fieldObj.id)
+            end
             fieldValue.save
+
           when 'text'
             fieldValue = FieldValue.first(:conditions => ['asset_id=?  and field_id=?',asset.id,fieldObj.id])
             if fieldValue == nil
