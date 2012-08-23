@@ -9,7 +9,7 @@
     <th>Name</th>
     <th>Actions</th>
   </tr>
-  <% @assetScreens.each do |asset_screen| %>
+  <% @asset.asset_screen.each do |asset_screen| %>
       <tr>
         <td>
           <%= Field.find(asset_screen.field_id).name %>

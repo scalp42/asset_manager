@@ -2,12 +2,12 @@ class AdminFieldController < ApplicationController
   layout 'admin'
 
   def list_fields
-    @fields = Field.all
+    @fields = Field.all.entries
     render :template => 'admin_field/list_fields'
   end
 
   def list_asset_types
-    @asset_types = AssetType.all
+    @asset_types = AssetType.all.entries
     render :template => 'admin_field/list_asset_types'
   end
 
@@ -21,11 +21,11 @@ class AdminFieldController < ApplicationController
   end
 
   def list_asset_screen_fields
-    @assetScreens = AssetScreen.find_all_by_asset_id(params[:id])
+
     @asset = AssetType.find(params[:id])
 
     fields = Array.new
-    @assetScreens.each do |assetScreen|
+    @asset.asset_screen.each do |assetScreen|
         fields.push(Field.find(assetScreen.field_id).name)
     end
 
@@ -40,10 +40,11 @@ class AdminFieldController < ApplicationController
   end
 
   def update_asset_type_screen
-    puts params.inspect
-    newAssetScreen = AssetScreen.new(:field_id => params[:field][:field_id] ,:asset_id => params[:asset_type][:asset_type_id])
 
-    if newAssetScreen.save
+    @asset = AssetType.find(BSON::ObjectId.from_string(params[:asset_type][:asset_type_id]))
+    @asset.asset_screen.build(:field_id => params[:field][:field_id] ,:asset_id => params[:asset_type][:asset_type_id])
+
+    if @asset.save
       redirect_to :back
     end
   end
@@ -57,37 +58,38 @@ class AdminFieldController < ApplicationController
   end
 
   def delete
-    if Field.destroy(params['field_id'])
+    if Field.destroy(BSON::ObjectId.from_string(params['field_id']))
       redirect_to :back
     end
+
   end
 
   def delete_asset_type
-    if AssetType.delete(params['asset_type_id'])
-      redirect_to :back
-    end
+    #if AssetType.delete(params['asset_type_id'])
+    #  redirect_to :back
+    #end
   end
 
   def configure_field
     if(params['value'].present?)
       @field = Field.find(params['field_id']['field_id'])
-      fieldOption = FieldOption.new(:option => params['value']['select_field_value'],:field_id => @field.id)
-      fieldOption.save
+      @field.field_option.build(:option => params['value']['select_field_value'],:field_id => @field.id)
+      @field.save
     else
       @field = Field.find(params['id'])
     end
   end
 
   def delete_option
-    if FieldOption.destroy(params['option_id'])
+    if Field.pull(BSON::ObjectId.from_string(params['field']['field_id']), {:field_option => {:_id => BSON::ObjectId.from_string(params['option']['option_id'])}})
       redirect_to :back
     end
   end
 
   def delete_asset_screen
-    if AssetScreen.destroy(params['asset_screen_id'])
-      redirect_to :back
-    end
+    #if AssetScreen.destroy(params['asset_screen_id'])
+    #  redirect_to :back
+    #end
   end
 
 end

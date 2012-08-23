@@ -1,8 +1,8 @@
-class AssetType < ActiveRecord::Base
-  attr_accessible :description, :name, :parent
+class AssetType
+  include MongoMapper::Document
+  key  :description, String
+  key  :name, String
+  key  :parent, String
 
-  searchable do
-      text :name, :description
-  end
-
+  many :asset_screen
 end

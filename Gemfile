@@ -39,3 +39,7 @@ gem 'jquery-rails'
 
 gem 'sunspot_rails'
 gem 'sunspot_solr'
+
+gem "mongo_mapper"
+
+gem "bson_ext"

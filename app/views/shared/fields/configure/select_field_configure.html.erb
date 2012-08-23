@@ -8,12 +8,12 @@
     <th>Name</th>
     <th>Actions</th>
   </tr>
-  <% FieldOption.find_all_by_field_id(field.id).each do |options| %>
+  <% field.field_option.each do |options| %>
       <tr>
         <td>
           <%= options.option %>
         </td>
-        <td><%= render :template => 'shared/fields/delete_field_option',:locals => { :option => options.id }%></td>
+        <td><%= render :template => 'shared/fields/delete_field_option',:locals => { :option => options.id,:field => field.id }%></td>
       </tr>
   <% end %>
 </table>

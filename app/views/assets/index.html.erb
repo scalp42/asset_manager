@@ -1,5 +1,4 @@
 <%= render :template => 'shared/navbar' %>
-
 <div align="right">
   <ul class="nav nav-pills">
     <li class="dropdown" id="menu1">
@@ -17,28 +16,27 @@
 </div>
 <table class="table table-striped">
   <tr>
-    <th>Type</th>
-    <th>Name</th>
-    <th>Description</th>
-    <th>Actions</th>
+	<th>Type</th>
+	<th>Name</th>
+	<th>Description</th>
+	<th>Actions</th>
   </tr>
   <% @assets.each do |asset| %>
-      <tr>
-        <td>
-          <%= link_to AssetType.find(asset.asset_type_id).name, :controller => 'assets', :action => 'view', :id => asset.id %>
-        </td>
-        <td>
-          <%= link_to asset.name, :controller => 'assets', :action => 'view', :id => asset.id %>
-        </td>
+	  <tr>
+		<td>
+		  <%= link_to 'sdfs', :controller => 'assets', :action => 'view', :id => asset.id %>
+		</td>
+		<td>
+		  <%= link_to asset.name, :controller => 'assets', :action => 'view', :id => asset.id %>
+		</td>
 
-        <td>
-          <%= link_to asset.description, :controller => 'assets', :action => 'view', :id => asset.id %>
-        </td>
-        <td>
-          <%= link_to 'Edit',:controller => 'assets', :action => 'edit' ,:id => asset.id  %>
-          <%= render :template => 'assets/delete', :locals => {:asset => asset} %>
-        </td>
-      </tr>
+		<td>
+		  <%= link_to asset.description, :controller => 'assets', :action => 'view', :id => asset.id %>
+		</td>
+		<td>
+		  <%= link_to 'Edit',:controller => 'assets', :action => 'edit' ,:id => asset.id  %>
+		  <%= render :template => 'assets/delete', :locals => {:asset => asset} %>
+		</td>
+	  </tr>
   <% end %>
 </table>
-
