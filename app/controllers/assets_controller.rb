@@ -6,37 +6,44 @@ class AssetsController < ApplicationController
   end
 
   def create
-   @asset_type = AssetType.find(BSON::ObjectId.from_string(params[:id]))
+    @asset_type = AssetType.find(BSON::ObjectId.from_string(params[:id]))
   end
 
   def save
-    asset = Asset.new(:name =>params[:name][:name],:description => params[:description][:description])
+    asset = Asset.new(:name => params[:name][:name],:description => params[:description][:description])
+
+    asset_type = AssetType.find(BSON::ObjectId.from_string(params[:asset_type][:asset_type_id]))
+
+    asset.asset_type_id = asset_type.id
+    asset.asset_type_name = asset_type.name
+
+    asset_type.asset_screen.each do |field|
+      fieldObj = Field.find(field.field_id)
+      if params[fieldObj.name][fieldObj.name] != nil
+        case params[fieldObj.name][fieldObj.name+'_type']
+          when 'option'
+            asset.field_value.build(:id => fieldObj.id,
+                                    :asset_id => asset.id ,
+                                    :field_option_id => params[fieldObj.name][fieldObj.name],
+                                    :field_id => fieldObj.id,
+                                    :text_value => fieldObj.field_option.find(BSON::ObjectId.from_string(params[fieldObj.name][fieldObj.name]  )).option)
+          when 'text'
+            asset.field_value.build(:id => fieldObj.id,
+                                    :asset_id => asset.id,
+                                    :text_value => params[fieldObj.name][fieldObj.name],
+                                    :field_id => fieldObj.id)
+          when 'date'
+            asset.field_value.build(:id => fieldObj.id,
+                                    :asset_id => asset.id,
+                                    :date => params[fieldObj.name][fieldObj.name],
+                                    :field_id => fieldObj.id)
+          else
+            puts "field not found"
+        end
+      end
+    end
+
     asset.save
-    #
-    #AssetScreen.find_all_by_asset_id(params[:asset_type][:asset_type_id]).each do |field|
-    #  fieldObj = Field.find(field)
-    #  if params[fieldObj.name][fieldObj.name] != nil
-    #    case params[fieldObj.name][fieldObj.name+'_type']
-    #      when 'option'
-    #        fieldValue = FieldValue.new(:asset_id => asset.id ,
-    #                                    :field_option_id => params[fieldObj.name][fieldObj.name],
-    #                                    :field_id => fieldObj.id)
-    #        fieldValue.save
-    #      when 'text'
-    #        fieldValue = FieldValue.new(:asset_id => asset.id,
-    #                                    :text_value => params[fieldObj.name][fieldObj.name],
-    #                                    :field_id => fieldObj.id)
-    #        fieldValue.save
-    #      when 'date'
-    #        fieldValue = FieldValue.new(:asset_id => asset.id,
-    #                                    :date => params[fieldObj.name][fieldObj.name],
-    #                                    :field_id => fieldObj.id)
-    #        fieldValue.save
-    #      else
-    #        puts "field not found"
-    #    end
-    #  end
-    #end
 
     redirect_to :action => 'index'
   end
@@ -49,11 +56,11 @@ class AssetsController < ApplicationController
 
   def edit
     @asset = Asset.find(params[:id])
+
   end
 
   def update
 
-    puts params.inspect
     asset = Asset.find(params[:asset][:asset_id])
 
     if(params[:name][:name] != nil)
@@ -68,56 +75,50 @@ class AssetsController < ApplicationController
       asset.description = nil
     end
 
-    asset.save
-
-    AssetScreen.find_all_by_asset_id(asset.asset_type_id).each do |field|
+    AssetType.find(asset.asset_type_id).asset_screen.each do |field|
       fieldObj = Field.find(field.field_id)
       if params[fieldObj.name][fieldObj.name] != nil
-        case params[fieldObj.name][fieldObj.name+'_type']
-          when 'option'
-            fieldValue = FieldValue.first(:conditions => ['asset_id=?  and field_id=?',asset.id,fieldObj.id])
-            if fieldValue != nil
-            fieldValue.field_option_id = params[fieldObj.name][fieldObj.name]
-            else
-              fieldValue = FieldValue.new(:asset_id => asset.id ,
+        asset.field_value.each do |fieldValue|
+          if(fieldObj.id == fieldValue.field_id)
+            case params[fieldObj.name][fieldObj.name+'_type']
+              when 'option'
+                if fieldValue != nil
+                  asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.field_option_id = params[fieldObj.name][fieldObj.name] }
+                else
+                  asset.field_value.build(:asset_id => asset.id ,
                                           :field_option_id => params[fieldObj.name][fieldObj.name],
                                           :field_id => fieldObj.id)
-            end
-            fieldValue.save
-
-          when 'text'
-            fieldValue = FieldValue.first(:conditions => ['asset_id=?  and field_id=?',asset.id,fieldObj.id])
-            if fieldValue == nil
-              fieldValue = FieldValue.new(:asset_id => asset.id,
+                end
+              when 'text'
+                if fieldValue == nil
+                  asset.field_value.build(:asset_id => asset.id,
                                           :text_value => params[fieldObj.name][fieldObj.name],
                                           :field_id => fieldObj.id)
-              fieldValue.save
-            elsif params[fieldObj.name][fieldObj.name] != ''
-              fieldValue.text_value = params[fieldObj.name][fieldObj.name]
-              fieldValue.save
-            elsif fieldValue != nil
-              fieldValue.destroy
-            end
-          when 'date'
-            fieldValue = FieldValue.first(:conditions => ['asset_id=?  and field_id=?',asset.id,fieldObj.id])
-            if fieldValue != nil
-              fieldValue.date = params[fieldObj.name][fieldObj.name]
-              fieldValue.save
-            else
-              fieldValue = FieldValue.new(:asset_id => asset.id,
+                elsif params[fieldObj.name][fieldObj.name] != ''
+                  asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.text_value = params[fieldObj.name][fieldObj.name] }
+                elsif fieldValue != nil
+                  fieldValue.destroy
+                end
+              when 'date'
+                if fieldValue != nil
+                  asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.date = params[fieldObj.name][fieldObj.name] }
+                else
+                  asset.field_value.build(:asset_id => asset.id,
                                           :date => params[fieldObj.name][fieldObj.name],
                                           :field_id => fieldObj.id)
-              fieldValue.save
-            end
 
-          else
-            puts "field not found"
+                end
+              else
+                puts "field not found"
+            end
+          end
         end
       elsif params[fieldObj.name][fieldObj.name] == nil and  FieldValue.first(:conditions => ['asset_id=?  and field_id=?',asset.id,fieldObj.id]) != nil
         FieldValue.destroy(FieldValue.first(:conditions => ['asset_id=?  and field_id=?',asset.id,fieldObj.id]).id)
       end
     end
 
+    asset.save
     redirect_to :action => 'index'
   end
 

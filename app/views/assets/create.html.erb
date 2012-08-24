@@ -18,6 +18,7 @@
        </table>
        <div class="modal-footer" style="text-align: center;">
 
+         <%= hidden_field('asset_type', 'asset_type_id',:value=>@asset_type.id) %>
 
          <%= submit_tag "Create" ,:class => 'btn btn-primary'%>
          <a data-toggle="modal" href="#myCreateAssetModal" class="btn secondary">No</a>

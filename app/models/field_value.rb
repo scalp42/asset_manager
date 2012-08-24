@@ -10,7 +10,7 @@ class FieldValue
   include MongoMapper::EmbeddedDocument
 
   key :numeric_value, Integer
-  key :field_id, String
+  key :field_id, ObjectId
   key :text_value, String
   key :date, Date
 
