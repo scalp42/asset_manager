@@ -57,10 +57,12 @@ class AssetsController < ApplicationController
       asset.description = nil
     end
 
+    fieldsToDelete = Array.new
+
     AssetType.find(asset.asset_type_id).asset_screen.each do |field|
       fieldObj = Field.find(field.field_id)
       createField = true
-      if params[fieldObj.name][fieldObj.name] != nil
+      if params[fieldObj.name][fieldObj.name] != nil and params[fieldObj.name][fieldObj.name]  != ''
         asset.field_value.each do |fieldValue|
           if(fieldObj.id == fieldValue.field_id)
             createField = false
@@ -70,12 +72,14 @@ class AssetsController < ApplicationController
         if createField
           setFieldValue(params,fieldObj,asset)
         end
-      elsif params[fieldObj.name][fieldObj.name] == nil and  FieldValue.first(:conditions => ['asset_id=?  and field_id=?',asset.id,fieldObj.id]) != nil
-        Asset.pull(asset.id, {:field_option => {:_id => fieldObj.id}})
+      elsif params[fieldObj.name][fieldObj.name]  == '' and  asset.field_value.find(fieldObj.id) != nil
+        fieldsToDelete.push(fieldObj.id)
+        puts asset.inspect
       end
     end
 
     asset.save
+    deleteFields(fieldsToDelete,asset)
     redirect_to :action => 'index'
   end
 

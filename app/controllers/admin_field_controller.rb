@@ -16,6 +16,8 @@ class AdminFieldController < ApplicationController
 
     if newField.save
       redirect_to :back
+    else
+      puts flash.inspect
     end
 
   end
@@ -26,7 +28,7 @@ class AdminFieldController < ApplicationController
 
     fields = Array.new
     @asset.asset_screen.each do |assetScreen|
-        fields.push(Field.find(assetScreen.field_id).name)
+      fields.push(Field.find(assetScreen.field_id).name)
     end
 
     puts fields.inspect
@@ -78,6 +80,19 @@ class AdminFieldController < ApplicationController
     else
       @field = Field.find(params['id'])
     end
+  end
+
+  def configure_child_field
+    if(params['value'].present?)
+      @field = Field.find(params['field_id']['field_id'])
+      @field.field_option.build(:option => params['value']['select_field_value'],:field_id => @field.id,:parent_field_option => params['parent_option_id']['parent_option_id'])
+      @field.save
+      @parentOption = params['parent_option_id']['parent_option_id']
+    else
+      @field = Field.find(params['field'])
+      @parentOption = params['id']
+    end
+
   end
 
   def delete_option

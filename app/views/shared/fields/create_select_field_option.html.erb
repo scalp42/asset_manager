@@ -11,6 +11,9 @@
             <td><%=  text_field("value","select_field_value") %> </td>
 
             <%= hidden_field('field_id', 'field_id',:value=>field.id) %>
+            <% if parentOption != nil %>
+                <%= hidden_field('parent_option_id', 'parent_option_id',:value=>parentOption) %>
+            <% end %>
           </tr>
         </table>
         <div class="modal-footer">

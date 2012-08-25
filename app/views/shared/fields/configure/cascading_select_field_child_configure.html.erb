@@ -1,0 +1,21 @@
+<h2>Configure Field <%= field.name %></h2>
+<%= render :template => 'shared/fields/create_select_field_option' ,:locals => { :field => field, :parentOption => parentOption }%>
+<div align="right">
+  <a class="btn btn-primary" data-toggle="modal" href="#myCreateSelectFieldOptionModal">Add Child Select Option</a>
+</div>
+<table class="table table-striped">
+  <tr>
+    <th>Name</th>
+    <th>Actions</th>
+  </tr>
+  <% field.field_option.each do |options| %>
+      <% if options.parent_field_option != nil and options.parent_field_option == BSON::ObjectId.from_string(parentOption) %>
+      <tr>
+        <td>
+          <%= options.option %>
+        </td>
+        <td><%= render :template => 'shared/fields/delete_field_option',:locals => { :option => options.id,:field => field.id }%></td>
+      </tr>
+          <% end %>
+  <% end %>
+</table>

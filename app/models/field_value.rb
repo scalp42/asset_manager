@@ -14,6 +14,7 @@ class FieldValue
   key :field_id, ObjectId
   key :text_value, String
   key :date, Date
+  key :parent_field_option_id, ObjectId
   key :field_option_id, Array
 
   #searchable do

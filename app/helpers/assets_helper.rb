@@ -14,8 +14,8 @@ module AssetsHelper
         asset.field_value.build(:id => fieldObj.id,
                                 :asset_id => asset.id ,
                                 :field_option_id => options,
-                                :field_id => fieldObj.id,
-                                :text_value => fieldObj.field_option.find(BSON::ObjectId.from_string(params[fieldObj.name][fieldObj.name])).option)
+                                :field_id => fieldObj.id)
+                               # :text_value => fieldObj.field_option.find(BSON::ObjectId.from_string(params[fieldObj.name][fieldObj.name])).option)
       when 'text'
         asset.field_value.build(:id => fieldObj.id,
                                 :asset_id => asset.id,
@@ -36,7 +36,9 @@ module AssetsHelper
       when 'single_option'
         asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.field_option_id = fieldObj.field_option.find(BSON::ObjectId.from_string(params[fieldObj.name][fieldObj.name]  )).id.to_s, b.text_value = fieldObj.field_option.find(BSON::ObjectId.from_string(params[fieldObj.name][fieldObj.name]  )).option}
       when 'multi_option'
-        asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.field_option_id = fieldObj.field_option.find(BSON::ObjectId.from_string(params[fieldObj.name][fieldObj.name]  )).id.to_s, b.text_value = fieldObj.field_option.find(BSON::ObjectId.from_string(params[fieldObj.name][fieldObj.name]  )).option}
+        options = Array.new
+        options.push(params[fieldObj.name][fieldObj.name])
+        asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.field_option_id = options}
       when 'text'
         if params[fieldObj.name][fieldObj.name] != ''
           asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.text_value = params[fieldObj.name][fieldObj.name] }
@@ -50,4 +52,10 @@ module AssetsHelper
     end
   end
 
+
+  def deleteFields(fieldsToDelete,asset)
+    fieldsToDelete.each do |field|
+      Asset.pull(asset.id, {:field_value => {:_id => field}})
+    end
+  end
 end
