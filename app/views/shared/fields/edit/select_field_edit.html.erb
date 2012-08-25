@@ -4,4 +4,4 @@
 <% else %>
     <td><%=  select(field_name,field_name, Field.find(field_id).field_option.collect {|p| [ p.option, p.id ] }) %></td>
 <% end %>
-<%= hidden_field(field_name, field_name+'_type',:value=> 'option') %>
+<%= hidden_field(field_name, field_name+'_type',:value=> 'single_option') %>

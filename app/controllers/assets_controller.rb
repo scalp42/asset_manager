@@ -1,4 +1,5 @@
 class AssetsController < ApplicationController
+  include AssetsHelper
 
   def index
     @assets = Asset.all
@@ -20,26 +21,7 @@ class AssetsController < ApplicationController
     asset_type.asset_screen.each do |field|
       fieldObj = Field.find(field.field_id)
       if params[fieldObj.name][fieldObj.name] != nil
-        case params[fieldObj.name][fieldObj.name+'_type']
-          when 'option'
-            asset.field_value.build(:id => fieldObj.id,
-                                    :asset_id => asset.id ,
-                                    :field_option_id => params[fieldObj.name][fieldObj.name],
-                                    :field_id => fieldObj.id,
-                                    :text_value => fieldObj.field_option.find(BSON::ObjectId.from_string(params[fieldObj.name][fieldObj.name]  )).option)
-          when 'text'
-            asset.field_value.build(:id => fieldObj.id,
-                                    :asset_id => asset.id,
-                                    :text_value => params[fieldObj.name][fieldObj.name],
-                                    :field_id => fieldObj.id)
-          when 'date'
-            asset.field_value.build(:id => fieldObj.id,
-                                    :asset_id => asset.id,
-                                    :date => params[fieldObj.name][fieldObj.name],
-                                    :field_id => fieldObj.id)
-          else
-            puts "field not found"
-        end
+        setFieldValue(params,fieldObj,asset)
       end
     end
 
@@ -77,44 +59,19 @@ class AssetsController < ApplicationController
 
     AssetType.find(asset.asset_type_id).asset_screen.each do |field|
       fieldObj = Field.find(field.field_id)
+      createField = true
       if params[fieldObj.name][fieldObj.name] != nil
         asset.field_value.each do |fieldValue|
           if(fieldObj.id == fieldValue.field_id)
-            case params[fieldObj.name][fieldObj.name+'_type']
-              when 'option'
-                if fieldValue != nil
-                  asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.field_option_id = params[fieldObj.name][fieldObj.name] }
-                else
-                  asset.field_value.build(:asset_id => asset.id ,
-                                          :field_option_id => params[fieldObj.name][fieldObj.name],
-                                          :field_id => fieldObj.id)
-                end
-              when 'text'
-                if fieldValue == nil
-                  asset.field_value.build(:asset_id => asset.id,
-                                          :text_value => params[fieldObj.name][fieldObj.name],
-                                          :field_id => fieldObj.id)
-                elsif params[fieldObj.name][fieldObj.name] != ''
-                  asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.text_value = params[fieldObj.name][fieldObj.name] }
-                elsif fieldValue != nil
-                  fieldValue.destroy
-                end
-              when 'date'
-                if fieldValue != nil
-                  asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.date = params[fieldObj.name][fieldObj.name] }
-                else
-                  asset.field_value.build(:asset_id => asset.id,
-                                          :date => params[fieldObj.name][fieldObj.name],
-                                          :field_id => fieldObj.id)
-
-                end
-              else
-                puts "field not found"
-            end
+            createField = false
+            updateFieldValue(params,fieldObj,fieldValue,asset)
           end
         end
+        if createField
+          setFieldValue(params,fieldObj,asset)
+        end
       elsif params[fieldObj.name][fieldObj.name] == nil and  FieldValue.first(:conditions => ['asset_id=?  and field_id=?',asset.id,fieldObj.id]) != nil
-        FieldValue.destroy(FieldValue.first(:conditions => ['asset_id=?  and field_id=?',asset.id,fieldObj.id]).id)
+        Asset.pull(asset.id, {:field_option => {:_id => fieldObj.id}})
       end
     end
 

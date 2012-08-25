@@ -8,11 +8,18 @@ class FieldValue
   #end
 
   include MongoMapper::EmbeddedDocument
+  include Sunspot::Mongo
 
   key :numeric_value, Integer
   key :field_id, ObjectId
   key :text_value, String
   key :date, Date
+  key :field_option_id, Array
 
+  #searchable do
+  #  integer :numeric_value
+  #  text :text_value
+  #  text :field_option_id
+  #end
 
 end

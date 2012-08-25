@@ -1,3 +1,3 @@
 <td><%= field_name %></td>
 <td><%=  select(field_name,field_name, Field.find(BSON::ObjectId.from_string(field_id)).field_option.collect {|p| [ p.option, p.id ] }) %></td>
-<%= hidden_field(field_name, field_name+'_type',:value=> 'option') %>
+<%= hidden_field(field_name, field_name+'_type',:value=> 'single_option') %>

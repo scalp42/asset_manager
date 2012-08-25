@@ -102,22 +102,40 @@ module SearchHelper
 
     fields = searchCriteria.fields
 
-    results = Sunspot.search [Asset] do
-      if searchCriteria.asset_types != nil and searchCriteria.asset_types.count > 0
-        with(:asset_type_id,searchCriteria.asset_types  )
+    results = Sunspot.search [Asset]do
+
+      if(searchCriteria.asset_types != nil && searchCriteria.asset_types.count > 0)
+        fulltext searchCriteria.asset_types do
+          fields('asset_type_id')
+        end
       end
 
       if searchCriteria.name != nil
         fulltext searchCriteria.name do
-          fields(:name)
+          fields('name')
         end
       end
 
       if searchCriteria.description != nil
         fulltext searchCriteria.description do
-          fields(:description)
+          fields('description')
         end
       end
+
+      #Field.all.each do |field|
+      #  if fields[field.id] != nil
+      #    if FieldType.find(BSON::ObjectId.from_string(field.field_type_id)).use_option
+      #      fulltext fields[field.id] do
+      #        fields(field.name)
+      #      end
+      #    elsif FieldType.find(BSON::ObjectId.from_string(field.field_type_id)).use_text
+      #      fulltext fields[field.id] do
+      #        fields(field.name)
+      #      end
+      #    end
+      #  end
+      #end
+
     end
 
     @assets = results.results

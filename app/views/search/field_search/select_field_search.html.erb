@@ -1,5 +1,5 @@
 <% if value != nil %>
-    <%=  select(field.name,field.name,FieldOption.find_all_by_field_id(field.id).collect {|p| [ p.option, p.id ] },{:selected  => value},{:multiple => true}) %>
+    <%=  select(field.name,field.name,field.field_option.collect {|p| [ p.option, p.id ] },{:selected  => value},{:multiple => true}) %>
 <% else %>
-    <%=  select(field.name,field.name,FieldOption.find_all_by_field_id(field.id).collect {|p| [ p.option, p.id ] },{},{:multiple => true}) %>
+    <%=  select(field.name,field.name,field.field_option.collect {|p| [ p.option, p.id ] },{},{:multiple => true}) %>
 <% end %>
