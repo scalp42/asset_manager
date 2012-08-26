@@ -42,6 +42,13 @@ gem 'sunspot_solr'
 
 gem 'sunspot_mongo'
 
+gem 'tire'
+
 gem "mongo_mapper"
 
 gem "bson_ext"
+
+gem "prototype-rails"
+
+gem 'devise'
+gem 'mm-devise'

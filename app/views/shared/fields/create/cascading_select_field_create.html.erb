@@ -1,12 +1,2 @@
 <td><%= field_name %></td>
-<script type="text/javascript">
-function test()
-{
- return document.getElementById("<%= field_name %>_parent_<%= field_name %>_parent").value;
-
-}
-</script>
-<td><%=  select(field_name+"_parent",field_name+"_parent", getParentOptions(field_id).collect {|p| [ p.option, p.id ] },{:prompt => 'Select'})  %>
-  <%= select(field_name+"_child",field_name+"_child" ,getChildOptions().collect {|p| [ p.option, p.id ] } ) %></td>
-<%= field_name+"_parent"  %>
-<%= hidden_field(field_name, field_name+'_type',:value=> 'cascading_option') %>
+<td><%=  collection_select(field_name, field_name, getParentOptions(field_id).collect {|p| [ p.option, p.id ]},{},{}  ) %></td>

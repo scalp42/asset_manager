@@ -86,4 +86,20 @@ class AssetsController < ApplicationController
   def view
     @asset = Asset.find(params[:id])
   end
+
+  def getChildOptions()
+
+    field = Field.find(BSON::ObjectId.from_string(params['field_id']))
+
+    @childOptions = Array.new
+    field.field_option.each do |field_option|
+       if(field_option.parent_field_option == BSON::ObjectId.from_string(params['data']))
+         @childOptions.push(field_option)
+       end
+    end
+
+    return @childOptions
+
+    render :template => 'shared/fields/create/cascading_select_field_child_create'
+  end
 end

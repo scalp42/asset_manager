@@ -67,9 +67,9 @@ class AdminFieldController < ApplicationController
   end
 
   def delete_asset_type
-    #if AssetType.delete(params['asset_type_id'])
-    #  redirect_to :back
-    #end
+    if AssetType.destroy(BSON::ObjectId.from_string(params['asset_type_id']))
+      redirect_to :back
+    end
   end
 
   def configure_field
