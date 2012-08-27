@@ -1,6 +1,7 @@
 <h2>Configure Field <%= field.name %></h2>
 <%= render :template => 'shared/fields/create_select_field_option' ,:locals => { :field => field, :parentOption => parentOption }%>
 <div align="right">
+  <a class="btn btn-primary" data-toggle="modal" href="/admin_field/configure_field/<%= field.id %>">Back To Parents</a>
   <a class="btn btn-primary" data-toggle="modal" href="#myCreateSelectFieldOptionModal">Add Child Select Option</a>
 </div>
 <table class="table table-striped">
