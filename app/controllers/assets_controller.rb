@@ -22,6 +22,8 @@ class AssetsController < ApplicationController
       fieldObj = Field.find(field.field_id)
       if params[fieldObj.name][fieldObj.name] != nil
         setFieldValue(params,fieldObj,asset)
+      elsif params[fieldObj.name+"_parent"][fieldObj.name+"_parent"] != nil
+        setCascadeValue(params,fieldObj,asset)
       end
     end
 
@@ -98,8 +100,9 @@ class AssetsController < ApplicationController
        end
     end
 
-    return @childOptions
+    respond_to do |format|
+      format.json { render :json => @childOptions }
+    end
 
-    render :template => 'shared/fields/create/cascading_select_field_child_create'
   end
 end

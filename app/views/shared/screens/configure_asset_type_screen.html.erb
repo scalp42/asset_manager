@@ -5,7 +5,7 @@
   </div>
   <div class="modal-body" align="center">
 
-    <form method="post" class="well" action="/admin_field/update_asset_type_screen" >
+    <form method="get" class="well" action="/admin_field/update_asset_type_screen" >
         <table>
           <tr>
           <td> <%=  select("field", "field_id", fieldsToBeAdded.collect {|p| [ p.name, p.id ] }, {:prompt => 'Select Field'}) %> </td>

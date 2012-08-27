@@ -1,5 +1,20 @@
 module AssetsHelper
 
+  def setCascadeValue(params,fieldObj,asset)
+    if params[fieldObj.name+"_child"][fieldObj.name+"_child"] != nil
+      asset.field_value.build(:id => fieldObj.id,
+                              :asset_id => asset.id ,
+                              :parent_field_option_id => params[fieldObj.name+"_parent"][fieldObj.name+"_parent"],
+                              :child_field_option_id => params[fieldObj.name+"_child"][fieldObj.name+"_child"],
+                              :field_id => fieldObj.id)
+    else
+      asset.field_value.build(:id => fieldObj.id,
+                              :asset_id => asset.id ,
+                              :parent_field_option_id => params[fieldObj.name+"_parent"][fieldObj.name+"_child"],
+                              :field_id => fieldObj.id)
+    end
+  end
+
   def setFieldValue(params,fieldObj,asset)
     case params[fieldObj.name][fieldObj.name+'_type']
       when 'single_option'
