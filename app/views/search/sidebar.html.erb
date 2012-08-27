@@ -11,7 +11,7 @@
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="tab1">
-                <form method="post" action="/search/search">
+                <form method="get" action="/search/search">
                   <% if @showCreateFilter %>
                       <%= render :template => 'search/create_filter' %>
                   <% end %>
