@@ -11,6 +11,7 @@ class AssetsController < ApplicationController
   end
 
   def save
+    puts params.inspect
     asset = Asset.new(:name => params[:name][:name],:description => params[:description][:description])
 
     asset_type = AssetType.find(BSON::ObjectId.from_string(params[:asset_type][:asset_type_id]))
@@ -74,6 +75,8 @@ class AssetsController < ApplicationController
         if createField
           setFieldValue(params,fieldObj,asset)
         end
+      elsif params[fieldObj.name+"_parent"][fieldObj.name+"_parent"] != ""
+        updateCascadeValue(params,fieldObj,asset)
       elsif params[fieldObj.name][fieldObj.name]  == '' and  asset.field_value.find(fieldObj.id) != nil
         fieldsToDelete.push(fieldObj.id)
         puts asset.inspect

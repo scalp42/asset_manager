@@ -1,7 +1,7 @@
 module AssetsHelper
 
   def setCascadeValue(params,fieldObj,asset)
-    if params[fieldObj.name+"_child"][fieldObj.name+"_child"] != nil
+    if params[fieldObj.name+"_child"][fieldObj.name+"_child"] != "null"
       asset.field_value.build(:id => fieldObj.id,
                               :asset_id => asset.id ,
                               :parent_field_option_id => params[fieldObj.name+"_parent"][fieldObj.name+"_parent"],
@@ -10,8 +10,18 @@ module AssetsHelper
     else
       asset.field_value.build(:id => fieldObj.id,
                               :asset_id => asset.id ,
-                              :parent_field_option_id => params[fieldObj.name+"_parent"][fieldObj.name+"_child"],
+                              :parent_field_option_id => params[fieldObj.name+"_parent"][fieldObj.name+"_parent"],
+                              :child_field_option_id => 'empty',
                               :field_id => fieldObj.id)
+    end
+  end
+
+  def updateCascadeValue(params,fieldObj,asset)
+    puts 'keely'
+    puts params.inspect
+    asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.parent_field_option_id = params[fieldObj.name+"_parent"][fieldObj.name+"_parent"] }
+    if params[fieldObj.name+"_child"][fieldObj.name+"_child"] != "null"
+      asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.child_field_option_id = params[fieldObj.name+"_child"][fieldObj.name+"_child"] }
     end
   end
 
@@ -30,7 +40,7 @@ module AssetsHelper
                                 :asset_id => asset.id ,
                                 :field_option_id => options,
                                 :field_id => fieldObj.id)
-                               # :text_value => fieldObj.field_option.find(BSON::ObjectId.from_string(params[fieldObj.name][fieldObj.name])).option)
+      # :text_value => fieldObj.field_option.find(BSON::ObjectId.from_string(params[fieldObj.name][fieldObj.name])).option)
       when 'text'
         asset.field_value.build(:id => fieldObj.id,
                                 :asset_id => asset.id,
@@ -61,7 +71,7 @@ module AssetsHelper
           Asset.pull(asset.id, {:field_option => {:_id => fieldObj.id}})
         end
       when 'date'
-          asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.date = params[fieldObj.name][fieldObj.name] }
+        asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.date = params[fieldObj.name][fieldObj.name] }
       else
         puts "field not found"
     end

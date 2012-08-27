@@ -27,7 +27,7 @@
         });
     }
 
-    if("<%= value.parent_field_option_id  %>" != null)
+    if("<%= value %>" != "")
     {
         $.ajax({
             url: '/assets/getChildOptions',
@@ -58,6 +58,7 @@
             }
         });
     }
+
 </script>
 <td>
   <% if value != nil %>
