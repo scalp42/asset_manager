@@ -9,6 +9,7 @@ class FieldValue
 
   include MongoMapper::EmbeddedDocument
   include Sunspot::Mongo
+  plugin Joint
 
   key :numeric_value, Integer
   key :field_id, ObjectId
@@ -16,6 +17,7 @@ class FieldValue
   key :date, Date
   key :parent_field_option_id, ObjectId
   key :field_option_id, Array
+  attachment :file
 
   #searchable do
   #  integer :numeric_value

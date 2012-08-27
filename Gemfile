@@ -53,3 +53,5 @@ gem "prototype-rails"
 gem 'devise'
 gem 'mm-devise'
 gem "cancan"
+
+gem 'joint'

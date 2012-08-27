@@ -51,6 +51,11 @@ module AssetsHelper
                                 :asset_id => asset.id,
                                 :date => params[fieldObj.name][fieldObj.name],
                                 :field_id => fieldObj.id)
+      when 'file_upload'
+        asset.field_value.build(:id => fieldObj.id,
+                                :asset_id => asset.id,
+                                :attachment => params[fieldObj.name][fieldObj.name],
+                                :field_id => fieldObj.id)
       else
         puts "field not found"
     end

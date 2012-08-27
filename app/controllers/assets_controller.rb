@@ -11,7 +11,11 @@ class AssetsController < ApplicationController
   end
 
   def save
-    puts params.inspect
+
+
+    puts 'iuewoiruioew'
+    puts params['Image']['Image']
+
     asset = Asset.new(:name => params[:name][:name],:description => params[:description][:description])
 
     asset_type = AssetType.find(BSON::ObjectId.from_string(params[:asset_type][:asset_type_id]))
