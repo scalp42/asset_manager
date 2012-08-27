@@ -16,4 +16,17 @@ class User
   key :remember_created_at, Date
   key :reset_password_token, String
   key :reset_password_sent_at, Date
+
+  key :first_name, String
+  key :last_name, String
+  key :active, Boolean
+  key :full_name, String
+
+  def inactive_message
+    "Sorry, this account has been deactivated."
+  end
+
+  def active?
+    !!active
+  end
 end

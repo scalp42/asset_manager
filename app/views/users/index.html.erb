@@ -1,0 +1,30 @@
+<%= render :template => 'shared/navbar' %>
+<div align="right">
+  <%= link_to 'Create User', :controller => 'users', :action => 'create' %>
+</div>
+<table class="table table-striped">
+  <tr>
+	<th>Full Name</th>
+	<th>Email</th>
+	<th>Active</th>
+	<th>Actions</th>
+  </tr>
+  <% @users.each do |user| %>
+	  <tr>
+		<td>
+		  <%= link_to user.full_name, :controller => 'users', :action => 'view', :id => user.id %>
+		</td>
+		<td>
+		  <%= link_to user.email, :controller => 'assets', :action => 'view', :id => user.id %>
+		</td>
+
+		<td>
+		  <%= link_to user.active, :controller => 'assets', :action => 'view', :id => user.id %>
+		</td>
+		<td>
+          <%= render :template => 'users/edit', :locals => {:user => user} %>
+		  <%= render :template => 'users/delete', :locals => {:user => user} %>
+		</td>
+	  </tr>
+  <% end %>
+</table>
