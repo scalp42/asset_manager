@@ -6,10 +6,12 @@ class FieldValue
   #searchable do
   #    text :numeric_value, :text_value , :date, :datetime
   #end
-
   include MongoMapper::EmbeddedDocument
   include Sunspot::Mongo
   plugin Joint
+
+
+  belongs_to :asset
 
   key :numeric_value, Integer
   key :field_id, ObjectId

@@ -98,47 +98,36 @@ module SearchHelper
 
   end
 
-  def search_solr(searchCriteria)
+  def search_elastic(searchCriteria)
+    puts "Megansdafsd12323"
 
-    fields = searchCriteria.fields
+    puts searchCriteria.fields.inspect
 
-    #
-    #results = Sunspot.search [Asset]do
-    #
-    #  if(searchCriteria.asset_types != nil && searchCriteria.asset_types.count > 0)
-    #    fulltext searchCriteria.asset_types do
-    #      fields('asset_type_id')
-    #    end
-    #  end
-    #
-    #  if searchCriteria.name != nil
-    #    fulltext searchCriteria.name do
-    #      fields('name')
-    #    end
-    #  end
-    #
-    #  if searchCriteria.description != nil
-    #    fulltext searchCriteria.description do
-    #      fields('description')
-    #    end
-    #  end
-    #
-    #  Field.all.each do |field|
-    #    if fields[field.id] != nil
-    #      if FieldType.find(BSON::ObjectId.from_string(field.field_type_id)).use_option
-    #        fulltext fields[field.id] do
-    #          fields(:field_value)
-    #        end
-    #      elsif FieldType.find(BSON::ObjectId.from_string(field.field_type_id)).use_text
-    #        fulltext fields[field.id] do
-    #          fields(:field_value)
-    #        end
-    #      end
-    #    end
-    #  end
-    #
-    #end
-    #
-    #@assets = results.results
+    results = Tire.search 'assets' do
+      searchCriteria.fields.each_pair do |k,v|
+        query do
+          if FieldType.find(BSON::ObjectId.from_string(Field.find(k).field_type_id)).use_text
+            string 'field_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+v
+          elsif FieldType.find(BSON::ObjectId.from_string(Field.find(k).field_type_id)).use_option
+            boolean do
+              v.each do |value|
+                if value != '' and !value.empty?
+                  should { string 'field_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+value }
+                end
+              end
+            end
+          elsif FieldType.find(Field.find(k).field_type_id).use_date
+            date 'field_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+v
+          end
+        end
+      end
+    end
+
+    puts results.as_json
+
+    puts results.results.inspect
+
+    @assets = results.results
+
   end
 end

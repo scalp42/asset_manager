@@ -3,7 +3,7 @@ class AssetsController < ApplicationController
 
   def index
     @assets = Asset.all
-
+    search()
   end
 
   def create
@@ -11,11 +11,7 @@ class AssetsController < ApplicationController
   end
 
   def save
-
-
-    puts 'iuewoiruioew'
-    puts params['Image']['Image']
-
+    puts params.inspect
     asset = Asset.new(:name => params[:name][:name],:description => params[:description][:description])
 
     asset_type = AssetType.find(BSON::ObjectId.from_string(params[:asset_type][:asset_type_id]))
@@ -27,7 +23,7 @@ class AssetsController < ApplicationController
       fieldObj = Field.find(field.field_id)
       if params[fieldObj.name][fieldObj.name] != nil
         setFieldValue(params,fieldObj,asset)
-      elsif params[fieldObj.name+"_parent"][fieldObj.name+"_parent"] != nil
+      elsif params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] != nil
         setCascadeValue(params,fieldObj,asset)
       end
     end
@@ -79,7 +75,7 @@ class AssetsController < ApplicationController
         if createField
           setFieldValue(params,fieldObj,asset)
         end
-      elsif params[fieldObj.name+"_parent"][fieldObj.name+"_parent"] != ""
+      elsif params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] != ""
         updateCascadeValue(params,fieldObj,asset)
       elsif params[fieldObj.name][fieldObj.name]  == '' and  asset.field_value.find(fieldObj.id) != nil
         fieldsToDelete.push(fieldObj.id)

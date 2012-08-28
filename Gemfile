@@ -37,11 +37,6 @@ gem 'jquery-rails'
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
-gem 'sunspot_rails'
-gem 'sunspot_solr'
-
-gem 'sunspot_mongo'
-
 gem 'tire'
 
 gem "mongo_mapper"

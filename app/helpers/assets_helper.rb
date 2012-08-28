@@ -1,27 +1,25 @@
 module AssetsHelper
 
   def setCascadeValue(params,fieldObj,asset)
-    if params[fieldObj.name+"_child"][fieldObj.name+"_child"] != "null"
+    if params[fieldObj.name.gsub(" ","_")+"_child"][fieldObj.name.gsub(" ","_")+"_child"] != "null"
       asset.field_value.build(:id => fieldObj.id,
                               :asset_id => asset.id ,
-                              :parent_field_option_id => params[fieldObj.name+"_parent"][fieldObj.name+"_parent"],
-                              :child_field_option_id => params[fieldObj.name+"_child"][fieldObj.name+"_child"],
+                              :parent_field_option_id => params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"],
+                              :child_field_option_id => params[fieldObj.name.gsub(" ","_")+"_child"][fieldObj.name.gsub(" ","_")+"_child"],
                               :field_id => fieldObj.id)
     else
       asset.field_value.build(:id => fieldObj.id,
                               :asset_id => asset.id ,
-                              :parent_field_option_id => params[fieldObj.name+"_parent"][fieldObj.name+"_parent"],
+                              :parent_field_option_id => params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"],
                               :child_field_option_id => 'empty',
                               :field_id => fieldObj.id)
     end
   end
 
   def updateCascadeValue(params,fieldObj,asset)
-    puts 'keely'
-    puts params.inspect
-    asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.parent_field_option_id = params[fieldObj.name+"_parent"][fieldObj.name+"_parent"] }
-    if params[fieldObj.name+"_child"][fieldObj.name+"_child"] != "null"
-      asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.child_field_option_id = params[fieldObj.name+"_child"][fieldObj.name+"_child"] }
+    asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.parent_field_option_id = params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] }
+    if params[fieldObj.name.gsub(" ","_")+"_child"][fieldObj.name.gsub(" ","_")+"_child"] != "null"
+      asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.child_field_option_id = params[fieldObj.name.gsub(" ","_")+"_child"][fieldObj.name.gsub(" ","_")+"_child"] }
     end
   end
 
@@ -32,6 +30,7 @@ module AssetsHelper
                                 :asset_id => asset.id ,
                                 :field_option_id => params[fieldObj.name][fieldObj.name],
                                 :field_id => fieldObj.id,
+                                fieldObj.name.downcase.gsub(" ","_") => params[fieldObj.name][fieldObj.name],
                                 :text_value => fieldObj.field_option.find(BSON::ObjectId.from_string(params[fieldObj.name][fieldObj.name])).option)
       when 'multi_option'
         options = Array.new
@@ -39,17 +38,20 @@ module AssetsHelper
         asset.field_value.build(:id => fieldObj.id,
                                 :asset_id => asset.id ,
                                 :field_option_id => options,
+                                fieldObj.name.downcase.gsub(" ","_") => options,
                                 :field_id => fieldObj.id)
       # :text_value => fieldObj.field_option.find(BSON::ObjectId.from_string(params[fieldObj.name][fieldObj.name])).option)
       when 'text'
         asset.field_value.build(:id => fieldObj.id,
                                 :asset_id => asset.id,
                                 :text_value => params[fieldObj.name][fieldObj.name],
+                                fieldObj.name.downcase.gsub(" ","_") => params[fieldObj.name][fieldObj.name],
                                 :field_id => fieldObj.id)
       when 'date'
         asset.field_value.build(:id => fieldObj.id,
                                 :asset_id => asset.id,
                                 :date => params[fieldObj.name][fieldObj.name],
+                                fieldObj.name.downcase.gsub(" ","_") => params[fieldObj.name][fieldObj.name],
                                 :field_id => fieldObj.id)
       when 'file_upload'
         asset.field_value.build(:id => fieldObj.id,
@@ -87,5 +89,9 @@ module AssetsHelper
     fieldsToDelete.each do |field|
       Asset.pull(asset.id, {:field_value => {:_id => field}})
     end
+  end
+
+  def search()
+
   end
 end

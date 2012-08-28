@@ -41,7 +41,7 @@ class SearchController < ApplicationController
 
     #createFilter(params,fields)
 
-    search_solr(@searchCriteria)
+    search_elastic(@searchCriteria)
 
     @filters = Filter.all
 
