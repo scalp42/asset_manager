@@ -66,7 +66,7 @@ module AssetsHelper
   def updateFieldValue(params,fieldObj,fieldValue,asset)
     case params[fieldObj.name][fieldObj.name+'_type']
       when 'single_option'
-        asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.field_option_id = fieldObj.field_option.find(BSON::ObjectId.from_string(params[fieldObj.name][fieldObj.name]  )).id.to_s, b.text_value = fieldObj.field_option.find(BSON::ObjectId.from_string(params[fieldObj.name][fieldObj.name]  )).option}
+        asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.field_option_id = fieldObj.field_option.find(BSON::ObjectId.from_string(params[fieldObj.name][fieldObj.name]  )).id, b.text_value = fieldObj.field_option.find(BSON::ObjectId.from_string(params[fieldObj.name][fieldObj.name]  )).option}
       when 'multi_option'
         options = Array.new
         options.push(params[fieldObj.name][fieldObj.name])

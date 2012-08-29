@@ -99,22 +99,29 @@ module SearchHelper
   end
 
   def search_elastic(searchCriteria)
-    puts "Megansdafsd12323"
 
-    puts searchCriteria.fields.inspect
 
     results = Tire.search 'assets' do
-      searchCriteria.fields.each_pair do |k,v|
-        query do
-          if FieldType.find(BSON::ObjectId.from_string(Field.find(k).field_type_id)).use_text
-            string 'field_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+v
-          elsif FieldType.find(BSON::ObjectId.from_string(Field.find(k).field_type_id)).use_option
-            boolean do
-              v.each do |value|
-                if value != '' and !value.empty?
-                  should { string 'field_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+value }
+      query do
+        boolean do
+          searchCriteria.fields.each_pair do |k,v|
+            if FieldType.find(Field.find(k).field_type_id).use_option
+              must do
+                boolean do
+                  v.each do |value|
+                    if value != '' and !value.empty?
+                      should { string 'field_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+value }
+                    end
+                  end
                 end
               end
+            end
+          end
+        end
+        searchCriteria.fields.each_pair do |k,v|
+          if FieldType.find(Field.find(k).field_type_id).use_text
+            if v != nil and v != ''
+              string 'field_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+v
             end
           elsif FieldType.find(Field.find(k).field_type_id).use_date
             date 'field_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+v
@@ -122,10 +129,6 @@ module SearchHelper
         end
       end
     end
-
-    puts results.as_json
-
-    puts results.results.inspect
 
     @assets = results.results
 

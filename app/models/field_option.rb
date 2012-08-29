@@ -6,8 +6,4 @@ class FieldOption
   key :option,  String
   key :parent_field_option, ObjectId
 
-  #searchable do
-  #    text :option
-  #end
-
 end

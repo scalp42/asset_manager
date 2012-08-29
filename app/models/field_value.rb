@@ -1,13 +1,5 @@
 class FieldValue
-  #has_one :asset
-  #belongs_to :asset
-  #attr_accessible :numeric_value, :field_option_id, :field_id, :text_value , :asset_id , :date ,:datetime
-  #
-  #searchable do
-  #    text :numeric_value, :text_value , :date, :datetime
-  #end
   include MongoMapper::EmbeddedDocument
-  include Sunspot::Mongo
   plugin Joint
 
 
@@ -20,11 +12,5 @@ class FieldValue
   key :parent_field_option_id, ObjectId
   key :field_option_id, Array
   attachment :file
-
-  #searchable do
-  #  integer :numeric_value
-  #  text :text_value
-  #  text :field_option_id
-  #end
 
 end
