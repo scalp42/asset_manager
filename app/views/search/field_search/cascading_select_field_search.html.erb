@@ -1,1 +1,70 @@
-w
+
+<script type="text/javascript">
+    function test()
+    {
+        $.ajax({
+            url: '/assets/getChildOptions',
+            dataType: 'json',
+            data: {
+                data: document.getElementById("<%= field.name.gsub(" ","_") %>_parent_<%= field.name.gsub(" ","_") %>_parent").value,
+                field_id: "<%= field.id %>"
+            },
+            type: "POST",
+            success: function(data) {
+                var childSelect = document.getElementById("<%= field.name.gsub(" ","_") %>_child_<%= field.name.gsub(" ","_") %>_child");
+
+                var options = 1 ;
+                childSelect[0] = new Option("Please Select",null,true,false);
+                data.forEach(function(item) {
+                    childSelect[options] = new Option(item.option,item.id,false, false);
+                    options++;
+                });
+
+            },
+            complete: function(request)	{
+
+            }
+        });
+    }
+
+    if("<%= valueParent %>" != "")
+    {
+        $.ajax({
+            url: '/assets/getChildOptions',
+            dataType: 'json',
+            data: {
+                data: "<%= valueParent  %>",
+                field_id: "<%= field.id %>"
+            },
+            type: "POST",
+            success: function(data) {
+                var childSelect = document.getElementById("<%= field.name.gsub(" ","_") %>_child_<%= field.name.gsub(" ","_") %>_child");
+
+                var options = 1 ;
+
+                childSelect[0] = new Option("Please Select",null,false,false);
+                data.forEach(function(item) {
+                    if(item.id == "<%= valueChild %>")
+                        childSelect[options] = new Option(item.option,item.id,true, true);
+                    else
+                        childSelect[options] = new Option(item.option,item.id,false, false);
+
+                    options++;
+                });
+
+            },
+            complete: function(request)	{
+
+            }
+        });
+    }
+
+</script>
+<% if valueParent != nil %>
+    <%=  select(field.name.gsub(" ","_")+"_parent",field.name.gsub(" ","_")+"_parent", getParentOptions(field.id.to_s).collect {|p| [ p.option, p.id ] },{:selected => valueParent,:prompt => 'Please Select'}, { :onchange => "test()" })  %>
+<% else %>
+    <%=  select(field.name.gsub(" ","_")+"_parent",field.name.gsub(" ","_")+"_parent", getParentOptions(field.id.to_s).collect {|p| [ p.option, p.id ] },{:prompt => 'Please Select'}, { :onchange => "test()" })  %>
+<% end %>
+<%=  select(field.name.gsub(" ","_")+"_child",field.name.gsub(" ","_")+"_child",{},{:prompt => 'Please Select'})  %>
+
+<%= hidden_field(field.name, field.name+'_type',:value=> 'cascading_option') %>

@@ -5,12 +5,15 @@ module AssetsHelper
       asset.field_value.build(:id => fieldObj.id,
                               :asset_id => asset.id ,
                               :parent_field_option_id => params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"],
+                              fieldObj.name.downcase.gsub(" ","_")+"_parent" => params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"],
+                              fieldObj.name.downcase.gsub(" ","_")+"_child" => params[fieldObj.name.gsub(" ","_")+"_child"][fieldObj.name.gsub(" ","_")+"_child"],
                               :child_field_option_id => params[fieldObj.name.gsub(" ","_")+"_child"][fieldObj.name.gsub(" ","_")+"_child"],
                               :field_id => fieldObj.id)
     else
       asset.field_value.build(:id => fieldObj.id,
                               :asset_id => asset.id ,
                               :parent_field_option_id => params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"],
+                              fieldObj.name.downcase.gsub(" ","_")+"_parent" => params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"],
                               :child_field_option_id => 'empty',
                               :field_id => fieldObj.id)
     end

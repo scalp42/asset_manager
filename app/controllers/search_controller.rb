@@ -33,7 +33,15 @@ class SearchController < ApplicationController
 
     Field.all.each do |field|
       if params[field.name] != nil
-        fields[field.id] = params[field.name][field.name]
+        if FieldType.find(field.field_type_id).use_casecade_option
+          cascadingValues = Hash.new
+          cascadingValues['parent'] = params[field.name.gsub(" ","_")+"_parent"][field.name.gsub(" ","_")+"_parent"]
+          cascadingValues['child'] = params[field.name.gsub(" ","_")+"_child"][field.name.gsub(" ","_")+"_child"]
+          fields[field.id] = cascadingValues
+        else
+          fields[field.id] = params[field.name][field.name]
+        end
+
       end
     end
 
