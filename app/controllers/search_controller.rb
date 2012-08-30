@@ -47,7 +47,7 @@ class SearchController < ApplicationController
 
     @searchCriteria.fields = fields
 
-    #createFilter(params,fields)
+    createFilter(params,fields)
 
     search_elastic(@searchCriteria)
 
@@ -60,13 +60,7 @@ class SearchController < ApplicationController
   def load_filter
     buildSearchCriteria(params[:filter_id])
 
-    results = Sunspot.search [Asset] do
-      #if params[:asset_type][:asset_type_id] != nil and params[:asset_type][:asset_type_id].count > 1
-      #   with(:asset_type_id,params[:asset_type][:asset_type_id]  )
-      #end
-    end
-
-    @assets = results.results
+    search_elastic(@searchCriteria)
 
     @filters = Filter.all
 

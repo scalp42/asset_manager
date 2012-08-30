@@ -1,4 +1,4 @@
-class FilterDetails
+class FilterDetail
   include MongoMapper::EmbeddedDocument
 
   key :date_search, Date

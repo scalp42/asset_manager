@@ -5,5 +5,7 @@ class Filter
   key :available, Boolean
   key :user_id, ObjectId
 
-  many :filter_details
+  many :filter_detail
+  has_many :filter_detail
+
 end

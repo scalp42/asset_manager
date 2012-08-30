@@ -28,7 +28,6 @@ class AssetsController < ApplicationController
       end
     end
 
-    puts
     asset.save
 
     redirect_to :action => 'index'

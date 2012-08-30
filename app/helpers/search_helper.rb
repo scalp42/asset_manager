@@ -4,25 +4,21 @@ module SearchHelper
 
     if params[:filter_value] != nil
       filter = Filter.new(:available => true,:name => params[:filter_value])
-      filter.save
 
       if params[:asset_type][:asset_type_id] != nil and params[:asset_type][:asset_type_id].count > 1
         params[:asset_type][:asset_type_id].each do |asset_type|
           if asset_type != ''
-            filterDetails = FilterDetails.new(:asset_type_id => asset_type,:filter_id=> filter.id )
-            filterDetails.save
+            filter.filter_detail.build(:asset_type_id => asset_type,:filter_id=> filter.id )
           end
         end
       end
 
       if params[:name][:name] != ''
-        filterDetails = FilterDetails.new(:name => params[:name][:name],:filter_id=> filter.id )
-        filterDetails.save
+        filter.filter_detail.build(:name => params[:name][:name],:filter_id=> filter.id )
       end
 
       if params[:description][:description] != ''
-        filterDetails = FilterDetails.new(:description => params[:description][:description],:filter_id=> filter.id )
-        filterDetails.save
+        filter.filter_detail.build(:description => params[:description][:description],:filter_id=> filter.id )
       end
 
       fields.each do |key, value|
@@ -30,18 +26,17 @@ module SearchHelper
         if(FieldType.find(field.field_type_id)).use_option?
           value.each do |option|
             if option != ''
-              filterDetails = FilterDetails.new(:field_option_id => option,:field_id => key,:filter_id=> filter.id )
-              filterDetails.save
+              filter.filter_detail.build(:field_option_id => option,:field_id => key,:filter_id=> filter.id )
             end
           end
         elsif (FieldType.find(field.field_type_id)).use_date?
-          filterDetails = FilterDetails.new(:date_search => value,:field_id => key,:filter_id=> filter.id )
-          filterDetails.save
+          filter.filter_details.build(:date_search => value,:field_id => key,:filter_id=> filter.id )
         elsif (FieldType.find(field.field_type_id)).use_text?
-          filterDetails = FilterDetails.new(:text_search => value,:field_id => key,:filter_id=> filter.id )
-          filterDetails.save
+          filter.filter_detail.build(:text_search => value,:field_id => key,:filter_id=> filter.id )
         end
       end
+
+      filter.save
     end
 
   end
@@ -51,32 +46,21 @@ module SearchHelper
     filter = Filter.find(filter_id)
     @searchCriteria = SearchCriteria.new
 
-    filterDetails = FilterDetails.all(:conditions["asset_type_id is ? and filter_id= ?"], nil,filter.id)
-
-    if(filterDetails != nil)
-      asset_types = Array.new
-      filterDetails.each do |filterDetail|
+    asset_types = Array.new
+    fields = Hash.new
+    filter.filter_detail.each do |filterDetail|
+      if filterDetail.asset_type_id != nil
         asset_types.push(filterDetail.asset_type_id)
       end
-      @searchCriteria.asset_types = asset_types
-    end
 
+      if filterDetail.name != nil
+        @searchCriteria.name = filterDetails.name
+      end
 
-    filterDetails = FilterDetails.first(:conditions["name is ? and filter_id= ?"], nil,filter.id)
-    if filterDetails != nil
-      @searchCriteria.name = filterDetails.name
-    end
+      if filterDetail.description != nil
+        @searchCriteria.description = filterDetails.description
+      end
 
-    filterDetails = FilterDetails.first(:conditions["description is ? and filter_id=?"],nil,filter.id)
-    if filterDetails.name != nil
-      @searchCriteria.description = filterDetails.description
-    end
-
-    fields = Hash.new
-
-    filterDetails = FilterDetails.all(:conditions["field_id is not ? and filter_id= ? "],nil, filter.id)
-
-    filterDetails.each do |filterDetail|
       if filterDetail.field_id != nil and FieldType.find(Field.find(filterDetail.field_id).field_type_id).use_option?
         if fields.has_key?(filterDetail.field_id)
           options = fields[filterDetail.field_id]
@@ -92,15 +76,14 @@ module SearchHelper
       elsif filterDetail.field_id != nil and FieldType.find(Field.find(filterDetail.field_id).field_type_id).use_date?
         fields[filterDetail.field_id] = filterDetail.date_search
       end
-    end
 
+    end
+    @searchCriteria.asset_types = asset_types
     @searchCriteria.fields = fields
 
   end
 
   def search_elastic(searchCriteria)
-
-    puts searchCriteria.inspect
 
     results = Tire.search 'assets' do
       query do
@@ -156,14 +139,12 @@ module SearchHelper
             end
             #elsif FieldType.find(Field.find(k).field_type_id).use_date
             #  date 'field_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+v
-            elsif FieldType.find(Field.find(k).field_type_id).use_radio_option
-              string 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+v
+          elsif FieldType.find(Field.find(k).field_type_id).use_radio_option
+            string 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+v
           end
         end
       end
     end
-
-    puts results.as_json
 
     @assets = results.results
 
