@@ -5,7 +5,8 @@
   </div>
   <div class="modal-body" align="center">
 
-    <form method="get" class="well" action="configure_field" >
+    <form method="post" class="well" action="configure_field" >
+      <input name="authenticity_token" type="hidden" value="token_value">
         <table>
           <tr>
             <td><%=  text_field("value","select_field_value") %> </td>

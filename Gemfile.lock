@@ -53,10 +53,6 @@ GEM
     hashr (0.0.22)
     hike (1.2.1)
     i18n (0.6.0)
-    joint (0.6.2)
-      mime-types
-      mongo_mapper (~> 0.9)
-      wand (~> 0.4)
     journey (1.0.4)
     jquery-rails (2.1.0)
       railties (>= 3.1.0, < 5.0)
@@ -67,6 +63,11 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.19)
+    mm-attach-it (0.2.4)
+      mime-types
+      mongo_mapper (>= 0.9.0)
+      rmagick
+      wand (~> 0.4)
     mm-devise (2.0)
       devise (>= 1.2)
       mongo_mapper (>= 0.9.0)
@@ -110,6 +111,7 @@ GEM
       json (~> 1.4)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    rmagick (2.13.1)
     safe_shell (1.0.2)
     sass (3.2.1)
     sass-rails (3.2.5)
@@ -150,8 +152,8 @@ DEPENDENCIES
   cancan
   coffee-rails (~> 3.2.1)
   devise
-  joint
   jquery-rails
+  mm-attach-it
   mm-devise
   mongo_mapper
   prototype-rails

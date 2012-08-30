@@ -19,7 +19,7 @@
           <tr>
             <%= render :template => 'shared/fields/view/'+FieldType.find(Field.find(assetScreenField.field_id).field_type_id).type_name.downcase.gsub(' ','_')+'_view' ,
                        :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id,
-                                    :value => @asset.field_value.find(assetScreenField.field_id)} %>
+                                    :value => @asset.field_value.find(assetScreenField.field_id),:valueImage => @asset.field_value.find(@asset.id)} %>
           </tr>
       <% end%>
     </table>

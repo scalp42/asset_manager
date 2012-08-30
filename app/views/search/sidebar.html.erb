@@ -11,7 +11,8 @@
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="tab1">
-                <form method="get" action="/search/search">
+                <form method="post" action="/search/search">
+                  <input name="authenticity_token" type="hidden" value="token_value">
                   <% if @showCreateFilter %>
                       <%= render :template => 'search/create_filter' %>
                   <% end %>
@@ -41,17 +42,19 @@
                       <% end %>
                     </td></li></tr>
                     <% Field.all.each do |field| %>
-                        <tr><li><td><%= field.name %>: </td><td>
-                          <% if @searchCriteria != nil && @searchCriteria.fields[field.id] != nil %>
-                              <% if FieldType.find(field.field_type_id).use_casecade_option %>
-                                  <%= render :template => 'search/field_search/'+FieldType.find(field.field_type_id).type_name.downcase.gsub(' ','_')+'_search',:locals =>{:field => field, :valueParent => @searchCriteria.fields[field.id]['parent'], :valueChild => @searchCriteria.fields[field.id]['child']} %>
+                        <% if FieldType.find(field.field_type_id).is_searchable %>
+                            <tr><li><td><%= field.name %>: </td><td>
+                              <% if @searchCriteria != nil && @searchCriteria.fields[field.id] != nil %>
+                                  <% if FieldType.find(field.field_type_id).use_casecade_option %>
+                                      <%= render :template => 'search/field_search/'+FieldType.find(field.field_type_id).type_name.downcase.gsub(' ','_')+'_search',:locals =>{:field => field, :valueParent => @searchCriteria.fields[field.id]['parent'], :valueChild => @searchCriteria.fields[field.id]['child']} %>
+                                  <% else %>
+                                      <%= render :template => 'search/field_search/'+FieldType.find(field.field_type_id).type_name.downcase.gsub(' ','_')+'_search',:locals =>{:field => field, :value => @searchCriteria.fields[field.id],:valueParent => nil, :valueChild => nil} %>
+                                  <% end %>
                               <% else %>
-                                  <%= render :template => 'search/field_search/'+FieldType.find(field.field_type_id).type_name.downcase.gsub(' ','_')+'_search',:locals =>{:field => field, :value => @searchCriteria.fields[field.id],:valueParent => nil, :valueChild => nil} %>
+                                  <%= render :template => 'search/field_search/'+FieldType.find(field.field_type_id).type_name.downcase.gsub(' ','_')+'_search',:locals =>{:field => field, :value => nil,:valueParent => nil, :valueChild => nil} %>
                               <% end %>
-                          <% else %>
-                              <%= render :template => 'search/field_search/'+FieldType.find(field.field_type_id).type_name.downcase.gsub(' ','_')+'_search',:locals =>{:field => field, :value => nil,:valueParent => nil, :valueChild => nil} %>
-                          <% end %>
-                        </td></li></tr>
+                            </td></li></tr>
+                        <% end %>
                     <% end %>
                   </table>
                   <div style="text-align: right;">

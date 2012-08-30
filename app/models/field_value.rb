@@ -1,6 +1,6 @@
 class FieldValue
   include MongoMapper::EmbeddedDocument
-  plugin Joint
+  plugin AttachIt
 
   belongs_to :asset
 
@@ -12,6 +12,8 @@ class FieldValue
   key :field_option_id, Array
   key :field_name_value, Hash
 
-  attachment :file
+  has_attachment :photo, {:styles => { :thumb => '100x100>' },  :storage => 'gridfs' }
+  validates_attachment_presence :photo
+  validates_attachment_content_type :photo, :content_type => ['image/jpeg', 'image/gif', 'image/png']
 
 end

@@ -1,6 +1,7 @@
 <%= render :template => 'shared/navbar' %>
 
-<form method="get" class="well" action="/assets/save" enctype="multipart/form-data" >
+<form method="post" class="well" action="/assets/save" enctype="multipart/form-data" >
+  <input name="authenticity_token" type="hidden" value="token_value">
        <table class="table table-striped" width="100%">
          <tr><td>Name</td>
          <td><%=  text_field('name','name') %></td>

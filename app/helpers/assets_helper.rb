@@ -63,9 +63,9 @@ module AssetsHelper
                                 :field_name_value => {fieldObj.name.downcase.gsub(" ","_") =>params[fieldObj.name][fieldObj.name] } ,
                                 :field_id => fieldObj.id)
       when 'file_upload'
-        asset.field_value.build(:id => fieldObj.id,
+        asset.field_value.build(:id => asset.id,
                                 :asset_id => asset.id,
-                                :attachment => params[fieldObj.name][fieldObj.name],
+                                :photo => params[fieldObj.name][fieldObj.name],
                                 :field_id => fieldObj.id)
       else
         puts "field not found"
@@ -93,6 +93,8 @@ module AssetsHelper
       when 'date'
         asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.date = params[fieldObj.name][fieldObj.name] }
         asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.field_name_value = {fieldObj.name.downcase.gsub(" ","_")=> params[fieldObj.name][fieldObj.name] } }
+      when 'file_upload'
+        asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.photo = params[fieldObj.name][fieldObj.name] }
       else
         puts "field not found"
     end

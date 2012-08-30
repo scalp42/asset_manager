@@ -1,7 +1,8 @@
 <%= render :template => 'shared/navbar' %>
 
 <h2 style="text-align: center;">Edit <%= @asset.name %> Asset</h2>
-<form method="get" class="well" action="/assets/update">
+<form method="post" class="well" action="/assets/update" enctype="multipart/form-data">
+  <input name="authenticity_token" type="hidden" value="token_value">
   <table class="table table-striped" width="100%">
     <tr><td>Name</td>
       <td><%=  text_field('name','name' ,{:value => @asset.name}) %></td>
@@ -14,7 +15,7 @@
         <tr>
           <%= render :template => 'shared/fields/edit/'+FieldType.find(Field.find(assetScreenField.field_id).field_type_id).type_name.downcase.gsub(' ','_')+'_edit' ,
                      :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id,
-                                  :value => @asset.field_value.find(BSON::ObjectId.from_string(assetScreenField.field_id))} %>
+                                  :value => @asset.field_value.find(BSON::ObjectId.from_string(assetScreenField.field_id)),:valueImage => @asset.field_value.find(@asset.id)} %>
         </tr>
     <% end%>
     <%= hidden_field('asset', 'asset_id',:value=> @asset.id) %>

@@ -129,7 +129,7 @@ module SearchHelper
                   boolean do
                     v.each do |value|
                       if value != '' and !value.empty?
-                        should { string 'field_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+value }
+                        should { string 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+value }
                       end
                     end
                   end
@@ -139,9 +139,9 @@ module SearchHelper
               if v['parent'] != ''
                 must do
                   boolean do
-                    should { string 'field_value.'+Field.find(k).name.downcase.gsub(" ","_")+'_parent:'+v['parent'] }
+                    should { string 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_")+'_parent:'+v['parent'] }
                     if v['child']
-                      should { string 'field_value.'+Field.find(k).name.downcase.gsub(" ","_")+'_child:'+v['child'] }
+                      should { string 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_")+'_child:'+v['child'] }
                     end
                   end
                 end
@@ -157,7 +157,7 @@ module SearchHelper
             #elsif FieldType.find(Field.find(k).field_type_id).use_date
             #  date 'field_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+v
             elsif FieldType.find(Field.find(k).field_type_id).use_radio_option
-              string 'field_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+v
+              string 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+v
           end
         end
       end
