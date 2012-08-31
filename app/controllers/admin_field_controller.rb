@@ -89,7 +89,7 @@ class AdminFieldController < ApplicationController
   end
 
   def configure_field
-    if(params['value'].present?)
+    if params['value'].present?
       @field = Field.find(params['field_id']['field_id'])
       @field.field_option.build(:option => params['value']['select_field_value'],:field_id => @field.id)
       @field.save
@@ -99,7 +99,7 @@ class AdminFieldController < ApplicationController
   end
 
   def configure_child_field
-    if(params['value'].present?)
+    if params['value'].present?
       @field = Field.find(params['field_id']['field_id'])
       @field.field_option.build(:option => params['value']['select_field_value'],:field_id => @field.id,:parent_field_option => params['parent_option_id']['parent_option_id'])
       @field.save

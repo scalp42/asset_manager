@@ -55,13 +55,13 @@ class AssetsController < ApplicationController
 
     asset = Asset.find(params[:asset][:asset_id])
 
-    if(params[:name][:name] != nil)
+    if params[:name][:name] != nil
       asset.name = params[:name][:name]
     else
       asset.name = nil
     end
 
-    if(params[:description][:description] != nil)
+    if params[:description][:description] != nil
       asset.description = params[:description][:description]
     else
       asset.description = nil
@@ -74,7 +74,7 @@ class AssetsController < ApplicationController
       createField = true
       if params[fieldObj.name][fieldObj.name] != nil and params[fieldObj.name][fieldObj.name]  != ''
         asset.field_value.each do |fieldValue|
-          if(fieldObj.id == fieldValue.field_id)
+          if fieldObj.id == fieldValue.field_id
             createField = false
             updateFieldValue(params,fieldObj,fieldValue,asset)
           end
@@ -110,7 +110,7 @@ class AssetsController < ApplicationController
 
     @childOptions = Array.new
     field.field_option.each do |field_option|
-      if(field_option.parent_field_option == BSON::ObjectId.from_string(params['data']))
+      if field_option.parent_field_option == BSON::ObjectId.from_string(params['data'])
         @childOptions.push(field_option)
       end
     end

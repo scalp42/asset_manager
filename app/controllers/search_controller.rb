@@ -14,7 +14,7 @@ class SearchController < ApplicationController
 
     if params[:asset_type][:asset_type_id] != nil and params[:asset_type][:asset_type_id].count > 1
       params[:asset_type][:asset_type_id].each do |asset_type_id|
-        if(asset_type_id != '')
+        if asset_type_id != ''
           assetTypesArr.push(asset_type_id)
         end
       end
