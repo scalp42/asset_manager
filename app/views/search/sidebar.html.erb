@@ -65,7 +65,10 @@
               <div class="tab-pane" id="tab2">
                 <table class="table table-striped">
                   <% @filters.each do |filter| %>
-                      <tr><td><%= link_to filter.name ,:controller => 'search',:action=>'load_filter', :filter_id => filter.id %></td></tr>
+                      <tr>
+                        <td><%= link_to filter.name ,:controller => 'search',:action=>'load_filter', :filter_id => filter.id %></td>
+                        <td><%= link_to "Delete",{:action => 'delete_filter',:filter_id => filter.id},:class=> 'btn btn-danger' %></td>
+                      </tr>
                   <% end %>
                 </table>
               </div>

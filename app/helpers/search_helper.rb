@@ -2,8 +2,8 @@ module SearchHelper
 
   def createFilter(params,fields)
 
-    if params[:filter_value] != nil
-      filter = Filter.new(:available => true,:name => params[:filter_value])
+    if params[:filter_value] != nil and params[:filter_value] != ''
+      filter = Filter.new(:available => true,:name => params[:filter_value],:user_id => current_user.id)
 
       if params[:asset_type][:asset_type_id] != nil and params[:asset_type][:asset_type_id].count > 1
         params[:asset_type][:asset_type_id].each do |asset_type|

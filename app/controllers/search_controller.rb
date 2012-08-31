@@ -70,4 +70,10 @@ class SearchController < ApplicationController
 
   end
 
+  def delete_filter
+    if Filter.delete(BSON::ObjectId.from_string(params['filter_id']))
+      redirect_to :back
+    end
+  end
+
 end

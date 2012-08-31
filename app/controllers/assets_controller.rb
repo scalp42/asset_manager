@@ -12,23 +12,25 @@ class AssetsController < ApplicationController
 
   def save
 
-    asset = Asset.new(:name => params[:name][:name],:description => params[:description][:description])
+    if params[:name][:name] != nil
+      asset = Asset.new(:name => params[:name][:name],:description => params[:description][:description])
 
-    asset_type = AssetType.find(BSON::ObjectId.from_string(params[:asset_type][:asset_type_id]))
+      asset_type = AssetType.find(BSON::ObjectId.from_string(params[:asset_type][:asset_type_id]))
 
-    asset.asset_type_id = asset_type.id
-    asset.asset_type_name = asset_type.name
+      asset.asset_type_id = asset_type.id
+      asset.asset_type_name = asset_type.name
 
-    asset_type.asset_screen.each do |field|
-      fieldObj = Field.find(field.field_id)
-      if params[fieldObj.name][fieldObj.name] != nil
-        setFieldValue(params,fieldObj,asset)
-      elsif params[fieldObj.name.gsub(" ","_")+"_parent"] != nil and params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] != nil
-        setCascadeValue(params,fieldObj,asset)
+      asset_type.asset_screen.each do |field|
+        fieldObj = Field.find(field.field_id)
+        if params[fieldObj.name][fieldObj.name] != nil
+          setFieldValue(params,fieldObj,asset)
+        elsif params[fieldObj.name.gsub(" ","_")+"_parent"] != nil and params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] != nil
+          setCascadeValue(params,fieldObj,asset)
+        end
       end
-    end
 
-    asset.save
+      asset.save
+    end
 
     redirect_to :action => 'index'
   end
@@ -99,9 +101,9 @@ class AssetsController < ApplicationController
 
     @childOptions = Array.new
     field.field_option.each do |field_option|
-       if(field_option.parent_field_option == BSON::ObjectId.from_string(params['data']))
-         @childOptions.push(field_option)
-       end
+      if(field_option.parent_field_option == BSON::ObjectId.from_string(params['data']))
+        @childOptions.push(field_option)
+      end
     end
 
     respond_to do |format|
