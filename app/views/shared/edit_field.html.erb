@@ -1,0 +1,27 @@
+<div class="modal hide" id="myEditFieldModal<%= field.id %>" style="display: none;">
+  <div class="modal-header">
+    <button class="close" data-toggle="modal" href="#myEditFieldModal<%= field.id %>">×</button>
+    <h3>Edit Field</h3>
+  </div>
+  <form method="post" class="well" action="edit_field" >
+    <div class="modal-body">
+      <input name="authenticity_token" type="hidden" value="token_value">
+      <table>
+        <tr>
+          <td>Name:</td>
+          <td><%=  text_field("field_name","field_name",:value => value) %></td>
+        </tr>
+        <tr>
+          <td>Description:</td>
+          <td><%=  text_field("field_description","field_description",:value => description) %></td>
+        </tr>
+      </table>
+      <%= hidden_field('field_id', 'field_id',:value=>field.id) %>
+    </div>
+    <div class="modal-footer">
+      <%= submit_tag "Update" ,:class => 'btn btn-primary'%>
+      <a data-toggle="modal" href="#myEditFieldModal<%= field.id %>" class="btn secondary">No</a>
+    </div>
+  </form>
+</div>
+<a class="btn" data-toggle="modal" href="#myEditFieldModal<%= field.id %>" >Edit</a>

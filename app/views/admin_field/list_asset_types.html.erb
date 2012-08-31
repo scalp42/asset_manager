@@ -21,7 +21,7 @@
           <%= asset_type.description %>
         </td>
         <td>
-          <%= link_to 'Configure',:controller => 'admin_field', :action => 'list_asset_screen_fields' ,:id => asset_type.id  %>
+          <%= link_to 'Configure',{ :action => 'list_asset_screen_fields' ,:id => asset_type.id},:class => 'btn'  %>
             <%= render :template => 'shared/delete_asset_type' ,:locals => { :asset_type => asset_type }%>
         </td>
       </tr>

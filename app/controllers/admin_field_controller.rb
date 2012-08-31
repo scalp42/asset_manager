@@ -22,6 +22,20 @@ class AdminFieldController < ApplicationController
 
   end
 
+  def edit_field
+    field = Field.find(params['field_id']['field_id'])
+    if params['field_name']['field_name'] != nil
+      field.name = params['field_name']['field_name']
+    end
+
+    if params['field_description']['field_description'] != nil
+      field.description = params['field_description']['field_description']
+    end
+
+    field.save
+    redirect_to :back
+  end
+
   def list_asset_screen_fields
 
     @asset = AssetType.find(params[:id])

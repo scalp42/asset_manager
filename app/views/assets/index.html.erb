@@ -34,7 +34,7 @@
 		  <%= link_to asset.description, :controller => 'assets', :action => 'view', :id => asset.id %>
 		</td>
 		<td>
-		  <%= link_to 'Edit',:controller => 'assets', :action => 'edit' ,:id => asset.id  %>
+		  <%= link_to 'Edit', {:action => 'edit' ,:id => asset.id}, :class => "btn"  %>
 		  <%= render :template => 'assets/delete', :locals => {:asset => asset} %>
 		</td>
 	  </tr>

@@ -26,10 +26,11 @@
           <%= FieldType.find(field.field_type_id).type_name %>
         </td>
         <td>
+          <% if FieldType.find(field.field_type_id).is_configurable %>
+              <%= link_to 'Configure',{:controller => 'admin_field', :action => 'configure_field' ,:id => field.id},:class => 'btn'  %>
+          <% end %>
+          <%= render :template => 'shared/edit_field' ,:locals => { :field => field,:value => field.name, :description => field.description }%>
           <%= render :template => 'shared/delete_field' ,:locals => { :field => field }%>
-          <%= link_to 'Configure',:controller => 'admin_field', :action => 'configure_field' ,:id => field.id  %>
-          <a class="btn" data-toggle="modal" href="#myEditModal<%= field.id %>" >Edit</a>
-          <a class="btn" data-toggle="modal" href="#myModal<%= field.id %>" >Delete</a>
         </td>
       </tr>
   <% end %>
