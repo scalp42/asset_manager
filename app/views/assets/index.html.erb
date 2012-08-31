@@ -24,7 +24,7 @@
   <% @assets.each do |asset| %>
 	  <tr>
 		<td>
-		  <%= link_to 'sdfs', :controller => 'assets', :action => 'view', :id => asset.id %>
+		  <%= link_to AssetType.find(asset.asset_type_id).name, :controller => 'assets', :action => 'view', :id => asset.id %>
 		</td>
 		<td>
 		  <%= link_to asset.name, :controller => 'assets', :action => 'view', :id => asset.id %>

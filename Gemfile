@@ -50,3 +50,6 @@ gem 'mm-devise'
 gem "cancan"
 
 gem "mm-attach-it"
+
+gem "execjs"
+gem "therubyracer"
