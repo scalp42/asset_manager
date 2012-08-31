@@ -5,4 +5,6 @@ class AssetType
   key  :parent, String
 
   many :asset_screen
+
+  validates :name, :presence => true
 end

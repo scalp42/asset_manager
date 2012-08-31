@@ -9,10 +9,10 @@
       <input name="authenticity_token" type="hidden" value="token_value">
         <table>
           <tr>
-            <td><%=  text_field("name","asset_type_name") %> </td>
+            <td><%=  text_field("name","asset_type_name",:placeholder => "Name") %> </td>
           </tr>
           <tr>
-            <td>  <%= text_field("description","asset_type_description") %> </td>
+            <td>  <%= text_field("description","asset_type_description",:placeholder => "Description") %> </td>
           </tr>
         </table>
         <div class="modal-footer">

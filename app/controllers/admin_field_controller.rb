@@ -66,7 +66,9 @@ class AdminFieldController < ApplicationController
   end
 
   def create_asset_type
-    newAssetType = AssetType.new(:description => params[:description][:asset_type_description],:name => params[:name][:asset_type_name])
+    if params[:name][:asset_type_name] != nil
+      newAssetType = AssetType.new(:description => params[:description][:asset_type_description],:name => params[:name][:asset_type_name])
+    end
 
     if newAssetType.save
       redirect_to :back
@@ -116,9 +118,9 @@ class AdminFieldController < ApplicationController
   end
 
   def delete_asset_screen
-    #if AssetScreen.destroy(params['asset_screen_id'])
-    #  redirect_to :back
-    #end
+    if AssetType.pull(BSON::ObjectId.from_string(params['asset_id']),{:asset_screen => {:_id => BSON::ObjectId.from_string(params['asset_screen_id'])}})
+      redirect_to :back
+    end
   end
 
 end
