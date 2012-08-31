@@ -1,9 +1,14 @@
 class AssetsController < ApplicationController
   include AssetsHelper
 
+  respond_to :html, :xml, :json
+
   def index
     @assets = Asset.all
-    search()
+    respond_with(@assets) do |format|
+        format.html
+        format.json { render :json => @assets }
+      end
   end
 
   def create
@@ -93,6 +98,10 @@ class AssetsController < ApplicationController
 
   def view
     @asset = Asset.find(params[:id])
+    respond_with(@asset) do |format|
+        format.html
+        format.json { render :json => @asset }
+      end
   end
 
   def getChildOptions()
