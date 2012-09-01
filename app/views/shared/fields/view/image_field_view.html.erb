@@ -1,5 +1,5 @@
-<% if valueImage != nil %>
+<% if value != nil %>
     <td><%= field_name %></td>
-    <td><a href="<%= valueImage.photo.base64 %>" rel="lightbox"> <img  src="<%= valueImage.photo.base64('thumb') %>"></a>
+    <td><a href="<%= value.photo.base64 %>" rel="lightbox"> <img  src="<%= value.photo.base64('thumb') %>"></a>
     </td>
 <% end %>

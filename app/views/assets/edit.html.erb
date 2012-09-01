@@ -15,7 +15,7 @@
         <tr>
           <%= render :template => 'shared/fields/edit/'+FieldType.find(Field.find(assetScreenField.field_id).field_type_id).type_name.downcase.gsub(' ','_')+'_edit' ,
                      :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id,
-                                  :value => @asset.field_value.find(BSON::ObjectId.from_string(assetScreenField.field_id)),:valueImage => @asset.field_value.find(@asset.id)} %>
+                                  :value => @asset.field_value.detect {|c|c.field_id == BSON::ObjectId.from_string(assetScreenField.field_id)} } %>
         </tr>
     <% end%>
     <%= hidden_field('asset', 'asset_id',:value=> @asset.id) %>
@@ -23,6 +23,6 @@
   <div class="modal-footer" style="text-align: center;">
 
     <%= submit_tag "Update" ,:class => 'btn btn-primary'%>
-    <a data-toggle="modal" href="#myCreateAssetModal" class="btn secondary">No</a>
+    <%= link_to 'No',{ :action => 'index'},:class => 'btn secondary'  %>
   </div>
 </form>

@@ -1,6 +1,6 @@
 <td><%= field_name %></td>
-<% if valueImage != nil %>
-    <td><a href="<%= valueImage.photo.base64 %>" rel="lightbox"> <img  src="<%= valueImage.photo.base64('thumb') %>"></a>
+<% if value != nil %>
+    <td><a href="<%= value.photo.base64 %>" rel="lightbox"> <img  src="<%= value.photo.base64('thumb') %>"></a>
       <%= file_field field_name, field_name %></td>
 <% else %>
     <td> <%= file_field field_name, field_name %></td>

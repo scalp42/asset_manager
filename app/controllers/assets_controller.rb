@@ -5,6 +5,7 @@ class AssetsController < ApplicationController
 
   def index
     @assets = Asset.all
+
     respond_with(@assets) do |format|
         format.html
         format.json { render :json => @assets }

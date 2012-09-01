@@ -2,8 +2,7 @@ module AssetsHelper
 
   def setCascadeValue(params,fieldObj,asset)
     if params[fieldObj.name.gsub(" ","_")+"_child"][fieldObj.name.gsub(" ","_")+"_child"] != "null"
-      asset.field_value.build(:id => fieldObj.id,
-                              :asset_id => asset.id ,
+      asset.field_value.build(:asset_id => asset.id ,
                               :parent_field_option_id => params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"],
                               fieldObj.name.downcase.gsub(" ","_")+"_parent" => params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"],
                               fieldObj.name.downcase.gsub(" ","_")+"_child" => params[fieldObj.name.gsub(" ","_")+"_child"][fieldObj.name.gsub(" ","_")+"_child"],
@@ -11,8 +10,7 @@ module AssetsHelper
                               :child_field_option_id => params[fieldObj.name.gsub(" ","_")+"_child"][fieldObj.name.gsub(" ","_")+"_child"],
                               :field_id => fieldObj.id)
     else
-      asset.field_value.build(:id => fieldObj.id,
-                              :asset_id => asset.id ,
+      asset.field_value.build(:asset_id => asset.id ,
                               :parent_field_option_id => params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"],
                               fieldObj.name.downcase.gsub(" ","_")+"_parent" => params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"],
                               :fieldNameValue => {"name" => fieldObj.name.downcase.gsub(" ","_"),"parent_value" =>params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"]},
@@ -35,8 +33,7 @@ module AssetsHelper
   def setFieldValue(params,fieldObj,asset)
     case params[fieldObj.name][fieldObj.name+'_type']
       when 'single_option'
-        asset.field_value.build(:id => fieldObj.id,
-                                :asset_id => asset.id ,
+        asset.field_value.build(:asset_id => asset.id ,
                                 :field_option_id => params[fieldObj.name][fieldObj.name],
                                 :field_id => fieldObj.id,
                                 :field_name_value => {fieldObj.name.downcase.gsub(" ","_") =>params[fieldObj.name][fieldObj.name] } ,
@@ -44,27 +41,23 @@ module AssetsHelper
       when 'multi_option'
         options = Array.new
         options.push(params[fieldObj.name][fieldObj.name])
-        asset.field_value.build(:id => fieldObj.id,
-                                :asset_id => asset.id ,
+        asset.field_value.build(:asset_id => asset.id ,
                                 :field_option_id => options,
                                 :field_name_value => {fieldObj.name.downcase.gsub(" ","_") =>options } ,
                                 :field_id => fieldObj.id)
       # :text_value => fieldObj.field_option.find(BSON::ObjectId.from_string(params[fieldObj.name][fieldObj.name])).option)
       when 'text'
-        asset.field_value.build(:id => fieldObj.id,
-                                :asset_id => asset.id,
+        asset.field_value.build(:asset_id => asset.id,
                                 :text_value => params[fieldObj.name][fieldObj.name],
                                 :field_name_value => {fieldObj.name.downcase.gsub(" ","_") =>params[fieldObj.name][fieldObj.name] } ,
                                 :field_id => fieldObj.id)
       when 'date'
-        asset.field_value.build(:id => fieldObj.id,
-                                :asset_id => asset.id,
+        asset.field_value.build(:asset_id => asset.id,
                                 :date => params[fieldObj.name][fieldObj.name],
                                 :field_name_value => {fieldObj.name.downcase.gsub(" ","_") =>params[fieldObj.name][fieldObj.name] } ,
                                 :field_id => fieldObj.id)
       when 'file_upload'
-        asset.field_value.build(:id => asset.id,
-                                :asset_id => asset.id,
+        asset.field_value.build(:asset_id => asset.id,
                                 :photo => params[fieldObj.name][fieldObj.name],
                                 :field_id => fieldObj.id)
       else
