@@ -1,4 +1,4 @@
-<%= render :template => 'shared/navbar' %>
+<%= render :template => 'shared/navbar' ,:locals => {:assetsNav => true, :searchNav => false,:adminNav => false} %>
 
 <form method="post" class="well" action="/assets/save" enctype="multipart/form-data" >
   <input name="authenticity_token" type="hidden" value="token_value">

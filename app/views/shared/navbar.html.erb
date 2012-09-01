@@ -6,9 +6,9 @@
         Asset Manager
       </a>
       <ul class="nav">
-        <li><%= link_to 'Assets',  :controller => "assets", :action => "index" %></li>
-        <li><%= link_to 'Search',  :controller => "search", :action => "index" %></li>
-        <li><%= link_to 'Admin',  :controller => "admin", :action => "index" %></li>
+        <li <% if assetsNav  %> class="active" <% end %> ><%= link_to 'Assets',  :controller => "assets", :action => "index" %></li>
+        <li <% if searchNav  %> class="active" <% end %> ><%= link_to 'Search',  :controller => "search", :action => "index" %></li>
+        <li <% if adminNav %> class="active" <% end %> ><%= link_to 'Admin',  :controller => "admin", :action => "index" %></li>
       </ul>
       <% if user_signed_in? %>
         <ul class="nav pull-right">

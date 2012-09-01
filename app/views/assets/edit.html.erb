@@ -1,4 +1,4 @@
-<%= render :template => 'shared/navbar' %>
+<%= render :template => 'shared/navbar' ,:locals => {:assetsNav => true, :searchNav => false,:adminNav => false}%>
 
 <h2 style="text-align: center;">Edit <%= @asset.name %> Asset</h2>
 <form method="post" class="well" action="/assets/update" enctype="multipart/form-data">

@@ -1,4 +1,4 @@
-<%= render :template => 'shared/navbar' %>
+<%= render :template => 'shared/navbar',:locals => {:assetsNav => false, :searchNav => false,:adminNav => true} %>
 <h2>Asset Types</h2>
 <%= render :template => 'admin_field/create_asset_type' %>
 

@@ -1,4 +1,4 @@
-<%= render :template => 'shared/navbar' %>
+<%= render :template => 'shared/navbar' ,:locals => {:assetsNav => false, :searchNav => false,:adminNav => true}%>
 <h2>Asset Screen for <%= @asset.name %></h2>
 <%= render :template => 'shared/screens/configure_asset_type_screen' , :locals => { :asset => @asset,:fieldsToBeAdded => @fieldToBeAdded} %>
 <div align="right">

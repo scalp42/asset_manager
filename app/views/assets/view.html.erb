@@ -1,4 +1,4 @@
-<%= render :template => 'shared/navbar' %>
+<%= render :template => 'shared/navbar' ,:locals => {:assetsNav => true, :searchNav => false,:adminNav => false} %>
 
 <h2 style="text-align: center;">View <%= @asset.name %> Asset</h2>
 
