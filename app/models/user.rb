@@ -4,7 +4,7 @@ class User
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable, :validatable,:token_authenticatable
 
   key :email, String
   key :encrypted_password, String
@@ -16,6 +16,7 @@ class User
   key :remember_created_at, Date
   key :reset_password_token, String
   key :reset_password_sent_at, Date
+  key :authentication_token, String
 
   key :first_name, String
   key :last_name, String

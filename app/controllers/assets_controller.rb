@@ -7,9 +7,9 @@ class AssetsController < ApplicationController
     @assets = Asset.all
 
     respond_with(@assets) do |format|
-        format.html
-        format.json { render :json => @assets }
-      end
+      format.html
+      format.json { render :json => @assets }
+    end
   end
 
   def create
@@ -100,9 +100,9 @@ class AssetsController < ApplicationController
   def view
     @asset = Asset.find(params[:id])
     respond_with(@asset) do |format|
-        format.html
-        format.json { render :json => @asset }
-      end
+      format.html
+      format.json { render :json => @asset }
+    end
   end
 
   def getChildOptions()
@@ -119,6 +119,37 @@ class AssetsController < ApplicationController
     respond_to do |format|
       format.json { render :json => @childOptions }
     end
+
+  end
+
+  def assetExport
+
+    @assetsExport = Array.new
+
+    Asset.all.each do |asset|
+
+      assetExportObj = AssetExport.new
+
+      if asset.name != nil
+        assetExportObj.name = asset.name
+      end
+
+      if asset.description != nil
+        assetExportObj.description = asset.description
+      end
+
+      assetExportObj.asset_type = {:name => AssetType.find(asset.asset_type_id),:id => asset.asset_type_id}
+
+      @assetsExport.push(assetExportObj)
+    end
+
+    respond_to do |format|
+        format.xml { render :xml => @assetsExport }
+    end
+
+  end
+
+  def createRest
 
   end
 end

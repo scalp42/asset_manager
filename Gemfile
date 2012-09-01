@@ -53,3 +53,7 @@ gem "mm-attach-it"
 
 gem "execjs"
 gem "therubyracer"
+
+gem "warden"
+
+gem "devise-encryptable"

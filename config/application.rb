@@ -55,9 +55,11 @@ module AssetManager
 
     # Enable the asset pipeline
     config.assets.enabled = true
+    config.http_authenticatable = true
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
     config.autoload_paths += Dir["#{Rails.root}/lib/search"]
+    config.autoload_paths += Dir["#{Rails.root}/lib/assets"]
   end
 end
