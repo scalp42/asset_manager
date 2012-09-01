@@ -7,8 +7,17 @@ class Api::AssetsController < Api::BaseController
 
   def create
 
+    asset = Asset.new
 
-    render :json=> {:success=>true}
+    asset.asset_type_id = BSON::ObjectId.from_string(params[:asset][:asset_type_id])
+    asset.name = params[:asset][:name]
+
+    if asset.save
+      render :json => {:success => true}
+    else
+      render :json => {:success => false}
+    end
+
   end
 
   protected
