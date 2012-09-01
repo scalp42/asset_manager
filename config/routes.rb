@@ -56,6 +56,7 @@ AssetManager::Application.routes.draw do
     resources :sessions
     resources :assets
     resources :asset_type
+    resources :users
   end
 
 
