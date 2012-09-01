@@ -1,0 +1,39 @@
+<div class="modal hide" id="myCreateUser" style="display: none;">
+  <div class="modal-header">
+    <button class="close" data-toggle="modal" href="#myCreateUser">×</button>
+    <h3 style="text-align: center;">Create User</h3>
+  </div>
+  <div class="modal-body" align="center">
+    <form method="post" class="well" action="/users/create" >
+      <input name="authenticity_token" type="hidden" value="token_value">
+      <table>
+        <tr>
+          <td>First Name</td>
+              <td><%=  text_field('first_name','first_name') %></td>
+        </tr>
+        <tr>
+          <td>Last Name</td>
+              <td><%=  text_field('last_name','last_name') %></td>
+        </tr>
+        <tr>
+          <td>Email</td>
+              <td><%=  text_field('email','email') %></td>
+        </tr>
+        <tr>
+          <td>Password</td>
+          <td><%= password_field('password','password') %></td>
+        </tr>
+        <tr>
+          <td>Password Confirmation</td>
+          <td><%= password_field('password_confirmation','password_confirmation') %></td>
+        </tr>
+      </table>
+      <div class="modal-footer">
+
+        <%= submit_tag "Create" ,:class => 'btn btn-primary'%>
+        <a data-toggle="modal" href="#myCreateUser" class="btn secondary">No</a>
+      </div>
+    </form>
+  </div>
+</div>
+<a class="btn" data-toggle="modal" href="#myCreateUser" >Create User</a>
