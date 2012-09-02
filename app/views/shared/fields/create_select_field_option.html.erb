@@ -5,11 +5,11 @@
   </div>
   <div class="modal-body" align="center">
 
-    <form method="post" class="well" action="configure_field" >
+    <form method="post" class="well" action="configure_field" onsubmit="return $(this).validate()">
       <input name="authenticity_token" type="hidden" value="token_value">
         <table>
           <tr>
-            <td><%=  text_field("value","select_field_value",:placeholder => "Field Option") %> </td>
+            <td><%=  text_field("value","select_field_value",:placeholder => "Field Option","data-validation" => "required") %> </td>
 
             <%= hidden_field('field_id', 'field_id',:value=>field.id) %>
             <% if parentOption != nil %>

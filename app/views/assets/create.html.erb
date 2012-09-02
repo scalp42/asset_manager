@@ -1,10 +1,10 @@
 <%= render :template => 'shared/navbar' ,:locals => {:assetsNav => true, :searchNav => false,:adminNav => false} %>
 
-<form method="post" class="well" action="/assets/save" enctype="multipart/form-data" >
+<form method="post" class="well" action="/assets/save" enctype="multipart/form-data" onsubmit="return $(this).validate()">
   <input name="authenticity_token" type="hidden" value="token_value">
        <table class="table table-striped" width="100%">
          <tr><td>Name</td>
-         <td><%=  text_field('name','name') %></td>
+         <td><%=  text_field('name','name',"data-validation" => "required") %></td>
            </tr>
          <tr>
          <td>Description</td>
@@ -13,7 +13,7 @@
          <%  @asset_type.asset_screen.each do |assetScreenField| %>
                      <tr>
                         <%= render :template => 'shared/fields/create/'+FieldType.find(Field.find(assetScreenField.field_id).field_type_id).type_name.downcase.gsub(' ','_')+'_create' ,
-                                       :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id} %>
+                                       :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id,:required => assetScreenField.required } %>
                      </tr>
                    <% end%>
        </table>

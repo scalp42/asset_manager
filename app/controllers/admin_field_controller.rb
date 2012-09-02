@@ -45,7 +45,7 @@ class AdminFieldController < ApplicationController
   def update_asset_type_screen
 
     asset = AssetType.find(BSON::ObjectId.from_string(params[:asset_type][:asset_type_id]))
-    asset.asset_screen.build(:field_id => params[:field][:field_id] ,:asset_id => params[:asset_type][:asset_type_id])
+    asset.asset_screen.build(:field_id => params[:field][:field_id] ,:asset_id => params[:asset_type][:asset_type_id],:required =>params[:required][:required])
 
     if asset.save
       assetScreenReturn(Field.find(params[:field][:field_id]).name,asset.name,"Added")

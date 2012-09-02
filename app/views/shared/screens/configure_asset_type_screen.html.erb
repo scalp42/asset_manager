@@ -12,6 +12,12 @@
 
             <%= hidden_field('asset_type', 'asset_type_id',:value=>asset.id) %>
           </tr>
+          <tr>
+            <td>
+              <label class="checkbox">
+                <%= check_box("required","required",:placeholder => "Required") %> Required
+                </label></td>
+          </tr>
         </table>
         <div class="modal-footer">
 

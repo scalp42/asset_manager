@@ -28,7 +28,7 @@ class AssetsController < ApplicationController
 
       asset_type.asset_screen.each do |field|
         fieldObj = Field.find(field.field_id)
-        if params[fieldObj.name][fieldObj.name] != nil
+        if params[fieldObj.name][fieldObj.name] != nil and params[fieldObj.name][fieldObj.name] != ''
           setFieldValue(params,fieldObj,asset)
         elsif params[fieldObj.name.gsub(" ","_")+"_parent"] != nil and params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] != nil
           setCascadeValue(params,fieldObj,asset)

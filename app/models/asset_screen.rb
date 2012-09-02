@@ -3,5 +3,6 @@ class AssetScreen
   key  :description, String
   key  :name, String
   key  :parent, String
+  key  :required, Boolean
 
 end
