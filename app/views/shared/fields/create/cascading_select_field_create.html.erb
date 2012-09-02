@@ -27,7 +27,11 @@
         });
     }
 </script>
-<td><%=  select(field_name.gsub(" ","_")+"_parent",field_name.gsub(" ","_")+"_parent", getParentOptions(field_id).collect {|p| [ p.option, p.id ] },{:prompt => 'Please Select'}, { :onchange => "test()" })  %>
+<% if required %>
+<td><%=  select(field_name.gsub(" ","_")+"_parent",field_name.gsub(" ","_")+"_parent", getParentOptions(field_id).collect {|p| [ p.option, p.id ] },{:prompt => 'Please Select'}, { :onchange => "test()" ,"data-validation"=>"required"})  %>
+  <% else %>
+    <td><%=  select(field_name.gsub(" ","_")+"_parent",field_name.gsub(" ","_")+"_parent", getParentOptions(field_id).collect {|p| [ p.option, p.id ] },{:prompt => 'Please Select'}, { :onchange => "test()" })  %>
+    <% end %>
   <%=  select(field_name.gsub(" ","_")+"_child",field_name.gsub(" ","_")+"_child",{},{:prompt => 'Please Select'})  %>
 </td>
 <%= hidden_field(field_name, field_name+'_type',:value=> 'cascading_option') %>

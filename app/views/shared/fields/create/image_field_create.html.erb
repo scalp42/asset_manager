@@ -1,3 +1,7 @@
 <td><%= field_name %></td>
-<td><%= file_field field_name, field_name %></td>
+<% if required %>
+    <td><%= file_field(field_name, field_name,"data-validation" => "required") %></td>
+<% else %>
+    <td><%= file_field(field_name, field_name) %></td>
+<% end %>
 <%= hidden_field(field_name, field_name+'_type',:value=> 'file_upload') %>

@@ -1,7 +1,15 @@
 <td><%= field_name %></td>
-<% if value != nil %>
-    <td><%=  text_area(field_name,field_name, { :cols => 40, :rows => 8,:value => value.text_value}) %></td>
+<% if required %>
+    <% if value != nil %>
+        <td><%=  text_area(field_name,field_name, {:cols => 40, :rows => 8,:value => value.text_value},"data-validation" => "required") %></td>
+    <% else %>
+        <td><%=  text_area(field_name,field_name,{:cols => 40, :rows => 8},"data-validation" => "required") %></td>
+    <% end %>
 <% else %>
-    <td><%=  text_area(field_name,field_name ,{ :cols => 40, :rows => 8}) %></td>
+    <% if value != nil %>
+        <td><%=  text_area(field_name,field_name, {:cols => 40, :rows => 8,:value => value.text_value}) %></td>
+    <% else %>
+        <td><%=  text_area(field_name,field_name,{:cols => 40, :rows => 8}) %></td>
+    <% end %>
 <% end %>
 <%= hidden_field(field_name, field_name+'_type',:value=> 'text') %>
