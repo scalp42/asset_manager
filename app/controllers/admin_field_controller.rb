@@ -1,5 +1,6 @@
 class AdminFieldController < ApplicationController
   layout 'admin'
+  include AdminFieldHelper
 
   def list_fields
     @fields = Field.all.entries
@@ -15,7 +16,7 @@ class AdminFieldController < ApplicationController
     newField = Field.new(:field_type_id => params[:field_type][:field_type_id] ,:description => params[:description][:field_type_description],:name => params[:name][:field_type_name])
 
     if newField.save
-      redirect_to :back
+      setFieldReturn(newField.name,"Created")
     else
       puts flash.inspect
     end
@@ -32,8 +33,9 @@ class AdminFieldController < ApplicationController
       field.description = params['field_description']['field_description']
     end
 
-    field.save
-    redirect_to :back
+    if field.save
+      setFieldReturn(field.name,"Edited")
+    end
   end
 
   def list_asset_screen_fields
@@ -77,7 +79,7 @@ class AdminFieldController < ApplicationController
 
   def delete
     if Field.destroy(BSON::ObjectId.from_string(params['field_id']))
-      redirect_to :back
+      setFieldReturn("","Deleted")
     end
 
   end
@@ -92,7 +94,9 @@ class AdminFieldController < ApplicationController
     if params['value'].present?
       @field = Field.find(params['field_id']['field_id'])
       @field.field_option.build(:option => params['value']['select_field_value'],:field_id => @field.id)
-      @field.save
+      if @field.save
+        setOptionReturn(@field.name, params['value']['select_field_value'],"Created")
+      end
     else
       @field = Field.find(params['id'])
     end
@@ -112,8 +116,11 @@ class AdminFieldController < ApplicationController
   end
 
   def delete_option
+
     if Field.pull(BSON::ObjectId.from_string(params['field']['field_id']), {:field_option => {:_id => BSON::ObjectId.from_string(params['option']['option_id'])}})
-      redirect_to :back
+      @field = Field.find(BSON::ObjectId.from_string(params['field']['field_id']))
+      setOptionReturn(@field.name,"","Deleted")
+      render :template => 'admin_field/configure_field'
     end
   end
 

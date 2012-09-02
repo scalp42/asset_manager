@@ -1,25 +1,24 @@
+<div class="logintable" style="text-align: center;">
+  <h2 style="text-align: center;">Login</h2>
+  <%= form_for(resource, :as => resource_name, :url => session_path(resource_name),:html => { :class => "well"}) do |f| %>
+      <table style="text-align: center;">
+        <tr>
+          <td><%= f.label :email,:class => 'login-text' %></td>
+          <td><%= f.email_field :email %></td>
+        </tr>
+        <tr>
+          <td><%= f.label :password ,:class => 'login-text'%></td>
+          <td> <%= f.password_field :password ,:class => 'password'%></td>
+        </tr>
+        <% if devise_mapping.rememberable? -%>
+            <tr>
+              <td><%= f.check_box :remember_me %> </td><td><%= f.label :remember_me %></td>
+            </tr>
+        <% end -%>
+        <tr><td colspan="2"><%= f.submit "Sign in" ,:class => 'btn btn-primary'  %></td> </tr>
+      </table>
 
-      <div class="logintable" style="text-align: center;">
-        <h2>Login</h2>
-        <%= form_for(resource, :as => resource_name, :url => session_path(resource_name),:html => { :class => "well"}) do |f| %>
-            <table style="text-align: center;">
-             <tr>
-                <td><%= f.label :email,:class => 'login-text' %></td>
-                <td><%= f.email_field :email %></td>
-                  </tr>
-              <tr>
-                <td><%= f.label :password ,:class => 'login-text'%></td>
-                <td> <%= f.password_field :password ,:class => 'password'%></td>
-              </tr>
-              <% if devise_mapping.rememberable? -%>
-                  <tr>
-                  <td><%= f.check_box :remember_me %> </td><td><%= f.label :remember_me %></td>
-                  </tr>
-              <% end -%>
-              <tr><td colspan="2"><%= f.submit "Sign in" ,:class => 'btn btn-primary'  %></td> </tr>
-            </table>
-
-        <% end %>
-      </div>
+  <% end %>
+</div>
 
 <%= render "devise/shared/links" %>

@@ -1,4 +1,9 @@
 <%= render :template => 'shared/navbar' ,:locals => {:assetsNav => false, :searchNav => false,:adminNav => true}%>
+<%  if @fieldAlert != nil %>
+    <div class="alert alert-success">
+      <%= @fieldAlert %> Field Successfully <%= @fieldAlertType %>
+    </div>
+<% end %>
 <h2>Current Fields</h2>
 <%= render :template => 'admin_field/create' %>
 

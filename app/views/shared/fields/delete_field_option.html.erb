@@ -14,6 +14,7 @@
     </div>
     <div class="modal-footer">
      <form method="post" action="/admin_field/delete_option">
+       <input name="authenticity_token" type="hidden" value="token_value">
        <%= hidden_field('option', 'option_id',:value=>option) %>
        <%= hidden_field('field', 'field_id',:value=>field) %>
       <%= submit_tag "Delete" ,:class => 'btn btn-danger' %>

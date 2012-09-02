@@ -16,4 +16,17 @@ module AdminFieldHelper
     puts parent_field_id.inspect
 
   end
+
+  def setFieldReturn(fieldName,alertType)
+    @fieldAlert =  fieldName
+    @fieldAlertType = alertType
+    @fields = Field.all.entries
+    render :template => 'admin_field/list_fields'
+  end
+
+  def setOptionReturn(fieldName,selectOption,alertType)
+    @fieldAlert = fieldName
+    @fieldAlertType = alertType
+    @selectOption = selectOption
+  end
 end

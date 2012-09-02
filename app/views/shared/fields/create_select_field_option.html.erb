@@ -9,7 +9,7 @@
       <input name="authenticity_token" type="hidden" value="token_value">
         <table>
           <tr>
-            <td><%=  text_field("value","select_field_value") %> </td>
+            <td><%=  text_field("value","select_field_value",:placeholder => "Field Option") %> </td>
 
             <%= hidden_field('field_id', 'field_id',:value=>field.id) %>
             <% if parentOption != nil %>
