@@ -1,10 +1,13 @@
 <%= render :template => 'shared/navbar' ,:locals => {:assetsNav => false, :searchNav => false,:adminNav => true}%>
+<ul class="breadcrumb">
+  <li><%= link_to "Asset Types", :controller =>"admin_field",:action =>"list_asset_types" %> <span class="divider">/</span></li>
+  <li class="active"><%= link_to "Asset Type Fields "+@asset.name, :controller =>"admin_field",:action =>"list_asset_screen_fields",:id => @asset.id %></li>
+</ul>
 <%  if @fieldAlert != nil %>
     <div class="alert alert-success">
       Field <%= @fieldAlert %> <%= @fieldAlertType %> Successfully For Asset Type <%= @assetType %>
     </div>
 <% end %>
-<h2>Asset Screen for <%= @asset.name %></h2>
 <%= render :template => 'shared/screens/configure_asset_type_screen' , :locals => { :asset => @asset,:fieldsToBeAdded => @fieldToBeAdded} %>
 <div align="right">
   <a class="btn btn-primary" data-toggle="modal" href="#myCreateAssetFieldScreenModal">Add Field To Screen</a>

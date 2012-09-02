@@ -4,7 +4,9 @@
       <%= @fieldAlert %> Field Successfully <%= @fieldAlertType %>
     </div>
 <% end %>
-<h2>Current Fields</h2>
+<ul class="breadcrumb">
+  <li class="active"><%= link_to "Fields", :controller =>"admin_field",:action =>"list_fields" %></li>
+</ul>
 <%= render :template => 'admin_field/create' %>
 
 <div align="right">

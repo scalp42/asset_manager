@@ -56,4 +56,11 @@ module AdminFieldHelper
       end
     end
   end
+
+  def setSidebar(assetsMenu,fieldsMenu,usersMenu,indexMenu)
+    @assetsMenu = assetsMenu
+    @fieldsMenu = fieldsMenu
+    @usersMenu = usersMenu
+    @indexMenu = indexMenu
+  end
 end

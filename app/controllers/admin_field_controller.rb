@@ -4,11 +4,13 @@ class AdminFieldController < ApplicationController
 
   def list_fields
     @fields = Field.all.entries
+    setSidebar(nil,true,nil,nil)
     render :template => 'admin_field/list_fields'
   end
 
   def list_asset_types
     @asset_types = AssetType.all.entries
+    setSidebar(true,nil,nil,nil)
     render :template => 'admin_field/list_asset_types'
   end
 
@@ -16,6 +18,7 @@ class AdminFieldController < ApplicationController
     newField = Field.new(:field_type_id => params[:field_type][:field_type_id] ,:description => params[:description][:field_type_description],:name => params[:name][:field_type_name])
 
     if newField.save
+      setSidebar(nil,true,nil,nil)
       setFieldReturn(newField.name,"Created")
     else
       puts flash.inspect
@@ -34,12 +37,14 @@ class AdminFieldController < ApplicationController
     end
 
     if field.save
+      setSidebar(nil,true,nil,nil)
       setFieldReturn(field.name,"Edited")
     end
   end
 
   def list_asset_screen_fields
     listAssetScreens(params[:id])
+    setSidebar(true,nil,nil,nil)
   end
 
   def update_asset_type_screen
@@ -50,6 +55,7 @@ class AdminFieldController < ApplicationController
     if asset.save
       assetScreenReturn(Field.find(params[:field][:field_id]).name,asset.name,"Added")
       listAssetScreens(asset.id)
+      setSidebar(true,nil,nil,nil)
       render :template => 'admin_field/list_asset_screen_fields'
     end
   end
@@ -62,6 +68,7 @@ class AdminFieldController < ApplicationController
     if newAssetType.save
       assetTypeReturn(params[:name][:asset_type_name] ,"Created")
       @asset_types = AssetType.all.entries
+      setSidebar(true,nil,nil,nil)
       render :template => 'admin_field/list_asset_types'
     end
   end
@@ -75,6 +82,7 @@ class AdminFieldController < ApplicationController
         asset.pull(:field_value =>{:field_id => BSON::ObjectId.from_string(params['field_id'])} )
       end
       setFieldReturn("","Deleted")
+      setSidebar(true,nil,nil,nil)
     end
 
   end
@@ -84,6 +92,7 @@ class AdminFieldController < ApplicationController
       Asset.pull_all(:asset_type_id => params['asset_type_id'])
       assetTypeReturn("","Deleted")
       @asset_types = AssetType.all.entries
+      setSidebar(true,nil,nil,nil)
       render :template => 'admin_field/list_asset_types'
     end
   end
@@ -98,6 +107,7 @@ class AdminFieldController < ApplicationController
     else
       @field = Field.find(params['id'])
     end
+    setSidebar(nil,true,nil,nil)
   end
 
   def configure_child_field
@@ -110,7 +120,7 @@ class AdminFieldController < ApplicationController
       @field = Field.find(params['field'])
       @parentOption = params['id']
     end
-
+    setSidebar(nil,true,nil,nil)
   end
 
   def delete_option
@@ -120,6 +130,7 @@ class AdminFieldController < ApplicationController
       setOptionReturn(@field.name,"","Deleted")
       render :template => 'admin_field/configure_field'
     end
+    setSidebar(nil,true,nil,nil)
   end
 
   def delete_asset_screen
@@ -129,6 +140,7 @@ class AdminFieldController < ApplicationController
       assetScreenReturn("",asset.name,"Removed")
       render :template => 'admin_field/list_asset_screen_fields'
     end
+    setSidebar(true,nil,nil,nil)
   end
 
 end

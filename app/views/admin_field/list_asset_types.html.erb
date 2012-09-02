@@ -1,10 +1,12 @@
 <%= render :template => 'shared/navbar',:locals => {:assetsNav => false, :searchNav => false,:adminNav => true} %>
+<ul class="breadcrumb">
+  <li><%= link_to "Asset Types", :controller =>"admin_field",:action =>"list_asset_types" %></li>
+</ul>
 <%  if @assetAlert != nil %>
     <div class="alert alert-success">
       Asset Type <%= @assetAlert %> Successfully <%= @assetAction %>
     </div>
 <% end %>
-<h2>Asset Types</h2>
 <%= render :template => 'admin_field/create_asset_type' %>
 
 <div align="right">

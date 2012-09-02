@@ -1,4 +1,7 @@
 <%= render :template => 'shared/navbar',:locals => {:assetsNav => false, :searchNav => false,:adminNav => true} %>
+<ul class="breadcrumb">
+  <li><%= link_to "Users", :controller =>"admin_field",:action =>"index" %></li>
+</ul>
 <div align="right">
   <%= render :template => 'users/create' %>
 </div>

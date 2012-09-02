@@ -1,12 +1,75 @@
-<div class="sidebar-nav">
-  <div class="well" style="padding: 8px 0;">
-    <ul class="nav nav-list">
-      <li class="nav-header">Main</li>
-      <li><%= link_to 'Assets',:controller => 'admin_field', :action => 'list_asset_types'  %></li>
-      <li><%= link_to 'Fields',:controller => 'admin_field', :action => 'list_fields'  %></li>
-      <li><%= link_to 'Users',:controller => 'users', :action => 'index'  %></li>
-      <li><%= link_to 'Index',:controller => 'index', :action => 'index'  %></li>
-    </ul>
-  </div>
-</div>
+<div class="accordion custom-acc" id="accordionSB">
 
+  <div class="accordion-group fs">
+    <div class="accordion-heading active-head">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionSB" href="#assetsb">
+        <i class="icon-large icon-th-large head_icon"></i> Assets
+      </a>
+    </div>
+    <% if @assetsMenu != nil %>
+        <div id="assetsb" class="accordion-body in collapse" style="height: auto;" >
+    <% else %>
+        <div id="assetsb" class="accordion-body in collapse" style="height: 0px;" >
+    <% end %>
+    <div class="accordion-inner">
+      <ul class="nav nav-list">
+        <li><%= link_to 'Assets',:controller => 'admin_field', :action => 'list_asset_types'  %></li>
+      </ul>
+    </div>
+    </div>
+    </div>
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionSB" href="#fieldssb">
+          <i class="icon-large icon-th-large head_icon"></i> Fields
+        </a>
+      </div>
+      <% if @fieldsMenu != nil %>
+          <div id="fieldssb" class="accordion-body collapse" style="height: auto; ">
+      <% else %>
+          <div id="fieldssb" class="accordion-body collapse" style="height: 0px; ">
+      <% end %>
+      <div class="accordion-inner">
+        <ul class="nav nav-list">
+          <li><%= link_to 'Fields',:controller => 'admin_field', :action => 'list_fields'  %></li>
+        </ul>
+      </div>
+      </div>
+      </div>
+      <div class="accordion-group">
+        <div class="accordion-heading">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionSB" href="#usersb">
+            <i class="icon-large icon-th-large head_icon"></i> Users
+          </a>
+        </div>
+        <% if @usersMenu != nil %>
+            <div id="usersb" class="accordion-body collapse" style="height: auto; ">
+        <% else %>
+            <div id="usersb" class="accordion-body collapse" style="height: 0px; ">
+        <% end %>
+        <div class="accordion-inner">
+          <ul class="nav nav-list">
+            <li><%= link_to 'Users',:controller => 'users', :action => 'index'  %></li>
+          </ul>
+        </div>
+        </div>
+        </div>
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionSB" href="#indexsb">
+              <i class="icon-large icon-th-large head_icon"></i> Indexing
+            </a>
+          </div>
+          <% if @indexMenu != nil %>
+              <div id="indexsb" class="accordion-body collapse" style="height: auto; ">
+          <% else %>
+              <div id="indexsb" class="accordion-body collapse" style="height: 0px; ">
+          <% end %>
+          <div class="accordion-inner">
+            <ul class="nav nav-list">
+              <li><%= link_to 'Index',:controller => 'index', :action => 'index'  %></li>
+            </ul>
+          </div>
+          </div>
+          </div>
+        </div>

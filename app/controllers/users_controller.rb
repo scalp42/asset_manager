@@ -1,8 +1,10 @@
 class UsersController < ApplicationController
   layout 'admin'
+  include AdminFieldHelper
 
   def index
     @users = User.all
+    setSidebar(nil,nil,true,nil)
   end
 
   def edit_user
@@ -18,8 +20,9 @@ class UsersController < ApplicationController
     user.last_name = params['last_name']['last_name']
     user.full_name = params['first_name']['first_name']+' '+params['last_name']['last_name']
 
-   user.save
+    user.save
 
+    setSidebar(nil,nil,true,nil)
     redirect_to :back
   end
 
@@ -37,6 +40,7 @@ class UsersController < ApplicationController
     user.active = true
 
     if user.save
+      setSidebar(nil,nil,true,nil)
       redirect_to :back
     end
 
