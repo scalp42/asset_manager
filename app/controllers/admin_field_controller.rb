@@ -68,6 +68,12 @@ class AdminFieldController < ApplicationController
 
   def delete
     if Field.destroy(BSON::ObjectId.from_string(params['field_id']))
+      AssetType.each do |assetType|
+        assetType.pull(:asset_screen =>{:field_id => params['field_id']})
+      end
+      Asset.each do |asset|
+        asset.pull(:field_value =>{:field_id => BSON::ObjectId.from_string(params['field_id'])} )
+      end
       setFieldReturn("","Deleted")
     end
 
@@ -75,6 +81,7 @@ class AdminFieldController < ApplicationController
 
   def delete_asset_type
     if AssetType.destroy(BSON::ObjectId.from_string(params['asset_type_id']))
+      Asset.pull_all(:asset_type_id => params['asset_type_id'])
       assetTypeReturn("","Deleted")
       @asset_types = AssetType.all.entries
       render :template => 'admin_field/list_asset_types'
