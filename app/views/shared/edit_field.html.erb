@@ -1,4 +1,4 @@
-<div class="modal hide" id="myEditFieldModal<%= field.id %>" style="display: none;">
+<div class="modal hide" id="myEditFieldModal<%= field.id %>" style="display: none; text-align: center;">
   <div class="modal-header">
     <button class="close" data-toggle="modal" href="#myEditFieldModal<%= field.id %>">×</button>
     <h3>Edit Field</h3>
@@ -8,11 +8,9 @@
       <input name="authenticity_token" type="hidden" value="token_value">
       <table>
         <tr>
-          <td>Name:</td>
           <td><%=  text_field("field_name","field_name",:value => value,:placeholder => "Name","data-validation"=>"required") %></td>
         </tr>
         <tr>
-          <td>Description:</td>
           <td><%=  text_field("field_description","field_description",:value => description,:placeholder => "Description") %></td>
         </tr>
       </table>

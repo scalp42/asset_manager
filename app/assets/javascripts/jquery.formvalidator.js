@@ -115,7 +115,7 @@
             $element
                 .removeClass(config.errorElementClass)
                 .parent()
-                    .find('.jquery_form_error_message').remove();
+                    .find('.alert alert-error').remove();
             
             // if element has custom err msg container, clear it
             if( elementErrMsgObj != null) {
@@ -137,7 +137,7 @@
                     if( elementErrMsgObj != null) {
                         elementErrMsgObj.innerHTML = validation; 
                     } else { // use regular span append
-                        $element.parent().append('<span class="jquery_form_error_message">'+validation+'</span>');
+                        $element.parent().append('<span class="alert alert-error">'+validation+'</span>');
                     }
 
                     if(config.borderColorOnError !== '') {
@@ -170,7 +170,7 @@
                 ignore : [], // Names of inputs not to be validated even though node attribute containing the validation rules tells us to
                 errorElementClass : 'error', // Class that will be put on elements which value is invalid
                 borderColorOnError : 'red', // Border color of elements which value is invalid, empty string to not change border color
-                errorMessageClass : 'jquery_form_error_message', // class name of div containing error messages when validation fails
+                errorMessageClass : 'alert alert-error', // class name of div containing error messages when validation fails
                 validationRuleAttribute : 'data-validation', // name of the attribute holding the validation rules
                 validationErrorMsgAttribute : 'data-validation-error-msg', // define custom err msg inline with element
                 errorMessagePosition : 'top', // Can be either "top" or "element"
@@ -282,7 +282,7 @@
             // Remove possible error messages from last validation
             //
             $('.' + config.errorMessageClass.split(' ').join('.')).remove();
-            $('.jquery_form_error_message').remove();
+            $('.alert alert-error').remove();
 
 
             //
@@ -315,11 +315,11 @@
                 else {
                     for (var i = 0; i < errorInputs.length; i++) {
                         var parent = errorInputs[i].parent();
-                        var errorSpan = parent.find('span[class=jquery_form_error_message]');
+                        var errorSpan = parent.find('span[class=alert alert-error]');
                         if (errorSpan.length > 0) {
                             errorSpan.eq(0).text(errorInputs[i].attr('data-validation-current-error'));
                         } else {
-                            parent.append('<span class="jquery_form_error_message">' + errorInputs[i].attr('data-validation-current-error') + '</span>');
+                            parent.append('<span class="alert alert-error">' + errorInputs[i].attr('data-validation-current-error') + '</span>');
                         }
                     }
                 }
