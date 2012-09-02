@@ -5,11 +5,11 @@
   </div>
   <div class="modal-body" align="center">
 
-    <form method="post" class="well" action="create_asset_type">
+    <form method="post" class="well" action="create_asset_type" onsubmit="return $(this).validate()">
       <input name="authenticity_token" type="hidden" value="token_value">
         <table>
           <tr>
-            <td><%=  text_field("name","asset_type_name",:placeholder => "Name") %> </td>
+            <td><%=  text_field("name","asset_type_name",:placeholder => "Name","data-validation"=>"required") %> </td>
           </tr>
           <tr>
             <td>  <%= text_field("description","asset_type_description",:placeholder => "Description") %> </td>
