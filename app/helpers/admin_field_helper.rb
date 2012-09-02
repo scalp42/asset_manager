@@ -29,4 +29,31 @@ module AdminFieldHelper
     @fieldAlertType = alertType
     @selectOption = selectOption
   end
+
+  def assetScreenReturn(fieldName,assetType,alertType)
+    @fieldAlert = fieldName
+    @assetType = assetType
+    @fieldAlertType = alertType
+  end
+
+  def assetTypeReturn(assetType,assetAction)
+    @assetAlert = assetType
+    @assetAction = assetAction
+  end
+
+  def listAssetScreens(asset_id)
+    @asset = AssetType.find(asset_id)
+
+    fields = Array.new
+    @asset.asset_screen.each do |assetScreen|
+      fields.push(Field.find(assetScreen.field_id).name)
+    end
+
+    @fieldToBeAdded = Array.new
+    Field.all.each do |field|
+      if(!fields.include?(field.name))
+        @fieldToBeAdded.push(field)
+      end
+    end
+  end
 end

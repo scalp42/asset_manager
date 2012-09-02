@@ -1,4 +1,9 @@
 <%= render :template => 'shared/navbar',:locals => {:assetsNav => false, :searchNav => false,:adminNav => true} %>
+<%  if @assetAlert != nil %>
+    <div class="alert alert-success">
+      Asset Type <%= @assetAlert %> Successfully <%= @assetAction %>
+    </div>
+<% end %>
 <h2>Asset Types</h2>
 <%= render :template => 'admin_field/create_asset_type' %>
 

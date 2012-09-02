@@ -39,31 +39,18 @@ class AdminFieldController < ApplicationController
   end
 
   def list_asset_screen_fields
-
-    @asset = AssetType.find(params[:id])
-
-    fields = Array.new
-    @asset.asset_screen.each do |assetScreen|
-      fields.push(Field.find(assetScreen.field_id).name)
-    end
-
-    puts fields.inspect
-    @fieldToBeAdded = Array.new
-    Field.all.each do |field|
-      if(!fields.include?(field.name))
-        @fieldToBeAdded.push(field)
-      end
-    end
-
+    listAssetScreens(params[:id])
   end
 
   def update_asset_type_screen
 
-    @asset = AssetType.find(BSON::ObjectId.from_string(params[:asset_type][:asset_type_id]))
-    @asset.asset_screen.build(:field_id => params[:field][:field_id] ,:asset_id => params[:asset_type][:asset_type_id])
+    asset = AssetType.find(BSON::ObjectId.from_string(params[:asset_type][:asset_type_id]))
+    asset.asset_screen.build(:field_id => params[:field][:field_id] ,:asset_id => params[:asset_type][:asset_type_id])
 
-    if @asset.save
-      redirect_to :back
+    if asset.save
+      assetScreenReturn(Field.find(params[:field][:field_id]).name,asset.name,"Added")
+      listAssetScreens(asset.id)
+      render :template => 'admin_field/list_asset_screen_fields'
     end
   end
 
@@ -73,7 +60,9 @@ class AdminFieldController < ApplicationController
     end
 
     if newAssetType.save
-      redirect_to :back
+      assetTypeReturn(params[:name][:asset_type_name] ,"Created")
+      @asset_types = AssetType.all.entries
+      render :template => 'admin_field/list_asset_types'
     end
   end
 
@@ -86,7 +75,9 @@ class AdminFieldController < ApplicationController
 
   def delete_asset_type
     if AssetType.destroy(BSON::ObjectId.from_string(params['asset_type_id']))
-      redirect_to :back
+      assetTypeReturn("","Deleted")
+      @asset_types = AssetType.all.entries
+      render :template => 'admin_field/list_asset_types'
     end
   end
 
@@ -126,7 +117,10 @@ class AdminFieldController < ApplicationController
 
   def delete_asset_screen
     if AssetType.pull(BSON::ObjectId.from_string(params['asset_id']),{:asset_screen => {:_id => BSON::ObjectId.from_string(params['asset_screen_id'])}})
-      redirect_to :back
+      asset = AssetType.find(BSON::ObjectId.from_string(params['asset_id']))
+      listAssetScreens(asset.id)
+      assetScreenReturn("",asset.name,"Removed")
+      render :template => 'admin_field/list_asset_screen_fields'
     end
   end
 
