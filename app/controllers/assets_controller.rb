@@ -95,6 +95,8 @@ class AssetsController < ApplicationController
         end
       elsif params[fieldObj.name.gsub(" ","_")+"_parent"] != nil and params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] != ""
         updateCascadeValue(params,fieldObj,asset)
+      elsif params[fieldObj.name.gsub(" ","_")+"_parent"] != nil and params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] == "" and  asset.field_value.detect {|c|c.field_id == fieldObj.id} != nil
+        fieldsToDelete.push(fieldObj.id)
       elsif params[fieldObj.name][fieldObj.name]  == '' and  asset.field_value.detect {|c|c.field_id == fieldObj.id} != nil
         fieldsToDelete.push(fieldObj.id)
       end
@@ -158,7 +160,7 @@ class AssetsController < ApplicationController
     end
 
     respond_to do |format|
-        format.xml { render :xml => @assetsExport }
+      format.xml { render :xml => @assetsExport }
     end
 
   end
