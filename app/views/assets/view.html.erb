@@ -1,6 +1,8 @@
 <%= render :template => 'shared/navbar' ,:locals => {:assetsNav => true, :searchNav => false,:adminNav => false} %>
-
-<h2 style="text-align: center;">View <%= @asset.name %> Asset</h2>
+<ul class="breadcrumb">
+  <li><%= link_to "Assets", :controller =>"assets",:action =>"index" %><span class="divider">/</span></li>
+  <li class="active"><%= link_to @asset.name, :controller =>"assets",:action =>"view" ,:id => @asset.id %> </li>
+</ul>
 
 <table class="table table-striped table-bordered" width="100%">
   <tr><td>Name</td>
