@@ -2,17 +2,9 @@
   <label class="control-label" style="color: #ffffff;"><%= field_name %></label>
   <div class="controls">
     <% if required %>
-        <% if value != nil %>
-            <%=  text_area(field_name,field_name, {  :rows => 5,:class => "span10",:value => value.text_value},"data-validation" => "required") %>
-        <% else %>
-            <%=  text_area(field_name,field_name,{:rows => 5,:class => "span10"},"data-validation" => "required") %>
-        <% end %>
+        <%=  text_area(field_name,field_name, {  :rows => 5,:class => "span10",:value => value.text_value},"data-validation" => "required") %>
     <% else %>
-        <% if value != nil %>
-            <%=  text_area(field_name,field_name, {:rows => 5,:class => "span10",:value => value.text_value}) %>
-        <% else %>
-            <%=  text_area(field_name,field_name,{:rows => 5,:class => "span10"}) %>
-        <% end %>
+        <%=  text_area(field_name,field_name, {:rows => 5,:class => "span10",:value => value.text_value}) %>
     <% end %>
   </div>
 </div>

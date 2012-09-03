@@ -2,17 +2,9 @@
   <label class="control-label" style="color: #ffffff;"><%= field_name %></label>
   <div class="controls">
     <% if required %>
-        <% if value != nil %>
-            <%=  select(field_name,field_name, Field.find(field_id).field_option.collect {|p| [ p.option, p.id ] },{:prompt => "Please Select",:selected => value.field_option_id},"data-validation" => "required") %>
-        <% else %>
-            <%=  select(field_name,field_name, Field.find(field_id).field_option.collect {|p| [ p.option, p.id ] },{:prompt => "Please Select"},"data-validation" => "required") %>
-        <% end %>
+        <%=  select(field_name,field_name, Field.find(field_id).field_option.collect {|p| [ p.option, p.id ] },{:prompt => "Please Select",:selected => value.field_option_id},"data-validation" => "required") %>
     <% else %>
-        <% if value != nil %>
-            <%=  select(field_name,field_name, Field.find(field_id).field_option.collect {|p| [ p.option, p.id ] },{:prompt => "Please Select",:selected => value.field_option_id}) %>
-        <% else %>
-            <%=  select(field_name,field_name, Field.find(field_id).field_option.collect {|p| [ p.option, p.id ] },{:prompt => "Please Select"}) %>
-        <% end %>
+        <%=  select(field_name,field_name, Field.find(field_id).field_option.collect {|p| [ p.option, p.id ] },{:prompt => "Please Select",:selected => value.field_option_id}) %>
     <% end %>
   </div>
 </div>

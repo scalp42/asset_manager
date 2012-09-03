@@ -3,11 +3,7 @@
   <div class="controls">
     <%= hidden_field(field_name, field_name+'_type',:value=> 'file_upload') %>
     <div class="fileupload fileupload-new" data-provides="fileupload">
-      <% if value != nil %>
-          <div class="fileupload-new thumbnail"><a href="<%= value.photo.base64 %>" rel="lightbox"> <img  src="<%= value.photo.base64('thumb') %>"></a></div>
-      <% else %>
-          <div class="fileupload-new thumbnail"><img src="" /></div>
-      <% end %>
+      <div class="fileupload-new thumbnail"><a href="<%= value.photo.base64 %>" rel="lightbox"> <img  src="<%= value.photo.base64('thumb') %>"></a></div>
       <div class="fileupload-preview fileupload-exists thumbnail"></div>
       <div>
     <span class="btn btn-file"><span class="fileupload-new">Select image</span><span class="fileupload-exists">Change</span>

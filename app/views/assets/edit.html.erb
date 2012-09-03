@@ -19,10 +19,14 @@
   </div>
   <%  AssetType.find(@asset.asset_type_id).asset_screen.each do |assetScreenField| %>
 
-      <%= render :template => 'shared/fields/edit/'+FieldType.find(Field.find(assetScreenField.field_id).field_type_id).type_name.downcase.gsub(' ','_')+'_edit' ,
-                 :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id,
-                              :value => @asset.field_value.detect {|c|c.field_id == BSON::ObjectId.from_string(assetScreenField.field_id)},:required => assetScreenField.required } %>
-
+      <% if @asset.field_value.detect {|c|c.field_id == BSON::ObjectId.from_string(assetScreenField.field_id)} != nil %>
+          <%= render :template => 'shared/fields/edit/'+FieldType.find(Field.find(assetScreenField.field_id).field_type_id).type_name.downcase.gsub(' ','_')+'_edit' ,
+                     :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id,
+                                  :value => @asset.field_value.detect {|c|c.field_id == BSON::ObjectId.from_string(assetScreenField.field_id)},:required => assetScreenField.required } %>
+      <% else %>
+          <%= render :template => 'shared/fields/create/'+FieldType.find(Field.find(assetScreenField.field_id).field_type_id).type_name.downcase.gsub(' ','_')+'_create' ,
+                     :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id,:required => assetScreenField.required } %>
+      <% end %>
   <% end%>
   <%= hidden_field('asset', 'asset_id',:value=> @asset.id) %>
 

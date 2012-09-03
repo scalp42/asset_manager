@@ -63,10 +63,10 @@
   <div class="control-group">
     <label class="control-label" style="color: #ffffff;"><%= field_name %></label>
     <div class="controls">
-      <% if value != nil %>
-          <%=  select(field_name.gsub(" ","_")+"_parent",field_name.gsub(" ","_")+"_parent", getParentOptions(field_id).collect {|p| [ p.option, p.id ] },{:selected => value.parent_field_option_id,:prompt => 'Please Select'}, { :onchange => "test()" })  %>
+      <% if required %>
+          <%=  select(field_name.gsub(" ","_")+"_parent",field_name.gsub(" ","_")+"_parent", getParentOptions(field_id).collect {|p| [ p.option, p.id ] },{:selected => value.parent_field_option_id,:prompt => 'Please Select'}, { :onchange => "test()" ,"data-validation" => "required"})  %>
       <% else %>
-          <%=  select(field_name.gsub(" ","_")+"_parent",field_name.gsub(" ","_")+"_parent", getParentOptions(field_id).collect {|p| [ p.option, p.id ] },{:prompt => 'Please Select'}, { :onchange => "test()" })  %>
+          <%=  select(field_name.gsub(" ","_")+"_parent",field_name.gsub(" ","_")+"_parent", getParentOptions(field_id).collect {|p| [ p.option, p.id ] },{:selected => value.parent_field_option_id,:prompt => 'Please Select'}, { :onchange => "test()"})  %>
       <% end %>
       <%=  select(field_name.gsub(" ","_")+"_child",field_name.gsub(" ","_")+"_child",{},{:prompt => 'Please Select'})  %>
     </div>

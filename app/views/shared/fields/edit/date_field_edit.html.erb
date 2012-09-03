@@ -1,10 +1,10 @@
 <div class="control-group">
   <label class="control-label" style="color: #ffffff;"><%= field_name %></label>
   <div class="controls">
-    <% if value != nil %>
-        <%= text_field(field_name,field_name, {:value => value.date})     %>
+    <% if required != nil %>
+        <%= text_field(field_name,field_name, {:value => value.date},"data-validaiton" => "required")     %>
     <% else %>
-        <%= text_field(field_name,field_name)     %>
+        <%= text_field(field_name,field_name, {:value => value.date})     %>
     <% end %>
     <%= hidden_field(field_name, field_name+'_type',:value=> 'date') %>
   </div>
