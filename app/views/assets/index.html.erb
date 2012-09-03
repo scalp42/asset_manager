@@ -26,17 +26,17 @@
   </tr>
   <% @assets.each do |asset| %>
 	  <tr>
-		<td>
+		<td style="text-align: center;">
 		  <%= link_to AssetType.find(asset.asset_type_id).name, :controller => 'assets', :action => 'view', :id => asset.id %>
 		</td>
-		<td>
+		<td style="text-align: center;">
 		  <%= link_to asset.name, :controller => 'assets', :action => 'view', :id => asset.id %>
 		</td>
 
-		<td>
+		<td style="text-align: center;">
 		  <%= link_to asset.description, :controller => 'assets', :action => 'view', :id => asset.id %>
 		</td>
-		<td>
+		<td style="text-align: center;">
 		  <%= link_to 'Edit', {:action => 'edit' ,:id => asset.id}, :class => "btn"  %>
 		  <%= render :template => 'assets/delete', :locals => {:asset => asset} %>
 		</td>
