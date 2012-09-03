@@ -31,6 +31,7 @@
           <% end %>
         </td>
         <td style="text-align: center;">
+          <%= link_to "Toggle Required",{:action => "toggle_required",:id => @asset.id ,:asset_type_id => asset_screen.id , :field_id =>asset_screen.field_id,:required => asset_screen.required },:class =>"btn" %>
           <%= render :template => 'shared/delete_asset_screen' ,:locals => { :asset_screen => asset_screen }%>
         </td>
       </tr>

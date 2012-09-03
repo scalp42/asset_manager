@@ -14,17 +14,17 @@
   </tr>
   <% @users.each do |user| %>
 	  <tr>
-		<td>
+		<td style="text-align: center;">
 		  <%= link_to user.full_name, :controller => 'users', :action => 'view', :id => user.id %>
 		</td>
-		<td>
+		<td style="text-align: center;">
 		  <%= link_to user.email, :controller => 'assets', :action => 'view', :id => user.id %>
 		</td>
 
-		<td>
+		<td style="text-align: center;">
 		  <%= link_to user.active, :controller => 'assets', :action => 'view', :id => user.id %>
 		</td>
-		<td>
+		<td style="text-align: center;">
           <%= render :template => 'users/edit', :locals => {:user => user} %>
 		  <%= render :template => 'users/delete', :locals => {:user => user} %>
 		</td>

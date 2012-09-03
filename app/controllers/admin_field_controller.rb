@@ -143,4 +143,23 @@ class AdminFieldController < ApplicationController
     setSidebar(true,nil,nil,nil)
   end
 
+
+  def toggle_required
+
+    assetType = AssetType.find(BSON::ObjectId.from_string(params[:id]))
+
+    if params[:required] == 'true'
+      assetType.asset_screen.select { |b| b.field_id == params[:field_id] }.each { |b|  b.required = FALSE}
+    else
+      assetType.asset_screen.select { |b| b.field_id == params[:field_id] }.each { |b|  b.required = TRUE}
+    end
+
+    if assetType.save
+      listAssetScreens(assetType.id)
+      assetScreenReturn("",assetType.name,"Toggled")
+      render :template => 'admin_field/list_asset_screen_fields'
+    end
+
+  end
+
 end

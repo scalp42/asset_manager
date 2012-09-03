@@ -21,18 +21,18 @@
   </tr>
   <% @fields.each do |field| %>
       <tr>
-        <td>
+        <td style="text-align: center;">
           <%= field.name %>
         </td>
 
-        <td>
+        <td style="text-align: center;">
           <%= field.description %>
         </td>
 
-        <td>
+        <td style="text-align: center;">
           <%= FieldType.find(field.field_type_id).type_name %>
         </td>
-        <td>
+        <td style="text-align: center;">
           <% if FieldType.find(field.field_type_id).is_configurable %>
               <%= link_to 'Configure',{:controller => 'admin_field', :action => 'configure_field' ,:id => field.id},:class => 'btn'  %>
           <% end %>
