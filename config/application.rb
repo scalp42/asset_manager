@@ -61,5 +61,6 @@ module AssetManager
     config.assets.version = '1.0'
     config.autoload_paths += Dir["#{Rails.root}/lib/search"]
     config.autoload_paths += Dir["#{Rails.root}/lib/assets"]
+    config.assets.paths << Rails.root.join("app", "assets", "fonts")
   end
 end

@@ -1,4 +1,3 @@
-<td><%= field_name %></td>
 <script type="text/javascript">
     function test()
     {
@@ -27,6 +26,9 @@
         });
     }
 </script>
+<div class="control-group">
+  <label class="control-label" style="color: #ffffff;"><%= field_name %></label>
+  <div class="controls">
 <% if required %>
 <td><%=  select(field_name.gsub(" ","_")+"_parent",field_name.gsub(" ","_")+"_parent", getParentOptions(field_id).collect {|p| [ p.option, p.id ] },{:prompt => 'Please Select'}, { :onchange => "test()" ,"data-validation"=>"required"})  %>
   <% else %>
@@ -35,3 +37,5 @@
   <%=  select(field_name.gsub(" ","_")+"_child",field_name.gsub(" ","_")+"_child",{},{:prompt => 'Please Select'})  %>
 </td>
 <%= hidden_field(field_name, field_name+'_type',:value=> 'cascading_option') %>
+      </div>
+</div>

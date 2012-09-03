@@ -1,27 +1,33 @@
 <%= render :template => 'shared/navbar' ,:locals => {:assetsNav => true, :searchNav => false,:adminNav => false} %>
-
-<form method="post" class="well" action="/assets/save" enctype="multipart/form-data" onsubmit="return $(this).validate()">
+<ul class="breadcrumb">
+  <li><%= link_to "Assets", :controller =>"assets",:action =>"index" %><span class="divider">/</span></li>
+  <li class="active"><%= link_to "Create "+@asset_type.name, :controller =>"assets",:action =>"create" ,:id => @asset_type.id %> </li>
+</ul>
+<form method="post" class="form-horizontal" action="/assets/save" enctype="multipart/form-data" onsubmit="return $(this).validate()">
   <input name="authenticity_token" type="hidden" value="token_value">
-       <table class="table table-striped" width="100%">
-         <tr><td>Name</td>
-         <td><%=  text_field('name','name',"data-validation" => "required") %></td>
-           </tr>
-         <tr>
-         <td>Description</td>
-         <td><%=  text_area('description','description',{:rows => 15,:cols => 40}) %></td>
-         </tr>
-         <%  @asset_type.asset_screen.each do |assetScreenField| %>
-                     <tr>
-                        <%= render :template => 'shared/fields/create/'+FieldType.find(Field.find(assetScreenField.field_id).field_type_id).type_name.downcase.gsub(' ','_')+'_create' ,
-                                       :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id,:required => assetScreenField.required } %>
-                     </tr>
-                   <% end%>
-       </table>
-       <div class="modal-footer" style="text-align: center;">
+  <div class="control-group">
+    <label class="control-label" style="color: #ffffff;">Name</label>
+    <div class="controls">
+      <%=  text_field('name','name',"data-validation" => "required",:class => "span10") %>
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" style="color: #ffffff;">Description</label>
+    <div class="controls">
+      <%=  text_area('description','description',{:class =>"span10",:rows => 5}) %>
+    </div>
+  </div>
+  <%  @asset_type.asset_screen.each do |assetScreenField| %>
 
-         <%= hidden_field('asset_type', 'asset_type_id',:value=>@asset_type.id) %>
+      <%= render :template => 'shared/fields/create/'+FieldType.find(Field.find(assetScreenField.field_id).field_type_id).type_name.downcase.gsub(' ','_')+'_create' ,
+                 :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id,:required => assetScreenField.required } %>
 
-         <%= submit_tag "Create" ,:class => 'btn btn-primary'%>
-         <%= link_to "No", {:action => 'index'},:class=>'btn secondary' %>
-       </div>
-   </form>
+  <% end%>
+  <div class="control-group" style="text-align: center;">
+
+    <%= hidden_field('asset_type', 'asset_type_id',:value=>@asset_type.id) %>
+
+    <%= submit_tag "Create" ,:class => 'btn btn-primary'%>
+    <%= link_to "No", {:action => 'index'},:class=>'btn secondary' %>
+  </div>
+</form>
