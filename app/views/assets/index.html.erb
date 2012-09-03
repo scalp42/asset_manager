@@ -1,19 +1,4 @@
 <%= render :template => 'shared/navbar' ,:locals => {:assetsNav => true, :searchNav => false,:adminNav => false}%>
-<div align="right">
-  <ul class="nav nav-pills">
-    <li class="dropdown" id="menu1">
-  	<a class="dropdown-toggle" data-toggle="dropdown" href="#menu1">
-  	  Create Asset
-  	  <b class="caret"></b>
-  	</a>
-  	<ul class="dropdown-menu parent">
-       <% AssetType.all.each do |assetType| %>
-            <li><%= link_to assetType.name, :controller => 'assets', :action => 'create',:id => assetType.id %></li>
-       <% end %>
-  	</ul>
-    </li>
-  </ul>
-</div>
 <ul class="breadcrumb">
   <li class=""><%= link_to "Assets", :controller =>"assets",:action =>"index" %> </li>
 </ul>
