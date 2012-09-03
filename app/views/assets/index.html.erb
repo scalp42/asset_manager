@@ -2,6 +2,11 @@
 <ul class="breadcrumb">
   <li class=""><%= link_to "Assets", :controller =>"assets",:action =>"index" %> </li>
 </ul>
+<%  if @assetName != nil %>
+    <div class="alert alert-success">
+     Asset <%= @assetName %> Successfully <%= @assetAction %>
+    </div>
+<% end %>
 <table class="table table-striped">
   <tr>
 	<th>Type</th>

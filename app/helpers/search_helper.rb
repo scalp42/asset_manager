@@ -139,8 +139,8 @@ module SearchHelper
             end
             #elsif FieldType.find(Field.find(k).field_type_id).use_date
             #  date 'field_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+v
-          elsif FieldType.find(Field.find(k).field_type_id).use_radio_option
-            string 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+v
+          #elsif FieldType.find(Field.find(k).field_type_id).use_radio_option
+          #  string 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+v
           end
         end
       end

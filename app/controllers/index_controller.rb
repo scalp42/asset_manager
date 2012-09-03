@@ -5,4 +5,14 @@ class IndexController < ApplicationController
 
   end
 
+  def reindex
+    Tire.index('assets').delete
+
+    Asset.import :per_page => 1000
+
+    @indexAlert = true
+
+    render :template => "index/index"
+  end
+
 end

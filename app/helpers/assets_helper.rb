@@ -96,11 +96,13 @@ module AssetsHelper
 
   def deleteFields(fieldsToDelete,asset)
     fieldsToDelete.each do |field|
-      Asset.pull(asset.id, {:field_value => {:_id => field}})
+      Asset.pull(asset.id, {:field_value => {:field_id => field}})
     end
   end
 
-  def search()
-
+  def assetAlert(assetName,assetAction)
+    @assetName = assetName
+    @assetAction = assetAction
   end
+
 end

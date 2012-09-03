@@ -1,3 +1,13 @@
 <%= render :template => 'shared/navbar',:locals => {:assetsNav => false, :searchNav => false,:adminNav => true} %>
-<h2>Indexing</h2>
+<ul class="breadcrumb">
+  <li><%= link_to "Index", :controller =>"index",:action =>"index" %></li>
+</ul>
+<%  if @indexAlert != nil %>
+    <div class="alert alert-success">
+      Reindex Successfully Completed
+    </div>
+<% end %>
+<div style="text-align: center;">
+  <%= link_to "Reindex" ,{:controller => 'index',:action => 'reindex'},:class => "btn btn-primary" %>
+</div>
 

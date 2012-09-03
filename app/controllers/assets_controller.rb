@@ -38,13 +38,23 @@ class AssetsController < ApplicationController
       asset.save
     end
 
-    redirect_to :action => 'index'
+    assetAlert(asset.name,"Created")
+
+    @assets = Asset.all
+
+    render :template => 'assets/index'
   end
 
   def delete
+    asset = Asset.find(params[:asset_id])
+
     Asset.destroy(params[:asset_id])
 
-    redirect_to :back
+    assetAlert(asset.name,"Deleted")
+
+    @assets = Asset.all
+
+    render :template => 'assets/index'
   end
 
   def edit
@@ -85,7 +95,7 @@ class AssetsController < ApplicationController
         end
       elsif params[fieldObj.name.gsub(" ","_")+"_parent"] != nil and params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] != ""
         updateCascadeValue(params,fieldObj,asset)
-      elsif params[fieldObj.name][fieldObj.name]  == '' and  asset.field_value.find(fieldObj.id) != nil
+      elsif params[fieldObj.name][fieldObj.name]  == '' and  asset.field_value.detect {|c|c.field_id == fieldObj.id} != nil
         fieldsToDelete.push(fieldObj.id)
       end
     end
@@ -94,7 +104,11 @@ class AssetsController < ApplicationController
 
     deleteFields(fieldsToDelete,asset)
 
-    redirect_to :action => 'index'
+    assetAlert(asset.name,"Updated")
+
+    @assets = Asset.all
+
+    render :template => 'assets/index'
   end
 
   def view
@@ -149,7 +163,4 @@ class AssetsController < ApplicationController
 
   end
 
-  def createRest
-
-  end
 end
