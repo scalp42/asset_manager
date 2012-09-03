@@ -1,0 +1,11 @@
+<% if value != nil %>
+    <td><%= field_name %>:</td>
+    <td><% value.field_option_id.each do |fieldOption| %>
+          <% fieldOption.each do |option| %>
+              <% if option != '' %>
+                  <%= (Field.find(value.field_id).field_option.detect{|c|c.id == BSON::ObjectId.from_string(option)}).option %>
+              <% end %>
+          <% end %>
+      <% end %>
+    </td>
+<% end %>

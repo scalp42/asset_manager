@@ -1,16 +1,19 @@
-<td><%= field_name %></td>
-<%= required %>
-<% if required %>
-    <% if value != nil %>
-        <td><%=  select(field_name,field_name, Field.find(field_id).field_option.collect {|p| [ p.option, p.id ] },{:prompt => "Please Select",:selected => value.field_option_id},"data-validation" => "required") %></td>
+<div class="control-group">
+  <label class="control-label" style="color: #ffffff;"><%= field_name %></label>
+  <div class="controls">
+    <% if required %>
+        <% if value != nil %>
+            <%=  select(field_name,field_name, Field.find(field_id).field_option.collect {|p| [ p.option, p.id ] },{:prompt => "Please Select",:selected => value.field_option_id},"data-validation" => "required") %>
+        <% else %>
+            <%=  select(field_name,field_name, Field.find(field_id).field_option.collect {|p| [ p.option, p.id ] },{:prompt => "Please Select"},"data-validation" => "required") %>
+        <% end %>
     <% else %>
-        <td><%=  select(field_name,field_name, Field.find(field_id).field_option.collect {|p| [ p.option, p.id ] },{:prompt => "Please Select"},"data-validation" => "required") %></td>
+        <% if value != nil %>
+            <%=  select(field_name,field_name, Field.find(field_id).field_option.collect {|p| [ p.option, p.id ] },{:prompt => "Please Select",:selected => value.field_option_id}) %>
+        <% else %>
+            <%=  select(field_name,field_name, Field.find(field_id).field_option.collect {|p| [ p.option, p.id ] },{:prompt => "Please Select"}) %>
+        <% end %>
     <% end %>
-<% else %>
-    <% if value != nil %>
-        <td><%=  select(field_name,field_name, Field.find(field_id).field_option.collect {|p| [ p.option, p.id ] },{:prompt => "Please Select",:selected => value.field_option_id}) %></td>
-    <% else %>
-        <td><%=  select(field_name,field_name, Field.find(field_id).field_option.collect {|p| [ p.option, p.id ] },{:prompt => "Please Select"}) %></td>
-    <% end %>
-<% end %>
+  </div>
+</div>
 <%= hidden_field(field_name, field_name+'_type',:value=> 'single_option') %>

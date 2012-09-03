@@ -1,15 +1,19 @@
-<td><%= field_name %></td>
-<% if required %>
-    <% if value != nil %>
-        <td><%=  text_area(field_name,field_name, {:cols => 40, :rows => 8,:value => value.text_value},"data-validation" => "required") %></td>
+<div class="control-group">
+  <label class="control-label" style="color: #ffffff;"><%= field_name %></label>
+  <div class="controls">
+    <% if required %>
+        <% if value != nil %>
+            <%=  text_area(field_name,field_name, {  :rows => 5,:class => "span10",:value => value.text_value},"data-validation" => "required") %>
+        <% else %>
+            <%=  text_area(field_name,field_name,{:rows => 5,:class => "span10"},"data-validation" => "required") %>
+        <% end %>
     <% else %>
-        <td><%=  text_area(field_name,field_name,{:cols => 40, :rows => 8},"data-validation" => "required") %></td>
+        <% if value != nil %>
+            <%=  text_area(field_name,field_name, {:rows => 5,:class => "span10",:value => value.text_value}) %>
+        <% else %>
+            <%=  text_area(field_name,field_name,{:rows => 5,:class => "span10"}) %>
+        <% end %>
     <% end %>
-<% else %>
-    <% if value != nil %>
-        <td><%=  text_area(field_name,field_name, {:cols => 40, :rows => 8,:value => value.text_value}) %></td>
-    <% else %>
-        <td><%=  text_area(field_name,field_name,{:cols => 40, :rows => 8}) %></td>
-    <% end %>
-<% end %>
+  </div>
+</div>
 <%= hidden_field(field_name, field_name+'_type',:value=> 'text') %>

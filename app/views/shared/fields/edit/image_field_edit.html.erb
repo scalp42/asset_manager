@@ -1,8 +1,28 @@
-<td><%= field_name %></td>
-<% if value != nil %>
-    <td><a href="<%= value.photo.base64 %>" rel="lightbox"> <img  src="<%= value.photo.base64('thumb') %>"></a>
-      <%= file_field field_name, field_name %></td>
-<% else %>
-    <td> <%= file_field field_name, field_name %></td>
-<% end %>
-<%= hidden_field(field_name, field_name+'_type',:value=> 'file_upload') %>
+<div class="control-group">
+  <label class="control-label" style="color: #ffffff;"><%= field_name %></label>
+  <div class="controls">
+    <%= hidden_field(field_name, field_name+'_type',:value=> 'file_upload') %>
+    <div class="fileupload fileupload-new" data-provides="fileupload">
+      <% if value != nil %>
+          <div class="fileupload-new thumbnail"><a href="<%= value.photo.base64 %>" rel="lightbox"> <img  src="<%= value.photo.base64('thumb') %>"></a></div>
+      <% else %>
+          <div class="fileupload-new thumbnail"><img src="" /></div>
+      <% end %>
+      <div class="fileupload-preview fileupload-exists thumbnail"></div>
+      <div>
+    <span class="btn btn-file"><span class="fileupload-new">Select image</span><span class="fileupload-exists">Change</span>
+      <% if required %>
+              <%= file_field(field_name, field_name,"data-validation" => "required") %>
+          <% else %>
+              <%= file_field(field_name, field_name) %>
+          <% end %>
+    </span>
+        <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+    $('.fileupload').fileupload()
+</script>

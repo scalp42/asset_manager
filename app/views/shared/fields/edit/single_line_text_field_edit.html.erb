@@ -1,15 +1,19 @@
-<td><%= field_name %></td>
-<% if required %>
-    <% if value != nil %>
-        <td><%=  text_field(field_name,field_name, {:value => value.text_value},"data-validation" => "required") %></td>
+<div class="control-group">
+  <label class="control-label" style="color: #ffffff;"><%= field_name %></label>
+  <div class="controls">
+    <% if required %>
+        <% if value != nil %>
+            <%=  text_field(field_name,field_name, {:value => value.text_value},"data-validation" => "required",:class => "span10") %>
+        <% else %>
+            <%=  text_field(field_name,field_name,"data-validation" => "required",:class => "span10") %>
+        <% end %>
     <% else %>
-        <td><%=  text_field(field_name,field_name,"data-validation" => "required") %></td>
+        <% if value != nil %>
+            <%=  text_field(field_name,field_name, {:value => value.text_value,:class => "span10"}) %>
+        <% else %>
+            <%=  text_field(field_name,field_name,:class => "span10") %>
+        <% end %>
     <% end %>
-<% else %>
-    <% if value != nil %>
-        <td><%=  text_field(field_name,field_name, {:value => value.text_value}) %></td>
-    <% else %>
-        <td><%=  text_field(field_name,field_name) %></td>
-    <% end %>
-<% end %>
+  </div>
+</div>
 <%= hidden_field(field_name, field_name+'_type',:value=> 'text') %>
