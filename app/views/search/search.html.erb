@@ -10,14 +10,13 @@
   </tr>
   <% @assets.each do |asset| %>
       <tr>
-        <td>
+        <td style="text-align: center;">
           <%= asset.name %>
         </td>
-
-        <td>
+        <td style="text-align: center;">
           <%= asset.description %>
         </td>
-        <td><%= link_to 'View', :controller => 'assets', :action => 'view', :id => asset.id %></td>
+        <td style="text-align: center;"><%= link_to 'View', :controller => 'assets', :action => 'view', :id => asset.id %></td>
       </tr>
   <% end %>
 </table>

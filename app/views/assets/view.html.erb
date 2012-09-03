@@ -19,7 +19,6 @@
   </div>
 </div>
 
-
 <% if @asset.field_value.count() > 0 %>
     <div class="container well">
       <div class="control-group">
@@ -37,5 +36,5 @@
     </div>
 <% end %>
 <div class="control-group" style="text-align: center;">
-  <%= link_to 'Edit',{:controller => 'assets', :action =>'edit'}, :id => @asset.id ,:class => "btn btn-primary" %>
+  <%= link_to 'Edit',{:controller => 'assets', :action =>'edit', :id => @asset.id} ,:class => "btn btn-primary" %>
 </div>
