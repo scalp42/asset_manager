@@ -20,17 +20,17 @@
   </tr>
   <% @asset.asset_screen.each do |asset_screen| %>
       <tr>
-        <td>
+        <td style="text-align: center;">
           <%= Field.find(asset_screen.field_id).name %>
         </td>
-        <td>
+        <td style="text-align: center;">
           <%  if asset_screen.required %>
               <i class="icon-large icon-ok"/>
           <% else %>
               <i class="icon-large icon-remove"/>
           <% end %>
         </td>
-        <td>
+        <td style="text-align: center;">
           <%= render :template => 'shared/delete_asset_screen' ,:locals => { :asset_screen => asset_screen }%>
         </td>
       </tr>
