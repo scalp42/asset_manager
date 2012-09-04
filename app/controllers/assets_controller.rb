@@ -18,25 +18,27 @@ class AssetsController < ApplicationController
 
   def save
 
-    if params[:name][:name] != nil
-      asset = Asset.new(:name => params[:name][:name],:description => params[:description][:description])
+    asset = Asset.new(:name => params[:name][:name],:description => params[:description][:description])
 
-      asset_type = AssetType.find(BSON::ObjectId.from_string(params[:asset_type][:asset_type_id]))
+    asset_type = AssetType.find(BSON::ObjectId.from_string(params[:asset_type][:asset_type_id]))
 
-      asset.asset_type_id = asset_type.id
-      asset.asset_type_name = asset_type.name
+    asset.asset_type_id = asset_type.id
+    asset.asset_type_name = asset_type.name
 
-      asset_type.asset_screen.each do |field|
-        fieldObj = Field.find(field.field_id)
-        if params[fieldObj.name][fieldObj.name] != nil and params[fieldObj.name][fieldObj.name] != ''
-          setFieldValue(params,fieldObj,asset)
-        elsif params[fieldObj.name.gsub(" ","_")+"_parent"] != nil and params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] != nil
-          setCascadeValue(params,fieldObj,asset)
-        end
+    asset_type.asset_screen.each do |field|
+      fieldObj = Field.find(field.field_id)
+      if params[fieldObj.name][fieldObj.name] != nil and params[fieldObj.name][fieldObj.name] != ''
+        setFieldValue(params,fieldObj,asset)
+      elsif params[fieldObj.name.gsub(" ","_")+"_parent"] != nil and params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] != nil
+        setCascadeValue(params,fieldObj,asset)
       end
-
-      asset.save
     end
+
+    asset.created_at = DateTime.now
+
+    asset.created_by = current_user.id
+
+    asset.save
 
     assetAlert(asset.name,"Created")
 
@@ -49,6 +51,8 @@ class AssetsController < ApplicationController
     asset = Asset.find(params[:asset_id])
 
     Asset.destroy(params[:asset_id])
+
+    ChangeHistory.pull_all(:asset_id => asset.id)
 
     assetAlert(asset.name,"Deleted")
 
@@ -66,16 +70,21 @@ class AssetsController < ApplicationController
 
     asset = Asset.find(params[:asset][:asset_id])
 
-    if params[:name][:name] != nil
-      asset.name = params[:name][:name]
-    else
-      asset.name = nil
+    changeHistory = ChangeHistory.new(:asset_id => asset.id,:asset_type_id => asset.asset_type_id,:changed_by => current_user.id)
+
+    if asset.name != params[:name][:name]
+      changeHistory.change_history_detail.build(:string_previous_value => asset.name,:string_new_value => params[:name][:name])
     end
+    asset.name = params[:name][:name]
 
     if params[:description][:description] != nil
       asset.description = params[:description][:description]
     else
       asset.description = nil
+    end
+
+    if asset.description != params[:description][:description]
+      changeHistory.change_history_detail.build(:string_previous_value => asset.description,:string_new_value => params[:description][:description])
     end
 
     fieldsToDelete = Array.new
@@ -101,6 +110,9 @@ class AssetsController < ApplicationController
         fieldsToDelete.push(fieldObj.id)
       end
     end
+
+    changeHistory.changed_at = DateTime.now
+    changeHistory.save
 
     asset.save
 

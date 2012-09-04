@@ -10,6 +10,9 @@ class Asset
   key :asset_type_id, String
   key :asset_type_name, ObjectId
 
+  key :created_at, Time
+  key :created_by, ObjectId
+
   many :field_value
 
   has_many :field_value

@@ -105,4 +105,24 @@ module AssetsHelper
     @assetAction = assetAction
   end
 
+  def getLatestChangeHistoryForAsset()
+
+    changeHistoryAsset = Hash.new
+
+    counter = 0
+
+    ChangeHistory.sort(:changed_at.desc).each do |changeHistoryItem|
+     unless changeHistoryAsset.has_key? changeHistoryItem.asset_id
+       changeHistoryAsset[changeHistoryItem.asset_id] = changeHistoryItem.id
+       counter += 1
+     end
+       if counter > 10
+         break
+       end
+    end
+
+    return changeHistoryAsset
+
+  end
+
 end
