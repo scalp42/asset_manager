@@ -8,10 +8,10 @@
       <input name="authenticity_token" type="hidden" value="token_value">
       <table>
         <tr>
-          <td><%=  text_field('first_name','first_name',:placeholder => "First Name") %></td>
+          <td><%=  text_field('first_name','first_name',:placeholder => "First Name","data-validation" => "required") %></td>
         </tr>
         <tr>
-          <td><%=  text_field('last_name','last_name',:placeholder => "Last Name") %></td>
+          <td><%=  text_field('last_name','last_name',:placeholder => "Last Name","data-validation" => "required") %></td>
         </tr>
         <tr>
           <td><%=  text_field('email','email',:placeholder => "Email","data-validation" => "required validate_email") %></td>

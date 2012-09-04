@@ -5,38 +5,45 @@
   </div>
   <div class="modal-body" align="center">
 
-    <form method="get" class="well" action="/users/edit_user" >
+    <form method="post" class="well" action="/users/edit_user" onsubmit="return $(this).validate()">
+      <input name="authenticity_token" type="hidden" value="token_value">
       <table>
         <tr>
-          <td>First Name</td>
           <% if user.first_name != nil %>
-              <td><%=  text_field('first_name','first_name', {:value => user.first_name}) %></td>
+              <td><%=  text_field('first_name','first_name', {:value => user.first_name,:placeholder => "First Name","data-validation" => "required"}) %></td>
           <% else %>
-              <td><%=  text_field('first_name','first_name') %></td>
+              <td><%=  text_field('first_name','first_name',:placeholder => "First Name","data-validation" => "required") %></td>
           <% end %>
         </tr>
         <tr>
-          <td>Last Name</td>
-          <% if user.first_name != nil %>
-              <td><%=  text_field('last_name','last_name', {:value => user.last_name}) %></td>
+          <% if user.last_name != nil %>
+              <td><%=  text_field('last_name','last_name', {:value => user.last_name,:placeholder => "Last Name","data-validation" => "required"}) %></td>
           <% else %>
-              <td><%=  text_field('last_name','last_name') %></td>
+              <td><%=  text_field('last_name','last_name',:placeholder => "Last Name","data-validation" => "required") %></td>
           <% end %>
         </tr>
         <tr>
-          <td>Email</td>
           <% if user.email != nil %>
-              <td><%=  text_field('email','email', {:value => user.email}) %></td>
+              <td><%=  text_field('email','email', {:value => user.email,:placeholder => "Email","data-validation" => "required"}) %></td>
           <% else %>
-              <td><%=  text_field('email','email') %></td>
+              <td><%=  text_field('email','email',:placeholder => "Email","data-validation" => "required") %></td>
           <% end %>
         </tr>
         <tr>
-          <td>Active</td>
           <% if user.active != nil && user.active %>
-              <td><%=  check_box_tag 'active', 'yes', true %></td>
+              <td>
+                <label class="checkbox">
+                  <%=  check_box_tag 'active', 'yes', true %>
+                  Active
+                </label>
+              </td>
           <% else %>
-              <td><%=  check_box_tag 'active', 'yes', false %></td>
+              <td>
+                <label class="checkbox">
+                <%=  check_box_tag 'active', 'yes', false %>
+                Active
+              </label>
+              </td>
           <% end %>
         </tr>
       </table>
