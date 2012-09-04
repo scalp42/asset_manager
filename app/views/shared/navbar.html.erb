@@ -20,7 +20,7 @@
                     <a href="#">Create<i class="icon-large icon-right"></i></a>
                     <ul class="dropdown-menu sub-menu">
                       <% AssetType.all.each do |assetType| %>
-                           <li><%= link_to assetType.name, :controller => 'assets', :action => 'create',:id => assetType.id %></li>
+                          <li><%= link_to assetType.name, :controller => 'assets', :action => 'create',:id => assetType.id %></li>
                       <% end %>
                     </ul>
                   </li>
@@ -36,10 +36,23 @@
               <ul class="nav pull-right">
                 <li class="dropdown" style="text-align: right;">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-align: right;"><%= current_user.email %><b class="caret"></b></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="#">Edit Profile</a></li>
-                    <li class="divider"></li>
-                    <li><%= link_to "Logout", destroy_user_session_path, :method => :delete %></li>
+                    <ul class="dropdown-menu megamenu col2 ud">
+                      <li class="sub">
+                        <% if current_user.gravatar_url != nil %>
+                            <div class="img_round img_c_margin"><img width="70" height="70" src="<%= current_user.gravatar_url %>"></div>
+                        <% else %>
+                            <div class="img_round img_c_margin"><img width="70" height="70" src="/assets/user.png"></div>
+                        <% end %>
+                      </li>
+                      <li class="sub">
+                        <ul>
+                          <li><a href="#"><i class="icon-large icon-cog-2"></i> Profile</a></li>
+                          <li><a href="#"><i class="icon-large icon-key"></i> Privacy Settings</a></li>
+                          <li class="divider"></li>
+                          <li><i class="icon-large icon-logout-1"></i><%= link_to "Logout", destroy_user_session_path, :method => :delete%></li>
+                        </ul>
+                      </li>
+                    </ul>
                   </ul>
           <% else %>
 

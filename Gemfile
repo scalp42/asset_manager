@@ -57,3 +57,5 @@ gem "therubyracer"
 gem "warden"
 
 gem "devise-encryptable"
+
+gem "gravtastic"
