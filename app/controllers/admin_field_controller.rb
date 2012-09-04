@@ -61,7 +61,9 @@ class AdminFieldController < ApplicationController
   end
 
   def create_asset_type
-    if params[:name][:asset_type_name] != nil
+    if params[:asset_image] != nil
+      newAssetType = AssetType.new(:description => params[:description][:asset_type_description],:name => params[:name][:asset_type_name],:photo => params[:asset_image][:asset_image])
+    else
       newAssetType = AssetType.new(:description => params[:description][:asset_type_description],:name => params[:name][:asset_type_name])
     end
 
@@ -70,7 +72,10 @@ class AdminFieldController < ApplicationController
       @asset_types = AssetType.all.entries
       setSidebar(true,nil,nil,nil)
       render :template => 'admin_field/list_asset_types'
+    else
+      puts newAssetType.errors.inspect
     end
+
   end
 
   def delete
@@ -158,6 +163,30 @@ class AdminFieldController < ApplicationController
       listAssetScreens(assetType.id)
       assetScreenReturn("",assetType.name,"Toggled")
       render :template => 'admin_field/list_asset_screen_fields'
+    end
+
+  end
+
+  def edit_asset_type_id
+    assetType = AssetType.find(BSON::ObjectId.from_string(params[:asset_type_id][:asset_type_id]))
+
+    puts 'jsdkljfklsdjfkljsl'
+    puts assetType.inspect
+    assetType.name = params[:asset_type_name][:asset_type_name]
+
+    if params[:asset_type_description][:asset_type_description] != nil
+      assetType.description = params[:asset_type_description][:asset_type_description]
+    end
+
+    if params[:asset_image] != nil
+      assetType.photo = params[:asset_image][:asset_image]
+    end
+
+    if assetType.save
+      assetTypeReturn("","Updated")
+      @asset_types = AssetType.all.entries
+      setSidebar(true,nil,nil,nil)
+      render :template => 'admin_field/list_asset_types'
     end
 
   end
