@@ -25,7 +25,6 @@
         <td style="text-align: center;">
           <%= link_to security.description, :controller => 'group', :action => 'view', :id => security.id %>
         </td>
-
         <td style="text-align: center;">
           <%= link_to AssetType.find(security.asset_type_id).name, :controller => 'group', :action => 'view', :id => security.id %>
         </td>

@@ -13,6 +13,9 @@
         <tr>
           <td><%=  text_field('description','description',:placeholder => "Description") %></td>
         </tr>
+        <tr>
+          <td><%=  select('asset_type','asset_type', AssetType.all.collect {|p| [ p.name, p.id ] },{:prompt => "Please Select"},{"data-validation" => "required"}) %></td>
+        </tr>
       </table>
       <div class="modal-footer">
         <%= submit_tag "Create" ,:class => 'btn btn-primary'%>
