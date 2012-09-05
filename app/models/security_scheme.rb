@@ -3,7 +3,11 @@ class SecurityScheme
 
   key :name, String
   key :description, String
-  key :restrictions, Array
+
   key :asset_type_id, ObjectId
 
+  key :view_restrictions, Hash
+  key :edit_restrictions, Hash
+  key :create_restrictions, Hash
+  key :delete_restrictions, Hash
 end

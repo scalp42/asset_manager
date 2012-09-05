@@ -1,6 +1,6 @@
 <%= render :template => 'shared/navbar',:locals => {:assetsNav => false, :searchNav => false,:adminNav => true} %>
 <ul class="breadcrumb">
-  <li><%= link_to "Security", :controller =>"security",:action =>"index" %></li>
+  <li class="active"><%= link_to "Security", :controller =>"security",:action =>"index" %></li>
 </ul>
 <%  if @securityName != nil %>
     <div class="alert alert-success">
@@ -29,6 +29,7 @@
           <%= link_to AssetType.find(security.asset_type_id).name, :controller => 'group', :action => 'view', :id => security.id %>
         </td>
         <td style="text-align: center;">
+          <%= link_to "View Restrictions",{:action => 'view_restrictions',:id => security.id},:class=>'btn'%>
         </td>
       </tr>
   <% end %>

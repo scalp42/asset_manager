@@ -1,0 +1,20 @@
+<p>Users:</p>
+<ul>
+  <% restrictions[:users].each do |user| %>
+      <% if user != '' %>
+          <li>
+            <%= user %>
+          </li>
+      <% end %>
+  <% end %>
+</ul>
+<p>Groups:</p>
+<ul>
+  <% restrictions[:groups].each do |group| %>
+      <% if group != '' %>
+          <li>
+            <%= group %>
+          </li>
+      <% end %>
+  <% end %>
+</ul>
