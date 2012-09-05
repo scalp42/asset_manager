@@ -32,4 +32,16 @@ module GroupHelper
 
     return users
   end
+
+  def getUsersInGroup(group_id)
+    users = Array.new
+
+    Group.find(group_id).membership.each do |membership|
+      puts 'sdkljfklsdjfljslkjdf'
+      users.push(User.find(membership.user_id))
+    end
+
+    puts users.inspect
+    return users
+  end
 end

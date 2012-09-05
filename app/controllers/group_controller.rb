@@ -51,4 +51,21 @@ class GroupController < ApplicationController
     end
 
   end
+
+  def remove_members
+    group = Group.find(BSON::ObjectId.from_string(params[:group][:group_id]))
+
+    users = params[:users][:users]
+
+    users.each do |user|
+      if user != ''
+        group.pull(:membership =>{:user_id=> BSON::ObjectId.from_string(user)})
+      end
+    end
+
+    groupReturn(group.name,"Removed Members")
+    @groups = Group.all
+    render :template => 'group/index'
+
+  end
 end
