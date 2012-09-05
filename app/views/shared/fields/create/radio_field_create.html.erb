@@ -1,7 +1,7 @@
 <td xmlns="http://www.w3.org/1999/html"><%= field_name %></td>
 <td>
   <table border="0">
-    <% FieldOption.find_all_by_field_id(field_id).each do |field| %>
+    <% Field.find(field_id).field_option.each do |field| %>
         <tr>
           <td><%= field.option %></td>
           <td><%= radio_button(field_name,field_name, field.id) %></td>
@@ -9,4 +9,4 @@
     <% end %>
   </table>
 </td>
-<%= hidden_field(field_name, field_name+'_type',:value=> 'option') %>
+<%= hidden_field(field_name, field_name+'_type',:value=> 'single_option') %>

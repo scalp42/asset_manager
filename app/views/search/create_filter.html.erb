@@ -19,16 +19,3 @@
 
 </div>
 <a class="btn btn-primary" data-toggle="modal" href="#myFilterModal1" >Create Filter</a>
-
-<script type="text/javascript">
-
-    $.ajax({
-            type: "POST",
-            url: "/search/create_filter",
-            dataType: "json",
-            data: {searchCriteria : <%= @searchCriteria.to_json %> },
-            success: function(msg){
-            alert(msg);
-            }
-    });
-</script>

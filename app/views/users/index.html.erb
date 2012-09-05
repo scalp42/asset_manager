@@ -1,0 +1,33 @@
+<%= render :template => 'shared/navbar',:locals => {:assetsNav => false, :searchNav => false,:adminNav => true} %>
+<ul class="breadcrumb">
+  <li><%= link_to "Users", :controller =>"admin_field",:action =>"index" %></li>
+</ul>
+<div align="right">
+  <%= render :template => 'users/create' %>
+</div>
+<table class="table table-hover">
+  <tr>
+	<th>Full Name</th>
+	<th>Email</th>
+	<th>Active</th>
+	<th>Actions</th>
+  </tr>
+  <% @users.each do |user| %>
+      <tr style="background-color: white;">
+		<td style="text-align: center;">
+		  <%= link_to user.full_name, :controller => 'users', :action => 'view', :id => user.id %>
+		</td>
+		<td style="text-align: center;">
+		  <%= link_to user.email, :controller => 'assets', :action => 'view', :id => user.id %>
+		</td>
+
+		<td style="text-align: center;">
+		  <%= link_to user.active, :controller => 'assets', :action => 'view', :id => user.id %>
+		</td>
+		<td style="text-align: center;">
+          <%= render :template => 'users/edit', :locals => {:user => user} %>
+		  <%= render :template => 'users/delete', :locals => {:user => user} %>
+		</td>
+	  </tr>
+  <% end %>
+</table>

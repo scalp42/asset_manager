@@ -4,6 +4,7 @@
         <ul class="nav nav-list">
           <li class="nav-header">Search</li>
           <form method="post" action="/search/search">
+            <input name="authenticity_token" type="hidden" value="token_value">
             <div style="text-align: right;">
               <%= submit_tag "Search" ,:class => 'btn btn-primary' %>
             </div>

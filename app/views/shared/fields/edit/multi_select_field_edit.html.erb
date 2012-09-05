@@ -1,0 +1,7 @@
+<div class="control-group">
+  <label class="control-label" style="color: #ffffff;"><%= field_name %></label>
+  <div class="controls">
+        <%=  select(field_name,field_name, Field.find(field_id).field_option.collect {|p| [ p.option, p.id ] },{:selected  => value.field_option_id[0]},{:multiple => true}) %>
+  </div>
+</div>
+<%= hidden_field(field_name, field_name+'_type',:value=> 'multi_option') %>

@@ -1,0 +1,39 @@
+<div class="modal hide" id="myEditAssetTypeModal<%= asset_type.id %>" style="display: none; text-align: center;">
+  <div class="modal-header">
+    <button class="close" data-toggle="modal" href="#myEditAssetTypeModal<%= asset_type.id %>">×</button>
+    <h3>Edit Field</h3>
+  </div>
+  <form method="post" class="well" action="edit_asset_type_id" enctype="multipart/form-data" onsubmit="return $(this).validate()">
+    <div class="modal-body">
+      <input name="authenticity_token" type="hidden" value="token_value">
+      <table width="100%">
+        <tr>
+          <td style="text-align: center;"><%=  text_field("asset_type_name","asset_type_name",:value => asset_type.name,:placeholder => "Name","data-validation"=>"required") %></td>
+        </tr>
+        <tr>
+          <td style="text-align: center;"><%=  text_field("asset_type_description","asset_type_description",:value => asset_type.description,:placeholder => "Description") %></td>
+        </tr>
+        <tr>
+          <td style="text-align: center;">
+            <div class="fileupload fileupload-new" data-provides="fileupload">
+              <div class="fileupload-new thumbnail"><a href="<%= asset_type.photo.base64 %>" rel="lightbox"> <img  src="<%= asset_type.photo.base64('thumb') %>"></a></div>
+              <div class="fileupload-preview fileupload-exists thumbnail"></div>
+              <div>
+                <span class="btn btn-file"><span class="fileupload-new">Select image</span><span class="fileupload-exists">Change</span>
+                  <%= file_field("asset_image", "asset_image") %>
+                </span>
+                <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+      <%= hidden_field('asset_type_id', 'asset_type_id',:value=>asset_type.id) %>
+    </div>
+    <div class="modal-footer">
+      <%= submit_tag "Update" ,:class => 'btn btn-primary'%>
+      <a data-toggle="modal" href="#myEditAssetTypeModal<%= asset_type.id %>" class="btn secondary">No</a>
+    </div>
+  </form>
+</div>
+<a class="btn" data-toggle="modal" href="#myEditAssetTypeModal<%= asset_type.id %>" >Edit</a>

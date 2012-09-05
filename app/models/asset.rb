@@ -1,10 +1,20 @@
-class Asset < ActiveRecord::Base
-  has_many :field_values, :dependent => :destroy
-  attr_accessible :description, :name, :parent_id, :asset_type_id
+class Asset
+  include MongoMapper::Document
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
 
-  searchable do
-      text :name, :description
-      integer :asset_type_id
-  end
+
+  key :description, String
+  key :name, String
+  key :parent_id, Integer
+  key :asset_type_id, String
+  key :asset_type_name, ObjectId
+
+  key :created_at, Time
+  key :created_by, ObjectId
+
+  many :field_value
+
+  has_many :field_value
 
 end

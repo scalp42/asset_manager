@@ -1,14 +1,27 @@
-<div class="modal hide" id="myModal<%= option %>" style="display: none;">
-          <div class="modal-header">
-            <button class="close" data-toggle="modal" href="#myModal<%= option %>">×</button>
-            <h3>Delete Option</h3>
-          </div>
-          <div class="modal-body">
-            <p>Are you sure?</p>
-          </div>
-          <div class="modal-footer">
-            <%= link_to "Yes", { :controller => "admin_field",:action=>"delete_option", :option_id=>option } , :class => "btn btn-danger"  %>
-            <a data-toggle="modal" href="#myModal<%= option %>" class="btn secondary">No</a>
-          </div>
+<div class="modal hide" id="myEditOption" style="display: none;">
+  <div class="modal-header">
+    <button class="close" data-toggle="modal" href="#myEditOption">×</button>
+    <h3>Delete Option</h3>
+  </div>
+
+    <div class="modal-body">
+
+      <div class="modal-body">
+                 <p>Are you sure?</p>
+               </div>
+
+
+    </div>
+    <div class="modal-footer">
+     <form method="post" action="/admin_field/delete_option">
+       <input name="authenticity_token" type="hidden" value="token_value">
+       <%= hidden_field('option', 'option_id',:value=>option) %>
+       <%= hidden_field('field', 'field_id',:value=>field) %>
+      <%= submit_tag "Delete" ,:class => 'btn btn-danger' %>
+
+      <a data-toggle="modal" href="#myEditOption" class="btn secondary">No</a>
+     </form>
+    </div>
+
 </div>
-<a class="btn" data-toggle="modal" href="#myModal<%= option %>" >Delete</a>
+<a class="btn btn-primary" data-toggle="modal" href="#myEditOption" >Delete</a>

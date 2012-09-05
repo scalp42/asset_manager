@@ -1,4 +1,8 @@
-<%= render :template => 'shared/navbar' %>
-
+<%= render :template => 'shared/navbar' ,:locals => {:assetsNav => false, :searchNav => false,:adminNav => true}%>
+<%  if @fieldAlert != nil %>
+    <div class="alert alert-success">
+      Field Option <%= @selectOption %> <%= @fieldAlertType %> For <%= @fieldAlert %> Successfully
+    </div>
+<% end %>
 <%= render :template => 'shared/fields/configure/'+FieldType.find(@field.field_type_id).type_name.to_s.downcase.gsub(' ','_')+'_configure',
-           :locals => { :field => @field } %>
+           :locals => { :field => @field, :parentOption => nil } %>

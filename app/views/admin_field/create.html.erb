@@ -5,16 +5,17 @@
   </div>
   <div class="modal-body" align="center">
 
-    <form method="post" class="well" action="create">
+    <form method="post" class="well" action="create" onsubmit="return $(this).validate()">
+      <input name="authenticity_token" type="hidden" value="token_value">
         <table>
           <tr>
-            <td><%=  text_field("name","field_type_name") %> </td>
+            <td><%=  text_field("name","field_type_name",:placeholder => "Name","data-validation"=>"required" ) %> </td>
           </tr>
           <tr>
-            <td>  <%= text_field("description","field_type_description") %> </td>
+            <td>  <%= text_field("description","field_type_description",:placeholder => "Description") %> </td>
           </tr>
           <tr>
-            <td> <%=  select("field_type", "field_type_id", FieldType.all.collect {|p| [ p.type_name, p.id ] }, {:prompt => 'Select Field Type'}) %> </td>
+            <td> <%=  select("field_type", "field_type_id", FieldType.all.collect {|p| [ p.type_name, p.id ] }, {:prompt => 'Select Field Type'},"data-validation"=>"required") %> </td>
           </tr>
         </table>
         <div class="modal-footer">

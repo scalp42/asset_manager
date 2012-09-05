@@ -1,3 +1,11 @@
-<td><%= field_name %></td>
-<td><%=  text_area(field_name,field_name, { :cols => 40, :rows => 8}) %></td>
+<div class="control-group">
+  <label class="control-label" style="color: #ffffff;"><%= field_name %></label>
+  <div class="controls">
+<% if required %>
+    <td><%=  text_area(field_name,field_name, {  :rows => 5,:class => "span10"},"data-validation" => "required") %></td>
+<% else %>
+    <td><%=  text_area(field_name,field_name, {  :rows => 5,:class => "span10"}) %></td>
+<% end %>
 <%= hidden_field(field_name, field_name+'_type',:value=> 'text') %>
+      </div>
+    </div>

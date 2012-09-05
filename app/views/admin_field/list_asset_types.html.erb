@@ -1,28 +1,36 @@
-<%= render :template => 'shared/navbar' %>
-<h2>Asset Types</h2>
+<%= render :template => 'shared/navbar',:locals => {:assetsNav => false, :searchNav => false,:adminNav => true} %>
+<ul class="breadcrumb">
+  <li><%= link_to "Asset Types", :controller =>"admin_field",:action =>"list_asset_types" %></li>
+</ul>
+<%  if @assetAlert != nil %>
+    <div class="alert alert-success">
+      Asset Type <%= @assetAlert %> Successfully <%= @assetAction %>
+    </div>
+<% end %>
 <%= render :template => 'admin_field/create_asset_type' %>
 
 <div align="right">
   <a class="btn btn-primary" data-toggle="modal" href="#myCreateAssetTypeModal">Create Asset Type</a>
 </div>
-<table class="table table-striped">
+<table class="table table-hover">
   <tr>
     <th>Name</th>
     <th>Description</th>
     <th>Actions</th>
   </tr>
   <% @asset_types.each do |asset_type| %>
-      <tr>
-        <td>
+      <tr style="background-color: white;">
+        <td style="text-align: center;">
           <%= asset_type.name %>
         </td>
 
-        <td>
+        <td style="text-align: center;">
           <%= asset_type.description %>
         </td>
-        <td>
-          <%= link_to 'Configure',:controller => 'admin_field', :action => 'list_asset_screen_fields' ,:id => asset_type.id  %>
-            <%= render :template => 'shared/delete_asset_type' ,:locals => { :asset_type => asset_type }%>
+        <td style="text-align: center;">
+          <%= render :template => 'shared/edit_asset_type', :locals => {:asset_type => asset_type} %>
+          <%= link_to 'Configure',{ :action => 'list_asset_screen_fields' ,:id => asset_type.id},:class => 'btn'  %>
+          <%= render :template => 'shared/delete_asset_type' ,:locals => { :asset_type => asset_type }%>
         </td>
       </tr>
   <% end %>

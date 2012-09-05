@@ -1,0 +1,40 @@
+<div class="control-group">
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="well" style="width:40%;margin:auto auto;">
+        <div class="navbar navbar-static navbar_as_heading">
+          <div class="navbar-inner">
+            <div class="container" style="width: auto;">
+              <a class="brand">Asset Manager</a>
+            </div>
+          </div>
+        </div>
+        <%= form_for(resource, :as => resource_name, :url => session_path(resource_name),:html => { :class => "well"}) do |f| %>
+            <fieldset>
+              <div class="control-group">
+                <label class="control-label" for="prependedInput">Email:</label>
+                <div class="controls">
+                  <div class="input-prepend">
+                    <span class="add-on"><i class="icon-user"></i></span><%= f.email_field :email %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for="prependedInput">Password:</label>
+                <div class="controls">
+                  <div class="input-prepend">
+                    <span class="add-on"><i class="icon-lock"></i></span> <%= f.password_field :password ,:class => 'password'%>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <%= f.submit "Sign in" ,:class => 'btn btn-large btn-primary'  %>
+              </div>
+            </fieldset>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+

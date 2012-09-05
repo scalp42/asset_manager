@@ -1,23 +1,26 @@
-<%= render :template => 'shared/navbar' %>
+<%= render :template => 'shared/navbar' ,:locals => {:assetsNav => false, :searchNav => true,:adminNav => false}%>
 
 <%= render :template => 'search/sidebar'  %>
 
-<table class="table table-striped table-bordered">
+<table class="table table-hover table-bordered">
   <tr>
     <th>Name</th>
     <th>Description</th>
     <th>Actions</th>
   </tr>
   <% @assets.each do |asset| %>
-      <tr>
-        <td>
+      <tr style="background-color: white;">
+        <td style="text-align: center;">
           <%= asset.name %>
         </td>
-
-        <td>
+        <td style="text-align: center;">
           <%= asset.description %>
         </td>
-        <td><%= link_to 'View', :controller => 'assets', :action => 'view', :id => asset.id %></td>
+        <td style="text-align: center;">
+          <%= link_to 'Edit',{ :controller => 'assets', :action => 'edit', :id => asset.id},:class => 'btn' %>
+          <%= link_to 'View',{ :controller => 'assets', :action => 'view', :id => asset.id},:class => 'btn' %>
+          <%= link_to 'Delete',{ :controller => 'assets', :action => 'delete', :asset_id => asset.id},:class => 'btn' %>
+        </td>
       </tr>
   <% end %>
 </table>

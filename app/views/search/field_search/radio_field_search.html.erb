@@ -1,8 +1,8 @@
 <table border="0">
-  <% FieldOption.find_all_by_field_id(field.id).each do |fieldOption| %>
+  <% field.field_option.each do |fieldOption| %>
       <tr>
         <td><%= fieldOption.option %></td>
-        <% if value != nil and Integer(value) == fieldOption.id %>
+        <% if value != nil and BSON::ObjectId.from_string(value) == fieldOption.id %>
             <td><%= radio_button(field.name,field.name, fieldOption.id,{:checked => true}) %></td>
         <% else %>
             <td><%= radio_button(field.name,field.name, fieldOption.id) %></td>

@@ -1,0 +1,59 @@
+<div class="modal hide" id="myEditUserModal<%= user.id%>" style="display: none;">
+  <div class="modal-header">
+    <button class="close" data-toggle="modal" href="#myEditUserModal<%= user.id%>">×</button>
+    <h3>Edit User</h3>
+  </div>
+  <div class="modal-body" align="center">
+
+    <form method="post" class="well" action="/users/edit_user" onsubmit="return $(this).validate()">
+      <input name="authenticity_token" type="hidden" value="token_value">
+      <table>
+        <tr>
+          <% if user.first_name != nil %>
+              <td><%=  text_field('first_name','first_name', {:value => user.first_name,:placeholder => "First Name","data-validation" => "required"}) %></td>
+          <% else %>
+              <td><%=  text_field('first_name','first_name',:placeholder => "First Name","data-validation" => "required") %></td>
+          <% end %>
+        </tr>
+        <tr>
+          <% if user.last_name != nil %>
+              <td><%=  text_field('last_name','last_name', {:value => user.last_name,:placeholder => "Last Name","data-validation" => "required"}) %></td>
+          <% else %>
+              <td><%=  text_field('last_name','last_name',:placeholder => "Last Name","data-validation" => "required") %></td>
+          <% end %>
+        </tr>
+        <tr>
+          <% if user.email != nil %>
+              <td><%=  text_field('email','email', {:value => user.email,:placeholder => "Email","data-validation" => "required"}) %></td>
+          <% else %>
+              <td><%=  text_field('email','email',:placeholder => "Email","data-validation" => "required") %></td>
+          <% end %>
+        </tr>
+        <tr>
+          <% if user.active != nil && user.active %>
+              <td>
+                <label class="checkbox">
+                  <%=  check_box_tag 'active', 'yes', true %>
+                  Active
+                </label>
+              </td>
+          <% else %>
+              <td>
+                <label class="checkbox">
+                <%=  check_box_tag 'active', 'yes', false %>
+                Active
+              </label>
+              </td>
+          <% end %>
+        </tr>
+      </table>
+      <div class="modal-footer">
+
+        <%= hidden_field('user', 'user_id',:value=>user.id) %>
+        <%= submit_tag "Update" ,:class => 'btn btn-primary'%>
+        <a data-toggle="modal" href="#myEditUserModal<%= user.id%>" class="btn secondary">No</a>
+      </div>
+    </form>
+  </div>
+</div>
+<a class="btn" data-toggle="modal" href="#myEditUserModal<%= user.id%>" >Edit</a>

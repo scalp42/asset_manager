@@ -1,0 +1,40 @@
+<%= render :template => 'shared/navbar',:locals => {:assetsNav => false, :searchNav => false,:adminNav => true} %>
+<ul class="breadcrumb">
+  <li><%= link_to "Groups", :controller =>"group",:action =>"index" %></li>
+</ul>
+<%  if @groupName != nil %>
+    <div class="alert alert-success">
+      Group <%= @groupName %> Successfully <%= @groupAction %>
+    </div>
+<% end %>
+<div align="right">
+  <%= render :template => 'group/create' %>
+</div>
+<table class="table table-hover">
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>No Of Members</th>
+    <th>Actions</th>
+  </tr>
+  <% @groups.each do |group| %>
+      <tr style="background-color: white;">
+        <td style="text-align: center;">
+          <%= link_to group.name, :controller => 'group', :action => 'view', :id => group.id %>
+        </td>
+        <td style="text-align: center;">
+          <%= link_to group.description, :controller => 'group', :action => 'view', :id => group.id %>
+        </td>
+
+        <td style="text-align: center;">
+          <%= link_to group.membership.count, :controller => 'group', :action => 'view', :id => group.id %>
+        </td>
+        <td style="text-align: center;">
+          <%= render :template => 'group/add_member', :locals => {:group => group} %>
+          <%= render :template => 'group/remove_member', :locals => {:group => group} %>
+          <!--<%= render :template => 'group/edit', :locals => {:group => group} %>-->
+          <!--<%= render :template => 'group/delete', :locals => {:group => group} %>-->
+        </td>
+      </tr>
+  <% end %>
+</table>

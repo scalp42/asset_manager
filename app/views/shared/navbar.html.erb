@@ -1,16 +1,65 @@
 <% content_for :head do %>
-<div class="navbar">
-  <div class="navbar-inner">
-    <div class="container">
-      <a class="brand" href="#">
-        Asset Manager
-      </a>
-      <ul class="nav">
-        <li><%= link_to 'Assets',  :controller => "assets", :action => "index" %></li>
-        <li><%= link_to 'Search',  :controller => "search", :action => "index" %></li>
-        <li><%= link_to 'Admin',  :controller => "admin", :action => "index" %></li>
-      </ul>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">
+            Asset Manager
+          </a>
+          <ul class="nav">
+            <div class="nav-collapse">
+              <ul class="nav">
+                <% if assetsNav  %>
+                    <li class="dropdown active">
+                <% else %>
+                    <li class="dropdown">
+                <% end %>
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#"><b>Assets</b> <b class="caret"></b></a>
+                <ul class="dropdown-menu parent">
+                  <li><%= link_to 'Dashboard',  :controller => "assets", :action => "index" %></li>
+                  <li>
+                    <a href="#">Create<i class="icon-large icon-right"></i></a>
+                    <ul class="dropdown-menu sub-menu">
+                      <% AssetType.all.each do |assetType| %>
+                          <li><%= link_to assetType.name, :controller => 'assets', :action => 'create',:id => assetType.id %></li>
+                      <% end %>
+                    </ul>
+                  </li>
+
+                </ul>
+                </li>
+                <li <% if searchNav  %> class="active" <% end %> ><%= link_to 'Search',  :controller => "search", :action => "index" %></li>
+                <li <% if adminNav %> class="active" <% end %> ><%= link_to 'Admin',  :controller => "admin", :action => "index" %></li>
+              </ul>
+            </div>
+          </ul>
+          <% if user_signed_in? %>
+              <ul class="nav pull-right">
+                <li class="dropdown" style="text-align: right;">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-align: right;"><%= current_user.email %><b class="caret"></b></a>
+                    <ul class="dropdown-menu megamenu col2 ud">
+                      <li class="sub">
+                        <% if current_user.gravatar_url != nil %>
+                            <div class="img_round img_c_margin"><img width="70" height="70" src="<%= current_user.gravatar_url %>"></div>
+                        <% else %>
+                            <div class="img_round img_c_margin"><img width="70" height="70" src="/assets/user.png"></div>
+                        <% end %>
+                      </li>
+                      <li class="sub">
+                        <ul>
+                          <li><a href="#"><i class="icon-large icon-cog-2"></i> Profile</a></li>
+                          <li><a href="#"><i class="icon-large icon-key"></i> Privacy Settings</a></li>
+                          <li class="divider"></li>
+                          <li><i class="icon-large icon-logout-1"></i><%= link_to "Logout", destroy_user_session_path, :method => :delete%></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </ul>
+          <% else %>
+
+          <% end %>
+          </li>
+          </ul>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 <% end%>

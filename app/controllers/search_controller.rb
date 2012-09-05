@@ -3,15 +3,22 @@ class SearchController < ApplicationController
 
   def index
 
-    @filters = Filter.find_all_by_available(true)
+    @filters = Filter.all
   end
 
   def search
 
     @searchCriteria = SearchCriteria.new
 
+    assetTypesArr = Array.new
+
     if params[:asset_type][:asset_type_id] != nil and params[:asset_type][:asset_type_id].count > 1
-      @searchCriteria.asset_types = params[:asset_type][:asset_type_id]
+      params[:asset_type][:asset_type_id].each do |asset_type_id|
+        if asset_type_id != ''
+          assetTypesArr.push(asset_type_id)
+        end
+      end
+      @searchCriteria.asset_types = assetTypesArr
     end
 
     if params[:name][:name] != ''
@@ -26,7 +33,15 @@ class SearchController < ApplicationController
 
     Field.all.each do |field|
       if params[field.name] != nil
-        fields[field.id] = params[field.name][field.name]
+        if FieldType.find(field.field_type_id).use_casecade_option
+          cascadingValues = Hash.new
+          cascadingValues['parent'] = params[field.name.gsub(" ","_")+"_parent"][field.name.gsub(" ","_")+"_parent"]
+          cascadingValues['child'] = params[field.name.gsub(" ","_")+"_child"][field.name.gsub(" ","_")+"_child"]
+          fields[field.id] = cascadingValues
+        else
+          fields[field.id] = params[field.name][field.name]
+        end
+
       end
     end
 
@@ -34,9 +49,9 @@ class SearchController < ApplicationController
 
     createFilter(params,fields)
 
-    search_solr(@searchCriteria)
+    search_elastic(@searchCriteria)
 
-    @filters = Filter.find_all_by_available(true)
+    @filters = Filter.all
 
     @showCreateFilter = true
 
@@ -45,20 +60,20 @@ class SearchController < ApplicationController
   def load_filter
     buildSearchCriteria(params[:filter_id])
 
-    results = Sunspot.search [Asset] do
-      #if params[:asset_type][:asset_type_id] != nil and params[:asset_type][:asset_type_id].count > 1
-      #   with(:asset_type_id,params[:asset_type][:asset_type_id]  )
-      #end
-    end
+    search_elastic(@searchCriteria)
 
-    @assets = results.results
-
-    @filters = Filter.find_all_by_available(true)
+    @filters = Filter.all
 
     @showCreateFilter = true
 
     render :template => 'search/search'
 
+  end
+
+  def delete_filter
+    if Filter.delete(BSON::ObjectId.from_string(params['filter_id']))
+      redirect_to :back
+    end
   end
 
 end

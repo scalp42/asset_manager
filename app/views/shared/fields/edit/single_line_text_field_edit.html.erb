@@ -1,7 +1,11 @@
-<td><%= field_name %></td>
-<% if value != nil %>
-    <td><%=  text_field(field_name,field_name, {:value => value.text_value}) %></td>
-<% else %>
-    <td><%=  text_field(field_name,field_name) %></td>
-<% end %>
+<div class="control-group">
+  <label class="control-label" style="color: #ffffff;"><%= field_name %></label>
+  <div class="controls">
+    <% if required %>
+        <%=  text_field(field_name,field_name, {:value => value.text_value},"data-validation" => "required",:class => "span10") %>
+    <% else %>
+        <%=  text_field(field_name,field_name, {:value => value.text_value,:class => "span10"}) %>
+    <% end %>
+  </div>
+</div>
 <%= hidden_field(field_name, field_name+'_type',:value=> 'text') %>

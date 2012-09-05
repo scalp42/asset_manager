@@ -1,9 +1,9 @@
-class FieldOption < ActiveRecord::Base
-  has_one :field
-  belongs_to :field
-  attr_accessible :field_id, :parent, :option
+class FieldOption
+  include MongoMapper::EmbeddedDocument
 
-  searchable do
-      text :option
-  end
+  key :field_id, String
+  key :parent, Integer
+  key :option,  String
+  key :parent_field_option, ObjectId
+
 end

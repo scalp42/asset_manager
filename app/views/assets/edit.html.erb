@@ -1,27 +1,38 @@
-<%= render :template => 'shared/navbar' %>
+<%= render :template => 'shared/navbar' ,:locals => {:assetsNav => true, :searchNav => false,:adminNav => false}%>
+<ul class="breadcrumb">
+  <li><%= link_to "Assets", :controller =>"assets",:action =>"index" %><span class="divider">/</span></li>
+  <li class="active"><%= link_to @asset.name, :controller =>"assets",:action =>"view" ,:id => @asset.id %> </li>
+</ul>
+<form method="post" class="form-horizontal" action="/assets/update" enctype="multipart/form-data" onsubmit="return $(this).validate()">
+  <input name="authenticity_token" type="hidden" value="token_value">
+  <div class="control-group">
+    <label class="control-label" style="color: #ffffff;">Name</label>
+    <div class="controls">
+      <%=  text_field('name','name',"data-validation" => "required",:value => @asset.name,:class => "span10") %>
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" style="color: #ffffff;">Description</label>
+    <div class="controls">
+      <%=  text_area('description','description',{:class =>"span10",:rows => 5,:value => @asset.description}) %>
+    </div>
+  </div>
+  <%  AssetType.find(@asset.asset_type_id).asset_screen.each do |assetScreenField| %>
 
-<h2 style="text-align: center;">Edit <%= @asset.name %> Asset</h2>
-<form method="post" class="well" action="/assets/update">
-       <table class="table table-striped" width="100%">
-         <tr><td>Name</td>
-         <td><%=  text_field('name','name' ,{:value => @asset.name}) %></td>
-           </tr>
-         <tr>
-         <td>Description</td>
-         <td><%=  text_area('description','description',{:rows => 15,:cols => 40,:value => @asset.name}) %></td>
-         </tr>
-         <%  AssetScreen.find_all_by_asset_id(@asset.asset_type_id).each do |assetScreenField| %>
-            <tr>
-               <%= render :template => 'shared/fields/edit/'+FieldType.find(Field.find(assetScreenField.field_id).field_type_id).type_name.downcase.gsub(' ','_')+'_edit' ,
-                              :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id,
-                                           :value => FieldValue.find(:first, :conditions => ["asset_id = ? and field_id = ?", @asset.id, assetScreenField.field_id])} %>
-            </tr>
-          <% end%>
-         <%= hidden_field('asset', 'asset_id',:value=> @asset.id) %>
-       </table>
-       <div class="modal-footer" style="text-align: center;">
+      <% if @asset.field_value.detect {|c|c.field_id == BSON::ObjectId.from_string(assetScreenField.field_id)} != nil %>
+          <%= render :template => 'shared/fields/edit/'+FieldType.find(Field.find(assetScreenField.field_id).field_type_id).type_name.downcase.gsub(' ','_')+'_edit' ,
+                     :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id,
+                                  :value => @asset.field_value.detect {|c|c.field_id == BSON::ObjectId.from_string(assetScreenField.field_id)},:required => assetScreenField.required } %>
+      <% else %>
+          <%= render :template => 'shared/fields/create/'+FieldType.find(Field.find(assetScreenField.field_id).field_type_id).type_name.downcase.gsub(' ','_')+'_create' ,
+                     :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id,:required => assetScreenField.required } %>
+      <% end %>
+  <% end%>
+  <%= hidden_field('asset', 'asset_id',:value=> @asset.id) %>
 
-         <%= submit_tag "Update" ,:class => 'btn btn-primary'%>
-         <a data-toggle="modal" href="#myCreateAssetModal" class="btn secondary">No</a>
-       </div>
-   </form>
+  <div class="control-group" style="text-align: center;">
+
+    <%= submit_tag "Update" ,:class => 'btn btn-primary'%>
+    <%= link_to "No", {:action => 'index'},:class=>'btn secondary' %>
+  </div>
+</form>

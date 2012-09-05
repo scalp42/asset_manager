@@ -1,5 +1,8 @@
-class AssetScreen < ActiveRecord::Base
-  has_one :field
-  belongs_to :field
-  attr_accessible :asset_id, :description, :field_id, :name, :position
+class AssetScreen
+  include MongoMapper::EmbeddedDocument
+  key  :description, String
+  key  :name, String
+  key  :parent, String
+  key  :required, Boolean
+
 end

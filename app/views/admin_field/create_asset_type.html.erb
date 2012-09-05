@@ -5,20 +5,35 @@
   </div>
   <div class="modal-body" align="center">
 
-    <form method="post" class="well" action="create_asset_type">
-        <table>
-          <tr>
-            <td><%=  text_field("name","asset_type_name") %> </td>
-          </tr>
-          <tr>
-            <td>  <%= text_field("description","asset_type_description") %> </td>
-          </tr>
-        </table>
-        <div class="modal-footer">
+    <form method="post" class="well" action="create_asset_type" enctype="multipart/form-data" onsubmit="return $(this).validate()">
+      <input name="authenticity_token" type="hidden" value="token_value">
+      <table>
+        <tr>
+          <td><%=  text_field("name","asset_type_name",:placeholder => "Name","data-validation"=>"required") %> </td>
+        </tr>
+        <tr>
+          <td>  <%= text_field("description","asset_type_description",:placeholder => "Description") %> </td>
+        </tr>
+        <tr>
+          <td style="text-align: center;">
+            <div class="fileupload fileupload-new" data-provides="fileupload">
+              <div class="fileupload-new thumbnail"></div>
+              <div class="fileupload-preview fileupload-exists thumbnail"></div>
+              <div>
+                         <span class="btn btn-file"><span class="fileupload-new">Select image</span><span class="fileupload-exists">Change</span>
+                           <%= file_field("asset_image", "asset_image") %>
+                         </span>
+                <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+      <div class="modal-footer">
 
-          <%= submit_tag "Create" ,:class => 'btn btn-primary'%>
-          <a data-toggle="modal" href="#myCreateAssetTypeModal" class="btn secondary">No</a>
-        </div>
+        <%= submit_tag "Create" ,:class => 'btn btn-primary'%>
+        <a data-toggle="modal" href="#myCreateAssetTypeModal" class="btn secondary">No</a>
+      </div>
     </form>
   </div>
 

@@ -1,10 +1,13 @@
-<div class="sidebar-nav">
-  <div class="well" style="padding: 8px 0;">
-    <ul class="nav nav-list">
-      <li class="nav-header">Main</li>
-      <li><%= link_to 'Assets',:controller => 'admin_field', :action => 'list_asset_types'  %></li>
-      <li><%= link_to 'Fields',:controller => 'admin_field', :action => 'list_fields'  %></li>
-    </ul>
-  </div>
-</div>
+<div id="sidebar">
+  <a href="#" class="visible-phone"><i class="icon icon-home"></i> Assets</a>
+  <ul style="display: block; ">
+    <li <% if @assetsMenu != nil %> class="active" <% end %> ><a href="/admin_field/list_asset_types"><i class="icon icon-hdd"></i> <span>Assets</span></a></li>
+    <li <% if @fieldsMenu != nil %> class="active" <% end %> ><a href="/admin_field/list_fields"><i class="icon icon-tasks"></i><span>Fields</span></a></li>
+    <li <% if @notificationMenu != nil %> class="active" <% end %> ><a href="/notification/index"><i class="icon icon-tasks"></i><span>Notifications</span></a></li>
+    <li <% if @usersMenu != nil %> class="active" <% end %> ><a href="/users/index"><i class="icon icon-user"></i> <span>Users</span></a></li>
+    <li <% if @groupMenu != nil %> class="active" <% end %> ><a href="/group/index"><i class="icon icon-group"></i> <span>Groups</span></a></li>
+    <li <% if @securityMenu != nil %> class="active" <% end %> ><a href="/security/index"><i class="icon icon-lock"></i> <span>Security</span></a></li>
+    <li <% if @indexMenu != nil %> class="active" <% end %> ><a href="/index/index"><i class="icon icon-th"></i> <span>Index</span></a></li>
+  </ul>
 
+</div>

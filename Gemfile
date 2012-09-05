@@ -1,11 +1,11 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 gem 'rails', '3.2.3'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'sqlite3'
+#gem 'sqlite3'
 
 
 # Gems used only for assets and not required
@@ -37,5 +37,25 @@ gem 'jquery-rails'
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
-gem 'sunspot_rails'
-gem 'sunspot_solr'
+gem 'tire'
+
+gem "mongo_mapper"
+
+gem "bson_ext"
+
+gem "prototype-rails"
+
+gem 'devise'
+gem 'mm-devise'
+gem "cancan"
+
+gem "mm-attach-it"
+
+gem "execjs"
+gem "therubyracer"
+
+gem "warden"
+
+gem "devise-encryptable"
+
+gem "gravtastic"

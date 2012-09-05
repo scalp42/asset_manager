@@ -12,6 +12,7 @@
             <div class="tab-content">
               <div class="tab-pane active" id="tab1">
                 <form method="post" action="/search/search">
+                  <input name="authenticity_token" type="hidden" value="token_value">
                   <% if @showCreateFilter %>
                       <%= render :template => 'search/create_filter' %>
                   <% end %>
@@ -21,9 +22,9 @@
                   <table class="table table-striped">
                     <tr><li><td>Asset Type: </td><td>
                       <% if @searchCriteria != nil && @searchCriteria.asset_types != nil %>
-                          <%=  select('asset_type','asset_type_id', AssetType.all().collect {|p| [ p.name, p.id ] },{:selected => @searchCriteria.asset_types},{:multiple => true}) %>
+                          <%=  select('asset_type','asset_type_id', AssetType.all.collect {|p| [ p.name, p.id ] },{:selected => @searchCriteria.asset_types},{:multiple => true}) %>
                       <% else %>
-                          <%=  select('asset_type','asset_type_id', AssetType.all().collect {|p| [ p.name, p.id ] },{},{:multiple => true}) %>
+                          <%=  select('asset_type','asset_type_id', AssetType.all.collect {|p| [ p.name, p.id ] },{},{:multiple => true}) %>
                       <% end %>
                     </td></li></tr>
                     <tr><li><td>Name: </td><td>
@@ -41,13 +42,19 @@
                       <% end %>
                     </td></li></tr>
                     <% Field.all.each do |field| %>
-                        <tr><li><td><%= field.name %>: </td><td>
-                          <% if @searchCriteria != nil && @searchCriteria.fields[field.id] != nil %>
-                              <%= render :template => 'search/field_search/'+FieldType.find(field.field_type_id).type_name.downcase.gsub(' ','_')+'_search',:locals =>{:field => field, :value => @searchCriteria.fields[field.id]} %>
-                          <% else %>
-                              <%= render :template => 'search/field_search/'+FieldType.find(field.field_type_id).type_name.downcase.gsub(' ','_')+'_search',:locals =>{:field => field, :value => nil} %>
-                          <% end %>
-                        </td></li></tr>
+                        <% if FieldType.find(field.field_type_id).is_searchable %>
+                            <tr><li><td><%= field.name %>: </td><td>
+                              <% if @searchCriteria != nil && @searchCriteria.fields[field.id] != nil %>
+                                  <% if FieldType.find(field.field_type_id).use_casecade_option %>
+                                      <%= render :template => 'search/field_search/'+FieldType.find(field.field_type_id).type_name.downcase.gsub(' ','_')+'_search',:locals =>{:field => field, :valueParent => @searchCriteria.fields[field.id]['parent'], :valueChild => @searchCriteria.fields[field.id]['child']} %>
+                                  <% else %>
+                                      <%= render :template => 'search/field_search/'+FieldType.find(field.field_type_id).type_name.downcase.gsub(' ','_')+'_search',:locals =>{:field => field, :value => @searchCriteria.fields[field.id],:valueParent => nil, :valueChild => nil} %>
+                                  <% end %>
+                              <% else %>
+                                  <%= render :template => 'search/field_search/'+FieldType.find(field.field_type_id).type_name.downcase.gsub(' ','_')+'_search',:locals =>{:field => field, :value => nil,:valueParent => nil, :valueChild => nil} %>
+                              <% end %>
+                            </td></li></tr>
+                        <% end %>
                     <% end %>
                   </table>
                   <div style="text-align: right;">
@@ -58,7 +65,10 @@
               <div class="tab-pane" id="tab2">
                 <table class="table table-striped">
                   <% @filters.each do |filter| %>
-                      <tr><td><%= link_to filter.name ,:controller => 'search',:action=>'load_filter', :filter_id => filter.id %></td></tr>
+                      <tr>
+                        <td><%= link_to filter.name ,:controller => 'search',:action=>'load_filter', :filter_id => filter.id %></td>
+                        <td><%= link_to "Delete",{:action => 'delete_filter',:filter_id => filter.id},:class=> 'btn btn-danger' %></td>
+                      </tr>
                   <% end %>
                 </table>
               </div>

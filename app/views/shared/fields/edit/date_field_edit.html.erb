@@ -1,12 +1,14 @@
-<td><%= field_name %></td>
-<td>
-  <% if value != nil %>
-      <%= text_field(field_name,field_name, {:value => value.date})     %>
-  <% else %>
-      <%= text_field(field_name,field_name)     %>
-  <% end %>
-  <%= hidden_field(field_name, field_name+'_type',:value=> 'date') %>
-</td>
+<div class="control-group">
+  <label class="control-label" style="color: #ffffff;"><%= field_name %></label>
+  <div class="controls">
+    <% if required != nil %>
+        <%= text_field(field_name,field_name, {:value => value.date},"data-validaiton" => "required")     %>
+    <% else %>
+        <%= text_field(field_name,field_name, {:value => value.date})     %>
+    <% end %>
+    <%= hidden_field(field_name, field_name+'_type',:value=> 'date') %>
+  </div>
+</div>
 <script type="text/javascript">
     $('#<%= field_name -%>_<%= field_name -%>').datepicker({
         format: 'yyyy-mm-dd'

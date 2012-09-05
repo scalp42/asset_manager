@@ -1,3 +1,11 @@
-<td><%= field_name %></td>
-<td><%=  text_field(field_name,field_name) %></td>
-<%= hidden_field(field_name, field_name+'_type',:value=> 'text') %>
+<div class="control-group">
+  <label class="control-label" style="color: #ffffff;"><%= field_name %></label>
+  <div class="controls">
+    <% if required %>
+        <td><%=  text_field(field_name,field_name,"data-validation" => "required",:class => "span10") %></td>
+    <% else %>
+        <td><%=  text_field(field_name,field_name,:class => "span10") %></td>
+    <% end %>
+    <%= hidden_field(field_name, field_name+'_type',:value=> 'text') %>
+  </div>
+</div>

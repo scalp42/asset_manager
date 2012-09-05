@@ -1,5 +1,8 @@
-<h2>Configure Field <%= field.name %></h2>
-<%= render :template => 'shared/fields/create_select_field_option' ,:locals => { :field => field }%>
+<ul class="breadcrumb">
+  <li><%= link_to "Fields", :controller =>"admin_field",:action =>"list_fields" %> <span class="divider">/</span></li>
+  <li class="active"><%= link_to "Configure Field "+field.name, :controller =>"admin_field",:action =>"configure_field",:id => field.id %></li>
+</ul>
+<%= render :template => 'shared/fields/create_select_field_option' ,:locals => { :field => field, :parentOption => nil }%>
 <div align="right">
   <a class="btn btn-primary" data-toggle="modal" href="#myCreateSelectFieldOptionModal">Add Select Option</a>
 </div>
@@ -8,12 +11,12 @@
     <th>Name</th>
     <th>Actions</th>
   </tr>
-  <% FieldOption.find_all_by_field_id(field.id).each do |options| %>
+  <% field.field_option.each do |options| %>
       <tr>
         <td>
           <%= options.option %>
         </td>
-        <td><%= render :template => 'shared/fields/delete_field_option',:locals => { :option => options.id }%></td>
+        <td><%= render :template => 'shared/fields/delete_field_option',:locals => { :option => options.id,:field => field.id }%></td>
       </tr>
   <% end %>
 </table>

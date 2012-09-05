@@ -1,22 +1,38 @@
-<%= render :template => 'shared/navbar' %>
-<h2>Asset Screen for <%= @asset.name %></h2>
+<%= render :template => 'shared/navbar' ,:locals => {:assetsNav => false, :searchNav => false,:adminNav => true}%>
+<ul class="breadcrumb">
+  <li><%= link_to "Asset Types", :controller =>"admin_field",:action =>"list_asset_types" %> <span class="divider">/</span></li>
+  <li class="active"><%= link_to "Asset Type Fields "+@asset.name, :controller =>"admin_field",:action =>"list_asset_screen_fields",:id => @asset.id %></li>
+</ul>
+<%  if @fieldAlert != nil %>
+    <div class="alert alert-success">
+      Field <%= @fieldAlert %> <%= @fieldAlertType %> Successfully For Asset Type <%= @assetType %>
+    </div>
+<% end %>
 <%= render :template => 'shared/screens/configure_asset_type_screen' , :locals => { :asset => @asset,:fieldsToBeAdded => @fieldToBeAdded} %>
 <div align="right">
   <a class="btn btn-primary" data-toggle="modal" href="#myCreateAssetFieldScreenModal">Add Field To Screen</a>
 </div>
-<table class="table table-striped">
+<table class="table table-hover">
   <tr>
     <th>Name</th>
+    <th>Required</th>
     <th>Actions</th>
   </tr>
-  <% @assetScreens.each do |asset_screen| %>
-      <tr>
-        <td>
+  <% @asset.asset_screen.each do |asset_screen| %>
+      <tr style="background-color: white;">
+        <td style="text-align: center;">
           <%= Field.find(asset_screen.field_id).name %>
         </td>
-
-        <td>
-            <%= render :template => 'shared/delete_asset_screen' ,:locals => { :asset_screen => asset_screen }%>
+        <td style="text-align: center;">
+          <%  if asset_screen.required %>
+              <i class="icon-large icon-ok"/>
+          <% else %>
+              <i class="icon-large icon-remove"/>
+          <% end %>
+        </td>
+        <td style="text-align: center;">
+          <%= link_to "Toggle Required",{:action => "toggle_required",:id => @asset.id ,:asset_type_id => asset_screen.id , :field_id =>asset_screen.field_id,:required => asset_screen.required },:class =>"btn" %>
+          <%= render :template => 'shared/delete_asset_screen' ,:locals => { :asset_screen => asset_screen }%>
         </td>
       </tr>
   <% end %>

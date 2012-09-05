@@ -1,11 +1,18 @@
-<%= render :template => 'shared/navbar' %>
-<h2>Current Fields</h2>
+<%= render :template => 'shared/navbar' ,:locals => {:assetsNav => false, :searchNav => false,:adminNav => true}%>
+<ul class="breadcrumb">
+  <li class="active"><%= link_to "Fields", :controller =>"admin_field",:action =>"list_fields" %></li>
+</ul>
+<%  if @fieldAlert != nil %>
+    <div class="alert alert-success">
+      <%= @fieldAlert %> Field Successfully <%= @fieldAlertType %>
+    </div>
+<% end %>
 <%= render :template => 'admin_field/create' %>
 
 <div align="right">
   <a class="btn btn-primary" data-toggle="modal" href="#myCreateFieldModal">Create Field</a>
 </div>
-<table class="table table-striped">
+<table class="table table-hover">
   <tr>
     <th>Name</th>
     <th>Description</th>
@@ -13,23 +20,24 @@
     <th>Actions</th>
   </tr>
   <% @fields.each do |field| %>
-      <tr>
-        <td>
+      <tr style="background-color: white;">
+        <td style="text-align: center;">
           <%= field.name %>
         </td>
 
-        <td>
+        <td style="text-align: center;">
           <%= field.description %>
         </td>
 
-        <td>
+        <td style="text-align: center;">
           <%= FieldType.find(field.field_type_id).type_name %>
         </td>
-        <td>
+        <td style="text-align: center;">
+          <% if FieldType.find(field.field_type_id).is_configurable %>
+              <%= link_to 'Configure',{:controller => 'admin_field', :action => 'configure_field' ,:id => field.id},:class => 'btn'  %>
+          <% end %>
+          <%= render :template => 'shared/edit_field' ,:locals => { :field => field,:value => field.name, :description => field.description }%>
           <%= render :template => 'shared/delete_field' ,:locals => { :field => field }%>
-          <%= link_to 'Configure',:controller => 'admin_field', :action => 'configure_field' ,:id => field.id  %>
-          <a class="btn" data-toggle="modal" href="#myEditModal<%= field.id %>" >Edit</a>
-          <a class="btn" data-toggle="modal" href="#myModal<%= field.id %>" >Delete</a>
         </td>
       </tr>
   <% end %>

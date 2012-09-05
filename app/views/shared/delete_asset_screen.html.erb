@@ -7,7 +7,7 @@
             <p>Are you sure?</p>
           </div>
           <div class="modal-footer">
-            <%= link_to "Yes", { :controller => "admin_field",:action=>"delete_asset_screen", :asset_screen_id=>asset_screen.id }, :id => 'asset_screen' , :class => "btn btn-danger"  %>
+            <%= link_to "Yes", { :controller => "admin_field",:action=>"delete_asset_screen", :asset_screen_id=>asset_screen.id,:asset_id => asset_screen.asset_id }, :id => 'asset_screen' , :class => "btn btn-danger"  %>
             <a data-toggle="modal" href="#myModal<%= asset_screen.id %>" class="btn secondary">No</a>
           </div>
 </div>

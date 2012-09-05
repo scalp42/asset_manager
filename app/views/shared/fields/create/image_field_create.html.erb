@@ -1,0 +1,24 @@
+<div class="control-group">
+  <label class="control-label" style="color: #ffffff;"><%= field_name %></label>
+  <div class="controls">
+    <%= hidden_field(field_name, field_name+'_type',:value=> 'file_upload') %>
+    <div class="fileupload fileupload-new" data-provides="fileupload">
+      <div class="fileupload-new thumbnail"><img src="" /></div>
+      <div class="fileupload-preview fileupload-exists thumbnail"></div>
+      <div>
+    <span class="btn btn-file"><span class="fileupload-new">Select image</span><span class="fileupload-exists">Change</span>
+      <% if required %>
+          <%= file_field(field_name, field_name,"data-validation" => "required") %>
+      <% else %>
+          <%= file_field(field_name, field_name) %>
+      <% end %>
+    </span>
+        <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+    $('.fileupload').fileupload()
+</script>
