@@ -10,8 +10,8 @@ module GroupHelper
   end
 
   def groupReturn(groupName,groupAction)
-    groupName = groupName
-    groupAction = groupAction
+    @groupName = groupName
+    @groupAction = groupAction
   end
 
   def findUsersNotInGroup(group_id)
