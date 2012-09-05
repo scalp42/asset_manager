@@ -4,7 +4,7 @@ class UsersController < ApplicationController
 
   def index
     @users = User.all
-    setSidebar(nil,nil,true,nil)
+    setSidebar(nil,nil,true,nil,nil)
   end
 
   def edit_user
@@ -22,7 +22,7 @@ class UsersController < ApplicationController
 
     user.save
 
-    setSidebar(nil,nil,true,nil)
+    setSidebar(nil,nil,true,nil,nil)
     redirect_to :back
   end
 
@@ -40,7 +40,7 @@ class UsersController < ApplicationController
     user.active = true
 
     if user.save
-      setSidebar(nil,nil,true,nil)
+      setSidebar(nil,nil,true,nil,nil)
       redirect_to :back
     end
 
