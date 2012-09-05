@@ -1,0 +1,36 @@
+<%= render :template => 'shared/navbar',:locals => {:assetsNav => false, :searchNav => false,:adminNav => true} %>
+<ul class="breadcrumb">
+  <li><%= link_to "Security", :controller =>"security",:action =>"index" %></li>
+</ul>
+<%  if @securityName != nil %>
+    <div class="alert alert-success">
+      Security Scheme <%= @securityName %> Successfully <%= @securityAction %>
+    </div>
+<% end %>
+<div align="right">
+  <%= render :template => 'security/create' %>
+</div>
+<table class="table table-hover">
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Asset Type</th>
+    <th>Actions</th>
+  </tr>
+  <% @securities.each do |security| %>
+      <tr style="background-color: white;">
+        <td style="text-align: center;">
+          <%= link_to security.name, :controller => 'group', :action => 'view', :id => security.id %>
+        </td>
+        <td style="text-align: center;">
+          <%= link_to security.description, :controller => 'group', :action => 'view', :id => security.id %>
+        </td>
+
+        <td style="text-align: center;">
+          <%= link_to AssetType.find(security.asset_type_id).name, :controller => 'group', :action => 'view', :id => security.id %>
+        </td>
+        <td style="text-align: center;">
+        </td>
+      </tr>
+  <% end %>
+</table>
