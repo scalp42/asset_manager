@@ -27,4 +27,12 @@ class SecurityController < ApplicationController
     puts @security.inspect
     puts 'lkdjsklfjsdljflksdjlk'
   end
+
+  def add_remove_user
+
+  end
+
+  def add_remove_group
+
+  end
 end

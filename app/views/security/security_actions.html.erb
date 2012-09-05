@@ -1,0 +1,42 @@
+<div class="modal hide" id="myAddUserSecurityScheme" style="display: none;">
+  <div class="modal-header">
+    <button class="close" data-toggle="modal" href="#myAddUserSecurityScheme">×</button>
+    <h3 style="text-align: center;">Update Users</h3>
+  </div>
+  <div class="modal-body" align="center">
+    <form method="post" class="well" action="/security/add_remove_users" onsubmit="return $(this).validate()">
+      <input name="authenticity_token" type="hidden" value="token_value">
+      <table>
+        <tr>
+          <td><%=  select('users','users',User.all.collect {|p| [ p.full_name, p.id ] },{},{:multiple => true, :selected => restrictions[:users]}) %></td>
+        </tr>
+      </table>
+      <div class="modal-footer">
+        <%= submit_tag "Create" ,:class => 'btn btn-primary'%>
+        <a data-toggle="modal" href="#myAddUserSecurityScheme" class="btn secondary">No</a>
+      </div>
+    </form>
+  </div>
+</div>
+<a class="btn" data-toggle="modal" href="#myAddGroupSecurityScheme" >Update Users</a>
+<div class="modal hide" id="myAddGroupSecurityScheme" style="display: none;">
+  <div class="modal-header">
+    <button class="close" data-toggle="modal" href="#myAddGroupSecurityScheme">×</button>
+    <h3 style="text-align: center;">Update Groups</h3>
+  </div>
+  <div class="modal-body" align="center">
+    <form method="post" class="well" action="/security/add_remove_groups" onsubmit="return $(this).validate()">
+      <input name="authenticity_token" type="hidden" value="token_value">
+      <table>
+        <tr>
+          <td><%=  select('groups','groups' ,Group.all.collect {|p| [ p.name, p.id ] },{},{:multiple => true, :selected => restrictions[:groups]}) %></td>
+        </tr>
+      </table>
+      <div class="modal-footer">
+        <%= submit_tag "Create" ,:class => 'btn btn-primary'%>
+        <a data-toggle="modal" href="#myAddGroupSecurityScheme" class="btn secondary">No</a>
+      </div>
+    </form>
+  </div>
+</div>
+<a class="btn" data-toggle="modal" href="#myAddGroupSecurityScheme" >Update Groups</a>
