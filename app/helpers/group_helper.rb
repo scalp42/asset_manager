@@ -17,9 +17,19 @@ module GroupHelper
   def findUsersNotInGroup(group_id)
     users = Array.new
 
-    Group.find(BSON::ObjectId.from_string(group_id)).membership.each do |membership|
+    User.each do |user|
+      userFound = false
+      Group.find(group_id).membership.each do |membership|
+         if membership.user_id == user.id
+          userFound = true
+         end
+      end
 
+      unless userFound
+        users.push(user)
+      end
     end
 
+    return users
   end
 end

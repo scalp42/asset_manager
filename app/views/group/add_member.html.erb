@@ -8,15 +8,15 @@
       <input name="authenticity_token" type="hidden" value="token_value">
       <table>
         <tr>
-          <td><%=  select('users','users',Field.find(BSON::ObjectId.from_string(field_id)).field_option.collect {|p| [ p.option, p.id ] } ,{},{:multiple => true,"data-validation" => "required"}) %></td>
+          <td><%=  select('users','users', findUsersNotInGroup(group.id).collect {|p| [ p.full_name, p.id ] },{},{:multiple => true,"data-validation" => "required"}) %></td>
         </tr>
       </table>
       <div class="modal-footer">
         <%= submit_tag "Create" ,:class => 'btn btn-primary'%>
         <a data-toggle="modal" href="#myAddMember" class="btn secondary">No</a>
       </div>
+      <%= hidden_field('group', 'group_id',:value=> group.id) %>
     </form>
   </div>
 </div>
-
 <a class="btn btn-primary" data-toggle="modal" href="#myAddMember" >Add Member</a>
