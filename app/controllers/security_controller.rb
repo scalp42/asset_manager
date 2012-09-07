@@ -24,6 +24,7 @@ class SecurityController < ApplicationController
 
   def view_restrictions
     @security = SecurityScheme.find(params[:id])
+    setSidebar(nil,nil,nil,nil,nil,nil,true)
   end
 
   def add_remove_users
@@ -33,13 +34,10 @@ class SecurityController < ApplicationController
     users = Array.new
     users.push(params[:users][:users])
 
-    puts params.inspect
-    puts 'jsdfkjskldfjkldsj'
     case params[:security_type][:security_type]
       when 'create'
         @security.create_restrictions['users'] = users
       when 'edit'
-        puts 'kjsdlfkjsdklfjklsdjf'
         @security.edit_restrictions['users'] = users
       when 'view'
         @security.view_restrictions['users'] = users
@@ -49,6 +47,7 @@ class SecurityController < ApplicationController
 
     if @security.save
       securityReturn(@security.name,"Restrictions Updated")
+      setSidebar(nil,nil,nil,nil,nil,nil,true)
       render :template => 'security/view_restrictions'
     end
 
@@ -74,7 +73,20 @@ class SecurityController < ApplicationController
 
     if @security.save
       securityReturn(@security.name,"Restrictions Updated")
+      setSidebar(nil,nil,nil,nil,nil,nil,true)
       render :template => 'security/view_restrictions'
     end
+  end
+
+  def delete
+
+    if SecurityScheme.destroy(BSON::ObjectId.from_string(params['security_id']))
+      securityReturn('',"Deleted")
+      setSidebar(nil,nil,nil,nil,nil,nil,true)
+      @securities = SecurityScheme.all
+
+      render :template => "security/index"
+    end
+
   end
 end

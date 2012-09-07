@@ -7,33 +7,6 @@
       Asset <%= @assetName %> Successfully <%= @assetAction %>
     </div>
 <% end %>
-<!--<table class="table table-hover">-->
-<!--<tr>-->
-<!--<th>Type</th>-->
-<!--<th>Name</th>-->
-<!--<th>Description</th>-->
-<!--<th>Actions</th>-->
-<!--</tr>-->
-<!--<% @assets.each do |asset| %>-->
-    <!--<tr style="background-color: white;">-->
-    <!--<td style="text-align: center;">-->
-    <!--<%= link_to AssetType.find(asset.asset_type_id).name, :controller => 'assets', :action => 'view', :id => asset.id %>-->
-    <!--</td>-->
-    <!--<td style="text-align: center;">-->
-    <!--<%= link_to asset.name, :controller => 'assets', :action => 'view', :id => asset.id %>-->
-    <!--</td>-->
-
-    <!--<td style="text-align: center;">-->
-    <!--<%= link_to asset.description, :controller => 'assets', :action => 'view', :id => asset.id %>-->
-    <!--</td>-->
-    <!--<td style="text-align: center;">-->
-    <!--<%= link_to 'Edit', {:action => 'edit' ,:id => asset.id}, :class => "btn"  %>-->
-    <!--<%= render :template => 'assets/delete', :locals => {:asset => asset} %>-->
-    <!--</td>-->
-    <!--</tr>-->
-    <!--<% end %>-->
-<!--</table>-->
-
 <div class="row-fluid">
   <div class="span3">
     <div class="widget_container">
@@ -48,9 +21,11 @@
         <table id="quick_view" class="table">
           <tbody>
           <% AssetType.each do |assetType| %>
-              <tr>
-                <td><a href="#"><b><%= Asset.where(:asset_type_id => assetType.id.to_s).count %></b> <i class="icon-large icon-list-alt"></i> <%= assetType.name %></a></td>
-              </tr>
+              <% if can_view(assetType.id.to_s) %>
+                  <tr>
+                    <td><a href="#"><b><%= Asset.where(:asset_type_id => assetType.id.to_s).count %></b> <i class="icon-large icon-list-alt"></i> <%= assetType.name %></a></td>
+                  </tr>
+              <% end %>
           <% end %>
           </tbody>
         </table>
@@ -84,20 +59,22 @@
               </th>
             </tr>
             <% Asset.sort(:created_at.desc).limit(10).each do |asset| %>
-                <tr>
-                  <td style="text-align: center;">
-                    <%= link_to AssetType.find(BSON::ObjectId.from_string(asset.asset_type_id)).name,{:action => 'view',:id =>asset.id} %>
-                  </td>
-                  <td style="text-align: center;">
-                    <%= link_to asset.name,{:action => 'view',:id =>asset.id} %>
-                  </td>
-                  <td style="text-align: center;">
-                    <%= link_to User.find(asset.created_by).full_name,{:action => 'view',:id =>asset.id} %>
-                  </td>
-                  <td style="text-align: center;">
-                    <%= link_to  asset.created_at,{:action => 'view',:id =>asset.id} %>
-                  </td>
-                </tr>
+                <% if can_view(asset.asset_type_id) %>
+                    <tr>
+                      <td style="text-align: center;">
+                        <%= link_to AssetType.find(BSON::ObjectId.from_string(asset.asset_type_id)).name,{:action => 'view',:id =>asset.id} %>
+                      </td>
+                      <td style="text-align: center;">
+                        <%= link_to asset.name,{:action => 'view',:id =>asset.id} %>
+                      </td>
+                      <td style="text-align: center;">
+                        <%= link_to User.find(asset.created_by).full_name,{:action => 'view',:id =>asset.id} %>
+                      </td>
+                      <td style="text-align: center;">
+                        <%= link_to  asset.created_at,{:action => 'view',:id =>asset.id} %>
+                      </td>
+                    </tr>
+                <% end %>
             <% end %>
           </table>
           <a href="#" class="btn btn-duadua">View More</a>
@@ -130,20 +107,22 @@
               </th>
             </tr>
             <% getLatestChangeHistoryForAsset().each_pair do |asset_id,changeHistory_id| %>
-                <tr>
-                  <td style="text-align: center;">
-                    <%= link_to  AssetType.find(Asset.find(asset_id).asset_type_id).name,{:action => 'view',:id =>asset_id} %>
-                  </td>
-                  <td style="text-align: center;">
-                    <%= link_to  Asset.find(asset_id).name,{:action => 'view',:id =>asset_id} %>
-                  </td>
-                  <td style="text-align: center;">
-                    <%= link_to  User.find(ChangeHistory.find(changeHistory_id).changed_by).full_name,{:action => 'view',:id =>asset_id} %>
-                  </td>
-                  <td style="text-align: center;">
-                    <%= link_to ChangeHistory.find(changeHistory_id).changed_at,{:action => 'view',:id =>asset_id} %>
-                  </td>
-                </tr>
+                <% if can_view(Asset.find(asset_id).asset_type_id) %>
+                    <tr>
+                      <td style="text-align: center;">
+                        <%= link_to  AssetType.find(Asset.find(asset_id).asset_type_id).name,{:action => 'view',:id =>asset_id} %>
+                      </td>
+                      <td style="text-align: center;">
+                        <%= link_to  Asset.find(asset_id).name,{:action => 'view',:id =>asset_id} %>
+                      </td>
+                      <td style="text-align: center;">
+                        <%= link_to  User.find(ChangeHistory.find(changeHistory_id).changed_by).full_name,{:action => 'view',:id =>asset_id} %>
+                      </td>
+                      <td style="text-align: center;">
+                        <%= link_to ChangeHistory.find(changeHistory_id).changed_at,{:action => 'view',:id =>asset_id} %>
+                      </td>
+                    </tr>
+                <% end %>
             <% end %>
           </table>
 

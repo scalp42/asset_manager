@@ -36,5 +36,7 @@
     </div>
 <% end %>
 <div class="control-group" style="text-align: center;">
+  <% if can_edit(@asset.asset_type_id) %>
   <%= link_to 'Edit',{:controller => 'assets', :action =>'edit', :id => @asset.id} ,:class => "btn btn-primary" %>
+      <% end %>
 </div>

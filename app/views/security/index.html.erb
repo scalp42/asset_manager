@@ -30,6 +30,7 @@
         </td>
         <td style="text-align: center;">
           <%= link_to "View Restrictions",{:action => 'view_restrictions',:id => security.id},:class=>'btn'%>
+          <%= render :template => 'security/delete', :class => 'btn', :locals => {:security => security} %>
         </td>
       </tr>
   <% end %>
