@@ -1,5 +1,6 @@
 class Ability
   include CanCan::Ability
+  include GroupHelper
 
   def initialize(user,asset_type_id)
     user ||= User.new
@@ -17,6 +18,14 @@ class Ability
             end
           end
         end
+        security.create_restrictions[:groups].each do |privilegedGroups|
+          privilegedGroups.each do |privilegedGroup|
+            if isUserMemberOf(user,privilegedGroup)
+              can :create, Asset, :asset_type_id => security.asset_type_id.to_s
+            end
+          end
+        end
+
         security.edit_restrictions[:users].each do |privilegedUsers|
           privilegedUsers.each do |privilegedUser|
             if privilegedUser == user.id.to_s
@@ -24,6 +33,14 @@ class Ability
             end
           end
         end
+        security.edit_restrictions[:groups].each do |privilegedGroups|
+          privilegedGroups.each do |privilegedGroup|
+            if isUserMemberOf(user,privilegedGroup)
+              can :create, Asset, :asset_type_id => security.asset_type_id.to_s
+            end
+          end
+        end
+
         security.view_restrictions[:users].each do |privilegedUsers|
           privilegedUsers.each do |privilegedUser|
             if privilegedUser == user.id.to_s
@@ -31,6 +48,14 @@ class Ability
             end
           end
         end
+        security.view_restrictions[:groups].each do |privilegedGroups|
+          privilegedGroups.each do |privilegedGroup|
+            if isUserMemberOf(user,privilegedGroup)
+              can :create, Asset, :asset_type_id => security.asset_type_id.to_s
+            end
+          end
+        end
+
         security.delete_restrictions[:users].each do |privilegedUsers|
           privilegedUsers.each do |privilegedUser|
             if privilegedUser == user.id.to_s
@@ -38,6 +63,14 @@ class Ability
             end
           end
         end
+        security.delete_restrictions[:groups].each do |privilegedGroups|
+          privilegedGroups.each do |privilegedGroup|
+            if isUserMemberOf(user,privilegedGroup)
+              can :create, Asset, :asset_type_id => security.asset_type_id.to_s
+            end
+          end
+        end
+
       end
     end
   end

@@ -8,7 +8,7 @@
       <input name="authenticity_token" type="hidden" value="token_value">
       <table>
         <tr>
-          <td><%=  select('users','users',User.all.collect {|p| [ p.full_name, p.id ] },{},{:multiple => true, :selected => restrictions[:users]}) %></td>
+          <td><%=  select('users','users',User.all.collect {|p| [ p.full_name, p.id ] },{:prompt => 'None',:selected => restrictions[:users][0]},{:multiple => true}) %></td>
         </tr>
       </table>
       <div class="modal-footer">
@@ -31,7 +31,7 @@
       <input name="authenticity_token" type="hidden" value="token_value">
       <table>
         <tr>
-          <td><%=  select('groups','groups' ,Group.all.collect {|p| [ p.name, p.id ] },{},{:multiple => true, :selected => restrictions[:groups]}) %></td>
+          <td><%=  select('groups','groups' ,Group.all.collect {|p| [ p.name, p.id ] },{:prompt => 'None',:selected => restrictions[:groups][0]},{:multiple => true, }) %></td>
         </tr>
       </table>
       <div class="modal-footer">

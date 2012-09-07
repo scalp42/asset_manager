@@ -149,4 +149,17 @@ module SearchHelper
     @assets = results.results
 
   end
+
+  def accessibleAssetTypes
+    assetTypes = Array.new
+
+    AssetType.all.each do |assetType|
+      if can_view(assetType.id.to_s)
+        assetTypes.push(assetType)
+      end
+    end
+
+    return assetTypes
+  end
+
 end

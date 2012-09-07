@@ -22,9 +22,9 @@
                   <table class="table table-striped">
                     <tr><li><td>Asset Type: </td><td>
                       <% if @searchCriteria != nil && @searchCriteria.asset_types != nil %>
-                          <%=  select('asset_type','asset_type_id', AssetType.all.collect {|p| [ p.name, p.id ] },{:selected => @searchCriteria.asset_types},{:multiple => true}) %>
+                          <%=  select('asset_type','asset_type_id', accessibleAssetTypes.collect {|p| [ p.name, p.id ] },{:selected => @searchCriteria.asset_types},{:multiple => true}) %>
                       <% else %>
-                          <%=  select('asset_type','asset_type_id', AssetType.all.collect {|p| [ p.name, p.id ] },{},{:multiple => true}) %>
+                          <%=  select('asset_type','asset_type_id', accessibleAssetTypes.collect {|p| [ p.name, p.id ] },{},{:multiple => true}) %>
                       <% end %>
                     </td></li></tr>
                     <tr><li><td>Name: </td><td>
