@@ -17,7 +17,9 @@
           <%= asset.description %>
         </td>
         <td style="text-align: center;">
+          <% if can? :update, asset %>
           <%= link_to 'Edit',{ :controller => 'assets', :action => 'edit', :id => asset.id},:class => 'btn' %>
+              <% end %>
           <%= link_to 'View',{ :controller => 'assets', :action => 'view', :id => asset.id},:class => 'btn' %>
           <%= link_to 'Delete',{ :controller => 'assets', :action => 'delete', :asset_id => asset.id},:class => 'btn' %>
         </td>

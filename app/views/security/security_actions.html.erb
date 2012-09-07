@@ -1,6 +1,6 @@
-<div class="modal hide" id="myAddUserSecurityScheme" style="display: none;">
+<div class="modal hide" id="myAddUserSecurityScheme<%= security_type%>" style="display: none;">
   <div class="modal-header">
-    <button class="close" data-toggle="modal" href="#myAddUserSecurityScheme">×</button>
+    <button class="close" data-toggle="modal" href="#myAddUserSecurityScheme<%= security_type%>">×</button>
     <h3 style="text-align: center;">Update Users</h3>
   </div>
   <div class="modal-body" align="center">
@@ -13,17 +13,17 @@
       </table>
       <div class="modal-footer">
         <%= submit_tag "Create" ,:class => 'btn btn-primary'%>
-        <a data-toggle="modal" href="#myAddUserSecurityScheme" class="btn secondary">No</a>
+        <a data-toggle="modal" href="#myAddUserSecurityScheme<%= security_type%>" class="btn secondary">No</a>
       </div>
       <%= hidden_field('security_type','security_type',:value=> security_type) %>
       <%= hidden_field('security_id','security_id',:value=> security_id) %>
     </form>
   </div>
 </div>
-<a class="btn" data-toggle="modal" href="#myAddUserSecurityScheme" >Update Users</a>
-<div class="modal hide" id="myAddGroupSecurityScheme" style="display: none;">
+<a class="btn" data-toggle="modal" href="#myAddUserSecurityScheme<%= security_type%>" >Update Users</a>
+<div class="modal hide" id="myAddGroupSecurityScheme<%= security_type%>" style="display: none;">
   <div class="modal-header">
-    <button class="close" data-toggle="modal" href="#myAddGroupSecurityScheme">×</button>
+    <button class="close" data-toggle="modal" href="#myAddGroupSecurityScheme<%= security_type%>">×</button>
     <h3 style="text-align: center;">Update Groups</h3>
   </div>
   <div class="modal-body" align="center">
@@ -36,11 +36,11 @@
       </table>
       <div class="modal-footer">
         <%= submit_tag "Create" ,:class => 'btn btn-primary'%>
-        <a data-toggle="modal" href="#myAddGroupSecurityScheme" class="btn secondary">No</a>
+        <a data-toggle="modal" href="#myAddGroupSecurityScheme<%= security_type%>" class="btn secondary">No</a>
       </div>
       <%= hidden_field('security_type','security_type',:value=> security_type) %>
       <%= hidden_field('security_id','security_id',:value=> security_id) %>
     </form>
   </div>
 </div>
-<a class="btn" data-toggle="modal" href="#myAddGroupSecurityScheme" >Update Groups</a>
+<a class="btn" data-toggle="modal" href="#myAddGroupSecurityScheme<%= security_type%>" >Update Groups</a>
