@@ -24,15 +24,33 @@ class SecurityController < ApplicationController
 
   def view_restrictions
     @security = SecurityScheme.find(params[:id])
-    puts @security.inspect
-    puts 'lkdjsklfjsdljflksdjlk'
   end
 
-  def add_remove_user
+  def add_remove_users
 
+    @security =  SecurityScheme.find(BSON::ObjectId.from_string(params[:security_id][:security_id]))
+
+    users = Array.new
+    users.push(params[:users][:users])
+
+    case params[:security_type][:security_type]
+      when 'create'
+        @security.create_restrictions['users'] = users
+      when 'edit '
+        @security.edit_restrictions['users'] = users
+      when 'view'
+        @security.view_restrictions['users'] = users
+      when 'delete'
+        @security.delete_restrictions['users'] = users
+    end
+
+    if @security.save
+      securityReturn(@security.name,"Restrictions Updated")
+      render :template => 'security/view_restrictions'
+    end
   end
 
-  def add_remove_group
+  def add_remove_groups
 
   end
 end
