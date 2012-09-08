@@ -36,9 +36,6 @@
           <% if FieldType.find(field.field_type_id).is_configurable %>
               <%= link_to 'Configure',{:controller => 'admin_field', :action => 'configure_field' ,:id => field.id},:class => 'btn'  %>
           <% end %>
-          <% if can? :update, field %>
-          <%= render :template => 'shared/edit_field' ,:locals => { :field => field,:value => field.name, :description => field.description }%>
-              <% end %>
           <%= render :template => 'shared/delete_field' ,:locals => { :field => field }%>
         </td>
       </tr>
