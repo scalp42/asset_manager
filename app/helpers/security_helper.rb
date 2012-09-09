@@ -15,4 +15,7 @@ module SecurityHelper
     @securityMenu = securityMenu
   end
 
+  def asset_type_no_security()
+    assetTypes = Array.new
+  end
 end
