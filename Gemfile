@@ -59,3 +59,6 @@ gem "warden"
 gem "devise-encryptable"
 
 gem "gravtastic"
+
+gem 'crypt'
+gem 'hex_string'

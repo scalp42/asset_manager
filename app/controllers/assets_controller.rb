@@ -1,5 +1,6 @@
 class AssetsController < ApplicationController
   include AssetsHelper
+  include EncryptDecryptPasswordHelper
 
   respond_to :html, :xml, :json
 
@@ -150,29 +151,10 @@ class AssetsController < ApplicationController
 
   end
 
-  def assetExport
-
-    @assetsExport = Array.new
-
-    Asset.all.each do |asset|
-
-      assetExportObj = AssetExport.new
-
-      if asset.name != nil
-        assetExportObj.name = asset.name
-      end
-
-      if asset.description != nil
-        assetExportObj.description = asset.description
-      end
-
-      assetExportObj.asset_type = {:name => AssetType.find(asset.asset_type_id),:id => asset.asset_type_id}
-
-      @assetsExport.push(assetExportObj)
-    end
-
+  def api_decryptPassword
+    @password = decryptPassword(params['data'])
     respond_to do |format|
-      format.xml { render :xml => @assetsExport }
+      format.json { render :json => @password }
     end
 
   end

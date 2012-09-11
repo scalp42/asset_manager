@@ -1,4 +1,5 @@
 module AssetsHelper
+  include EncryptDecryptPasswordHelper
 
   def setCascadeValue(params,fieldObj,asset)
     if params[fieldObj.name.gsub(" ","_")+"_child"][fieldObj.name.gsub(" ","_")+"_child"] != "null"
@@ -60,6 +61,11 @@ module AssetsHelper
         asset.field_value.build(:asset_id => asset.id,
                                 :photo => params[fieldObj.name][fieldObj.name],
                                 :field_id => fieldObj.id)
+      when 'password'
+        asset.field_value.build(:asset_id => asset.id,
+                                       :password_value => encryptPassword(params[fieldObj.name][fieldObj.name]),
+                                       :field_name_value => {fieldObj.name.downcase.gsub(" ","_") =>encryptPassword(params[fieldObj.name][fieldObj.name]) } ,
+                                       :field_id => fieldObj.id)
       else
         puts "field not found"
     end
@@ -88,6 +94,9 @@ module AssetsHelper
         asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.field_name_value = {fieldObj.name.downcase.gsub(" ","_")=> params[fieldObj.name][fieldObj.name] } }
       when 'file_upload'
         asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.photo = params[fieldObj.name][fieldObj.name] }
+      when 'password'
+        asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.field_name_value = {fieldObj.name.downcase.gsub(" ","_")=> encryptPassword(params[fieldObj.name][fieldObj.name])} }
+        asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.password_value = encryptPassword(params[fieldObj.name][fieldObj.name])}
       else
         puts "field not found"
     end
