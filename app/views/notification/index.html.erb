@@ -2,3 +2,36 @@
 <ul class="breadcrumb">
   <li class="active"><%= link_to "Notifications", :controller =>"notification",:action =>"index" %></li>
 </ul>
+<%  if @notificationName != nil %>
+    <div class="alert alert-success">
+      Notification Scheme <%= @notificationName %> Successfully <%= @notificationAction %>
+    </div>
+<% end %>
+<div align="right">
+  <%= render :template => 'notification/create' %>
+</div>
+<table class="table table-hover">
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Asset Type</th>
+    <th>Actions</th>
+  </tr>
+  <% @notifications.each do |notification| %>
+      <tr style="background-color: white;">
+        <td style="text-align: center;">
+          <%= link_to notification.name, :controller => 'group', :action => 'view', :id => notification.id %>
+        </td>
+        <td style="text-align: center;">
+          <%= link_to notification.description, :controller => 'group', :action => 'view', :id => notification.id %>
+        </td>
+        <td style="text-align: center;">
+          <%= link_to AssetType.find(notification.asset_type_id).name, :controller => 'group', :action => 'view', :id => notification.id %>
+        </td>
+        <td style="text-align: center;">
+          <%= link_to "View Notifications",{:action => 'view_notifications',:id => notification.id},:class=>'btn'%>
+          <%= render :template => 'notification/delete', :class => 'btn', :locals => {:notification => notification} %>
+        </td>
+      </tr>
+  <% end %>
+</table>

@@ -1,0 +1,60 @@
+<%= render :template => 'shared/navbar',:locals => {:assetsNav => false, :searchNav => false,:adminNav => true} %>
+<ul class="breadcrumb">
+  <li><%= link_to "Notification", :controller =>"notification",:action =>"index" %><span class="divider">/</span></li>
+  <li class="active"><%= link_to "Scheme "+@notification.name, :controller =>"notification",:action =>"view_notifications",:id => @notification.id %></li>
+</ul>
+<%  if @notificationName != nil %>
+    <div class="alert alert-success">
+      Notification Scheme <%= @notificationName %> Successfully <%= @notificationAction %>
+    </div>
+<% end %>
+<table class="table table-hover">
+  <tr>
+    <th>Asset Type</th>
+    <th>Notification Type</th>
+    <th>Notify</th>
+    <th>Actions</th>
+  </tr>
+  <tr style="background-color: white;">
+    <td style="text-align: center;">
+      <%= AssetType.find(@notification.asset_type_id).name %>
+    </td>
+    <td style="text-align: center;">
+      Create
+    </td>
+    <td style="text-align: center;">
+      <%= render :template => 'notification/individual_perms',:locals => {:restrictions => @notification.create_email} %>
+    </td>
+    <td style="text-align: center;">
+      <%= render :template => 'notification/notification_actions', :locals =>{:restrictions => @notification.create_email,:notification_type => 'create',:notification_id =>@notification.id } %>
+    </td>
+  </tr>
+  <tr style="background-color: white;">
+    <td style="text-align: center;">
+      <%= AssetType.find(@notification.asset_type_id).name %>
+    </td>
+    <td style="text-align: center;">
+      Edit
+    </td>
+    <td style="text-align: center;">
+      <%= render :template => 'notification/individual_perms',:locals => {:restrictions => @notification.edit_email} %>
+    </td>
+    <td style="text-align: center;">
+      <%= render :template => 'notification/notification_actions', :locals =>{:restrictions => @notification.edit_email,:notification_type => 'edit',:notification_id =>@notification.id } %>
+    </td>
+  </tr>
+  <tr style="background-color: white;">
+    <td style="text-align: center;">
+      <%= AssetType.find(@notification.asset_type_id).name %>
+    </td>
+    <td style="text-align: center;">
+      Delete
+    </td>
+    <td style="text-align: center;">
+      <%= render :template => 'notification/individual_perms',:locals => {:restrictions => @notification.delete_email} %>
+    </td>
+    <td style="text-align: center;">
+      <%= render :template => 'notification/notification_actions', :locals =>{:restrictions => @notification.delete_email,:notification_type => 'delete',:notification_id =>@notification.id } %>
+    </td>
+  </tr>
+</table>

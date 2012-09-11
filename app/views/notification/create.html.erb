@@ -1,0 +1,27 @@
+<div class="modal hide" id="myCreateNotificationScheme" style="display: none;">
+  <div class="modal-header">
+    <button class="close" data-toggle="modal" href="#myCreateNotificationScheme">×</button>
+    <h3 style="text-align: center;">Create Notification Scheme</h3>
+  </div>
+  <div class="modal-body" align="center">
+    <form method="post" class="well" action="/notification/create" onsubmit="return $(this).validate()">
+      <input name="authenticity_token" type="hidden" value="token_value">
+      <table>
+        <tr>
+          <td><%=  text_field('name','name',:placeholder => "Name","data-validation" => "required") %></td>
+        </tr>
+        <tr>
+          <td><%=  text_field('description','description',:placeholder => "Description") %></td>
+        </tr>
+        <tr>
+          <td><%=  select('asset_type','asset_type', AssetType.all.collect {|p| [ p.name, p.id ] },{:prompt => "Please Select"},{"data-validation" => "required"}) %></td>
+        </tr>
+      </table>
+      <div class="modal-footer">
+        <%= submit_tag "Create" ,:class => 'btn btn-primary'%>
+        <a data-toggle="modal" href="#myCreateNotificationScheme" class="btn secondary">No</a>
+      </div>
+    </form>
+  </div>
+</div>
+<a class="btn btn-primary" data-toggle="modal" href="#myCreateNotificationScheme" >Create Notification Scheme</a>

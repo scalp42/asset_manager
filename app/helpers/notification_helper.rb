@@ -7,4 +7,9 @@ module NotificationHelper
     @indexMenu = indexMenu
     @notificationMenu = notificationMenu
   end
+
+  def notificationReturn(notificationName,notificationAction)
+    @notificationName = notificationName
+    @notificationAction = notificationAction
+  end
 end

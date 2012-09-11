@@ -1,0 +1,24 @@
+<p>Users:</p>
+<ul>
+  <% restrictions[:users].each do |user| %>
+      <% user.each do |u| %>
+          <% if u != '' %>
+              <li>
+                <%= User.find(BSON::ObjectId.from_string(u)).full_name %>
+              </li>
+          <% end %>
+      <% end %>
+  <% end %>
+</ul>
+<p>Groups:</p>
+<ul>
+  <% restrictions[:groups].each do |group| %>
+      <% group.each do |g| %>
+          <% if g != '' %>
+              <li>
+                <%= Group.find(BSON::ObjectId.from_string(g)).name %>
+              </li>
+          <% end %>
+      <% end %>
+  <% end %>
+</ul>
