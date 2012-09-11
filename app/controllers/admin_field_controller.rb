@@ -36,6 +36,8 @@ class AdminFieldController < ApplicationController
       field.description = params['field_description']['field_description']
     end
 
+    field.wiki_enabled = params['allows_wiki']['allows_wiki']
+
     if field.save
       setSidebar(nil,true,nil,nil,nil)
       setFieldReturn(field.name,"Edited")

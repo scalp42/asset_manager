@@ -2,7 +2,7 @@ namespace :bootstrap do
       desc "Add Field Types"
       task :field_type => :environment do
         FieldType.create(:type_name => 'Single Line Text Field',:use_text => true,:is_searchable => true,:is_configurable => false)
-        FieldType.create(:type_name => 'Multi Line Text Field', :use_text => true,:is_searchable => true,:is_configurable => false)
+        FieldType.create(:type_name => 'Multi Line Text Field', :use_text => true,:is_searchable => true,:is_configurable => false,:allows_wiki => true)
         FieldType.create(:type_name => 'Select Field',:use_option => true,:is_searchable => true,:is_configurable => true)
         FieldType.create(:type_name => 'Multi Select Field',:use_option => true,:is_searchable => true,:is_configurable => true)
         FieldType.create(:type_name => 'Cascading Select Field',:use_casecade_option => true,:is_searchable => true,:is_configurable => true)

@@ -1,4 +1,8 @@
 <% if value != nil %>
     <td><%= field_name %>:</td>
-    <td><%= value.text_value %></td>
+    <% if wiki_enabled %>
+        <td><%= raw(WikiCloth::Parser.new({ :data => value.text_value}).to_html) %></td>
+    <% else %>
+        <td><%= value.text_value %></td>
+    <% end %>
 <% end %>

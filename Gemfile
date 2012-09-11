@@ -62,3 +62,5 @@ gem "gravtastic"
 
 gem 'crypt'
 gem 'hex_string'
+
+gem 'wikicloth'

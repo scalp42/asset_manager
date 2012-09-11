@@ -33,6 +33,7 @@
           <%= FieldType.find(field.field_type_id).type_name %>
         </td>
         <td style="text-align: center;">
+          <%= render :template => 'shared/edit_field' ,:locals => { :field => field }%>
           <% if FieldType.find(field.field_type_id).is_configurable %>
               <%= link_to 'Configure',{:controller => 'admin_field', :action => 'configure_field' ,:id => field.id},:class => 'btn'  %>
           <% end %>
