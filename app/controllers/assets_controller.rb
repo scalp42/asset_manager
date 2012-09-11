@@ -7,7 +7,6 @@ class AssetsController < ApplicationController
   def index
     @assets = Asset.all
 
-  #  AssetMailer.create().deliver
     respond_with(@assets) do |format|
       format.html
       format.json { render :json => @assets }

@@ -46,7 +46,6 @@ module AssetsHelper
                                 :field_option_id => options,
                                 :field_name_value => {fieldObj.name.downcase.gsub(" ","_") =>options } ,
                                 :field_id => fieldObj.id)
-      # :text_value => fieldObj.field_option.find(BSON::ObjectId.from_string(params[fieldObj.name][fieldObj.name])).option)
       when 'text'
         asset.field_value.build(:asset_id => asset.id,
                                 :text_value => params[fieldObj.name][fieldObj.name],
@@ -131,6 +130,15 @@ module AssetsHelper
     end
 
     return changeHistoryAsset
+
+  end
+
+  def sendNotificationEmailsViaScheme(asset,action)
+    notification = NotificationScheme.find(BSON::ObjectId.from_string(asset.asset_type_id))
+
+    if notification
+
+    end
 
   end
 

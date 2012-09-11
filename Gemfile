@@ -64,3 +64,5 @@ gem 'crypt'
 gem 'hex_string'
 
 gem 'wikicloth'
+
+gem 'cloudservers'
