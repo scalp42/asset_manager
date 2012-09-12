@@ -11,6 +11,7 @@ class TestMailer < ActionMailer::Base
       :password             => mail.password
     }
   end
+
   def test_email(email_address)
 
     mail = MailSetting.first()
