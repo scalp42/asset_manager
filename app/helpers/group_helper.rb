@@ -40,9 +40,9 @@ module GroupHelper
       users.push(User.find(membership.user_id))
     end
 
-    puts users.inspect
     return users
   end
+
 
   def isUserMemberOf(user,group_id)
 

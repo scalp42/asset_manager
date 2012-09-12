@@ -62,9 +62,9 @@ module AssetsHelper
                                 :field_id => fieldObj.id)
       when 'password'
         asset.field_value.build(:asset_id => asset.id,
-                                       :password_value => encryptPassword(params[fieldObj.name][fieldObj.name]),
-                                       :field_name_value => {fieldObj.name.downcase.gsub(" ","_") =>encryptPassword(params[fieldObj.name][fieldObj.name]) } ,
-                                       :field_id => fieldObj.id)
+                                :password_value => encryptPassword(params[fieldObj.name][fieldObj.name]),
+                                :field_name_value => {fieldObj.name.downcase.gsub(" ","_") =>encryptPassword(params[fieldObj.name][fieldObj.name]) } ,
+                                :field_id => fieldObj.id)
       else
         puts "field not found"
     end
@@ -120,13 +120,13 @@ module AssetsHelper
     counter = 0
 
     ChangeHistory.sort(:changed_at.desc).each do |changeHistoryItem|
-     unless changeHistoryAsset.has_key? changeHistoryItem.asset_id
-       changeHistoryAsset[changeHistoryItem.asset_id] = changeHistoryItem.id
-       counter += 1
-     end
-       if counter > 10
-         break
-       end
+      unless changeHistoryAsset.has_key? changeHistoryItem.asset_id
+        changeHistoryAsset[changeHistoryItem.asset_id] = changeHistoryItem.id
+        counter += 1
+      end
+      if counter > 10
+        break
+      end
     end
 
     return changeHistoryAsset
@@ -134,11 +134,42 @@ module AssetsHelper
   end
 
   def sendNotificationEmailsViaScheme(asset,action)
-    notification = NotificationScheme.find(BSON::ObjectId.from_string(asset.asset_type_id))
+    notification = NotificationScheme.first(:asset_type_id => BSON::ObjectId.from_string(asset.asset_type_id))
+
+    addresses = Array.new
 
     if notification
-
+      case action
+        when 'create'
+          notification.create_email['users'][0].each do |user|
+            if user != ''
+              addresses.push(User.find(BSON::ObjectId.from_string(user)).email)
+            end
+          end
+          addresses.each do |address|
+            AssetMailer.create(asset,address).deliver
+          end
+        when 'edit'
+          notification.edit_email['users'][0].each do |user|
+            if user != ''
+              addresses.push(User.find(BSON::ObjectId.from_string(user)).email)
+            end
+          end
+          addresses.each do |address|
+            AssetMailer.edit(asset,address).deliver
+          end
+        when 'delete'
+          notification.delete_email['users'][0].each do |user|
+            if user != ''
+              addresses.push(User.find(BSON::ObjectId.from_string(user)).email)
+            end
+          end
+          addresses.each do |address|
+            AssetMailer.delete(asset,address).deliver
+          end
+      end
     end
+
 
   end
 

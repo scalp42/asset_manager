@@ -43,6 +43,7 @@ class AssetsController < ApplicationController
 
     assetAlert(asset.name,"Created")
 
+    sendNotificationEmailsViaScheme(asset,'create')
     @assets = Asset.all
 
     render :template => 'assets/index'
@@ -57,6 +58,7 @@ class AssetsController < ApplicationController
 
     assetAlert(asset.name,"Deleted")
 
+    sendNotificationEmailsViaScheme(asset,'delete')
     @assets = Asset.all
 
     render :template => 'assets/index'
@@ -116,6 +118,8 @@ class AssetsController < ApplicationController
     changeHistory.save
 
     asset.save
+
+    sendNotificationEmailsViaScheme(asset,'edit')
 
     deleteFields(fieldsToDelete,asset)
 
