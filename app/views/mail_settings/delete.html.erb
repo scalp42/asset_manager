@@ -1,0 +1,14 @@
+<div class="modal hide" id="myModal<%= mail.id %>" style="display: none;">
+          <div class="modal-header">
+            <button class="close" data-toggle="modal" href="#myModal<%= mail.id %>">×</button>
+            <h3>Delete Record</h3>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure?</p>
+          </div>
+          <div class="modal-footer">
+            <%= link_to "Yes", { :controller => "mail_settings",:action=>"delete", :mail_setting_id=>mail.id }, :id => 'mail' , :class => "btn btn-danger"  %>
+            <a data-toggle="modal" href="#myModal<%= mail.id %>" class="btn secondary">No</a>
+          </div>
+</div>
+<a class="btn" data-toggle="modal" href="#myModal<%= mail.id %>" >Delete</a>

@@ -1,0 +1,39 @@
+<div class="modal hide" id="myCreateMailServer" style="display: none;">
+  <div class="modal-header">
+    <button class="close" data-toggle="modal" href="#myCreateMailServer">×</button>
+    <h3 style="text-align: center;">Add Mail Server</h3>
+  </div>
+  <div class="modal-body" align="center">
+    <form method="post" class="well" action="/mail_settings/create" onsubmit="return $(this).validate()">
+      <input name="authenticity_token" type="hidden" value="token_value">
+      <table>
+        <tr>
+          <td><%=  text_field('name','name',:placeholder => "Name","data-validation" => "required") %></td>
+        </tr>
+        <tr>
+          <td><%=  text_field('description','description',:placeholder => "Description") %></td>
+        </tr>
+        <tr>
+          <td><%=  text_field('from_email','from_email',:placeholder => "From Email","data-validation" => "required validate_email") %></td>
+        </tr>
+        <tr>
+          <td><%=  text_field('server','server',:placeholder => "Mail Server","data-validation" => "required") %></td>
+        </tr>
+        <tr>
+          <td><%=  text_field('port','port',:placeholder => "Port",:value => 25,"data-validation" => "required") %></td>
+        </tr>
+        <tr>
+          <td><%=  text_field('username','username',:placeholder => "Username") %></td>
+        </tr>
+        <tr>
+          <td><%= password_field('password','password',:placeholder => "Password") %></td>
+        </tr>
+      </table>
+      <div class="modal-footer">
+        <%= submit_tag "Add" ,:class => 'btn btn-primary'%>
+        <a data-toggle="modal" href="#myCreateMailServer" class="btn secondary">No</a>
+      </div>
+    </form>
+  </div>
+</div>
+<a class="btn btn-primary" data-toggle="modal" href="#myCreateMailServer" >Add Mail Server</a>

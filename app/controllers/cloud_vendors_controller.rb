@@ -1,0 +1,2 @@
+class CloudVendorsController < ApplicationController
+end

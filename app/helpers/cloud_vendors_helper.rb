@@ -1,0 +1,2 @@
+module CloudVendorsHelper
+end
