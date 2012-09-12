@@ -20,6 +20,12 @@ namespace :bootstrap do
 
       end
 
+      desc "Add Cloud Vendor Types"
+      task :cloud_vendor_types => :environment do
+        CloudVendorType.create(:vendor_name => "Rackspace Cloud",:description => "")
+        CloudVendorType.create(:vendor_name => "Amazon EC2 Cloud",:description => "")
+      end
+
       desc "Run all bootstrapping tasks"
-      task :all => [:field_type]
+      task :all => [:field_type,:cloud_vendor_types]
 end
