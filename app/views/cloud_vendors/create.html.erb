@@ -1,0 +1,52 @@
+<script type="text/javascript">
+    function vendorType()
+    {
+        vendorType = document.getElementById('vendor_type_vendor_type').value
+        if(vendorType == 'rackspace')
+        {
+            document.getElementById('rackspace_div').style.display= 'block';
+            document.getElementById('amazon_div').style.display= 'none';
+        }
+        else if(vendorType == 'amazon')
+        {
+            document.getElementById('rackspace_div').style.display= 'block';
+            document.getElementById('amazon_div').style.display= 'none';
+        }
+
+    }
+</script>
+<div class="modal hide" id="myCreateVendor" style="display: none;">
+  <div class="modal-header">
+    <button class="close" data-toggle="modal" href="#myCreateVendor">×</button>
+    <h3 style="text-align: center;">Add Third Party Vendor</h3>
+  </div>
+  <div class="modal-body" align="center">
+    <form method="post" class="well" action="/cloud_vendors/create" onsubmit="return $(this).validate()">
+      <input name="authenticity_token" type="hidden" value="token_value">
+      <table>
+        <tr>
+          <td><%=  text_field('name','name',:placeholder => "Name","data-validation" => "required") %></td>
+        </tr>
+        <tr>
+          <td><%=  text_field('description','description',:placeholder => "Description") %></td>
+        </tr>
+        <tr>
+          <td>
+            <%= select("vendor_type","vendor_type",[['Rackspace','rackspace'],['Amazon EC2','amazon']], {:prompt => "Please Select"}, { :onchange => "vendorType()","data-validation" => "required" }) %>
+          </td>
+        </tr>
+      </table>
+
+        <%= render :template => 'cloud_vendors/rackspace' %>
+
+        <%= render :template => 'cloud_vendors/amazon' %>
+
+
+      <div class="modal-footer">
+        <%= submit_tag "Create" ,:class => 'btn btn-primary'%>
+        <a data-toggle="modal" href="#myCreateVendor" class="btn secondary">No</a>
+      </div>
+    </form>
+  </div>
+</div>
+<a class="btn btn-primary" data-toggle="modal" href="#myCreateVendor" >Add Vendor</a>

@@ -2,3 +2,37 @@
 <ul class="breadcrumb">
   <li><%= link_to "Cloud Vendors", :controller =>"cloud_vendors",:action =>"index" %></li>
 </ul>
+<%  if @vendorName != nil %>
+    <div class="alert alert-success">
+      Cloud Vendor <%= @vendorName %> Successfully <%= @vendorAction %>
+    </div>
+<% end %>
+<div align="right">
+  <%= render :template => 'cloud_vendors/create' %>
+</div>
+<table class="table table-hover">
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Cloud Vendor</th>
+    <th>Actions</th>
+  </tr>
+  <% @cloudVendors.each do |cloudVendor| %>
+      <tr style="background-color: white;">
+        <td style="text-align: center;">
+          <%= link_to cloudVendor.name, :controller => 'cloud_vendors', :action => 'view', :id => cloudVendor.id %>
+        </td>
+        <td style="text-align: center;">
+          <%= link_to cloudVendor.description, :controller => 'cloud_vendors', :action => 'view', :id => cloudVendor.id %>
+        </td>
+
+        <td style="text-align: center;">
+          <%= link_to CloudVendorType.find(cloudVendor.cloud_vendor_type).vendor_name, :controller => 'cloud_vendors', :action => 'view', :id => cloudVendor.id %>
+        </td>
+        <td style="text-align: center;">
+          <%= render :template => 'cloud_vendors/edit', :locals => {:cloudVendor => cloudVendor} %>
+          <%= render :template => 'cloud_vendors/delete', :locals => {:cloudVendor => cloudVendor} %>
+        </td>
+      </tr>
+  <% end %>
+</table>
