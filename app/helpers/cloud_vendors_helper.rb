@@ -12,4 +12,9 @@ module CloudVendorsHelper
     @cloudMenu = cloudMenu
   end
 
+  def vendorAlert(vendorName,vendorAction)
+    @vendorName = vendorName
+    @vendorAction = vendorAction
+  end
+
 end

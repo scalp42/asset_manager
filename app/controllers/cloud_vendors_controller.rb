@@ -22,6 +22,7 @@ class CloudVendorsController < ApplicationController
 
     if cloudVendor.save
       setSidebar(nil,nil,nil,nil,nil,nil,nil,nil,true)
+      vendorAlert(cloudVendor.name,"Created")
       @cloudVendors = CloudVendor.all
       render :template => 'cloud_vendors/index'
     end
@@ -32,6 +33,15 @@ class CloudVendorsController < ApplicationController
   end
 
   def test_connection
+     CloudVendor.find(params[:cloud_vendor_id])
+  end
 
+  def delete
+
+    CloudVendor.destroy(params[:cloud_vendor_id])
+    setSidebar(nil,nil,nil,nil,nil,nil,nil,nil,true)
+    vendorAlert('',"Deleted")
+    @cloudVendors = CloudVendor.all
+     render :template => 'cloud_vendors/index'
   end
 end

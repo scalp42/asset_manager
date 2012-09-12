@@ -1,0 +1,14 @@
+<div class="modal hide" id="myModal<%= cloudVendor.id %>" style="display: none;">
+          <div class="modal-header">
+            <button class="close" data-toggle="modal" href="#myModal<%= cloudVendor.id %>">×</button>
+            <h3>Delete Record</h3>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure?</p>
+          </div>
+          <div class="modal-footer">
+            <%= link_to "Yes", { :controller => "cloud_vendors",:action=>"delete", :cloud_vendor_id=>cloudVendor.id }, :id => 'cloudVendor' , :class => "btn btn-danger"  %>
+            <a data-toggle="modal" href="#myModal<%= cloudVendor.id %>" class="btn secondary">No</a>
+          </div>
+</div>
+<a class="btn" data-toggle="modal" href="#myModal<%= cloudVendor.id %>" >Delete</a>
