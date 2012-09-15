@@ -6,6 +6,7 @@ class Field
   key :field_type_id,  String
   key :wiki_enabled, Boolean
   key :locked, Boolean
+  key :vendor_type, ObjectId
 
   validates :field_type_id, :presence => true
   validates :name, :presence =>  true
