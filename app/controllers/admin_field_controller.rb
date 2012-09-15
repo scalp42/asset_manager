@@ -121,6 +121,12 @@ class AdminFieldController < ApplicationController
     setSidebar(nil,true,nil,nil,nil)
   end
 
+  def update_rs_asset_type_screen
+    if params[:field][:rs_fields] != ''
+
+    end
+  end
+
   def configure_child_field
     if params['value'].present?
       @field = Field.find(params['field_id']['field_id'])

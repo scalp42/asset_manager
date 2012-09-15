@@ -17,4 +17,17 @@ module CloudVendorsHelper
     @vendorAction = vendorAction
   end
 
+  def add_rs_fields(fields)
+    fields.each do |field|
+      if field != ''
+        case field
+          when 'flavor'
+            flavor = Field.new(:field_type_id => FieldType.first(:type_name => "Select Field") ,:description => 'Flavor',:name => 'Flavor')
+            if flavor.save
+
+            end
+        end
+      end
+    end
+  end
 end

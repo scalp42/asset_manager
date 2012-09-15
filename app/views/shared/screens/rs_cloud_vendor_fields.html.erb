@@ -1,1 +1,23 @@
-sdfds
+<div class="modal hide" id="myConfigureRSFields" style="display: none;">
+  <div class="modal-header">
+    <button class="close" data-toggle="modal" href="#myConfigureRSFields">×</button>
+    <h3>Add Rackspace Fields</h3>
+  </div>
+  <div class="modal-body" align="center">
+
+    <form method="get" class="well" action="/admin_field/update_rs_asset_type_screen" onsubmit="return $(this).validate()">
+      <table>
+        <tr>
+          <td> <%=  select("field", "rs_fields", [['Flavor','flavor'],['Size','size'],['Public IP','public_ip'],['Private IP','private_ip']], {},{:multiple => true,"data-validation" => "required"}) %> </td>
+          <%= hidden_field('asset_type', 'asset_type_id',:value=>asset.id) %>
+        </tr>
+      </table>
+      <div class="modal-footer">
+
+        <%= submit_tag "Add RS Fields" ,:class => 'btn btn-primary'%>
+        <a data-toggle="modal" href="#myConfigureRSFields" class="btn secondary">No</a>
+      </div>
+    </form>
+  </div>
+</div>
+<a class="btn btn-primary" data-toggle="modal" href="#myConfigureRSFields">Add Rackspace Fields</a>
