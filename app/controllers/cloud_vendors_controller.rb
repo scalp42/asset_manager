@@ -33,7 +33,22 @@ class CloudVendorsController < ApplicationController
   end
 
   def test_connection
-     CloudVendor.find(params[:cloud_vendor_id])
+    cloudVendor = CloudVendor.find(params[:id])
+
+    if CloudVendorType.find(cloudVendor.cloud_vendor_type).vendor_name == "Rackspace Cloud"
+      begin
+      cs = CloudServers::Connection.new(:username => cloudVendor.username, :api_key => cloudVendor.api_key)
+      vendorAlert(cloudVendor.name,"Connected")
+      rescue
+        vendorAlert(cloudVendor.name,"Could Not Connect")
+      end
+
+    end
+
+    setSidebar(nil,nil,nil,nil,nil,nil,nil,nil,true)
+
+    @cloudVendors = CloudVendor.all
+    render :template => 'cloud_vendors/index'
   end
 
   def delete
@@ -42,6 +57,6 @@ class CloudVendorsController < ApplicationController
     setSidebar(nil,nil,nil,nil,nil,nil,nil,nil,true)
     vendorAlert('',"Deleted")
     @cloudVendors = CloudVendor.all
-     render :template => 'cloud_vendors/index'
+    render :template => 'cloud_vendors/index'
   end
 end

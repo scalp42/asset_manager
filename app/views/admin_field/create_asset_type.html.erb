@@ -15,6 +15,9 @@
           <td>  <%= text_field("description","asset_type_description",:placeholder => "Description") %> </td>
         </tr>
         <tr>
+          <td>  <%= select("vendor","vendor_type_description",CloudVendorType.all.collect {|p| [ p.vendor_name, p.id ] },{:prompt => "None"}) %> </td>
+        </tr>
+        <tr>
           <td style="text-align: center;">
             <div class="fileupload fileupload-new" data-provides="fileupload">
               <div class="fileupload-new thumbnail"></div>

@@ -30,6 +30,7 @@
           <%= link_to CloudVendorType.find(cloudVendor.cloud_vendor_type).vendor_name, :controller => 'cloud_vendors', :action => 'view', :id => cloudVendor.id %>
         </td>
         <td style="text-align: center;">
+          <%= link_to "Test Connection", {:controller => 'cloud_vendors',:action => 'test_connection',:id => cloudVendor.id},:class => 'btn' %>
           <%= render :template => 'cloud_vendors/edit', :locals => {:cloudVendor => cloudVendor} %>
           <%= render :template => 'cloud_vendors/delete', :locals => {:cloudVendor => cloudVendor} %>
         </td>

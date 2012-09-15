@@ -69,6 +69,10 @@ class AdminFieldController < ApplicationController
       newAssetType = AssetType.new(:description => params[:description][:asset_type_description],:name => params[:name][:asset_type_name])
     end
 
+    if params[:vendor][:vendor_type_description] != ''
+      newAssetType.vendor = params[:vendor][:vendor_type_description]
+    end
+
     if newAssetType.save
       assetTypeReturn(params[:name][:asset_type_name] ,"Created")
       @asset_types = AssetType.all.entries

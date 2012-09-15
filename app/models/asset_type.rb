@@ -6,6 +6,8 @@ class AssetType
   key  :name, String
   key  :parent, String
 
+  key  :vendor, ObjectId
+
   many :asset_screen
 
   validates :name, :presence => true

@@ -10,6 +10,9 @@
 <% end %>
 <%= render :template => 'shared/screens/configure_asset_type_screen' , :locals => { :asset => @asset,:fieldsToBeAdded => @fieldToBeAdded} %>
 <div align="right">
+  <% if @asset.vendor != nil && CloudVendorType.find(@asset.vendor).vendor_name == "Rackspace Cloud" %>
+      <%= render :template => 'shared/screens/rs_cloud_vendor_fields' , :locals => { :asset => @asset} %>
+  <% end %>
   <a class="btn btn-primary" data-toggle="modal" href="#myCreateAssetFieldScreenModal">Add Field To Screen</a>
 </div>
 <table class="table table-hover">
