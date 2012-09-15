@@ -1,17 +1,24 @@
 <script type="text/javascript">
     function vendorType()
     {
-        vendorType = document.getElementById('vendor_type_vendor_type').value
-        if(vendorType == 'rackspace')
+
+        var select_list_field = document.getElementById('vendor_type_vendor_type');
+        var select_list_selected_index = select_list_field.selectedIndex;
+
+        var text = select_list_field.options[select_list_selected_index].text;
+        var value = select_list_field.value;
+
+        if(text == 'Rackspace Cloud')
         {
             document.getElementById('rackspace_div').style.display= 'block';
             document.getElementById('amazon_div').style.display= 'none';
         }
-        else if(vendorType == 'amazon')
+        else if(text == 'Amazon EC2 Cloud')
         {
-            document.getElementById('rackspace_div').style.display= 'block';
-            document.getElementById('amazon_div').style.display= 'none';
+            document.getElementById('rackspace_div').style.display= 'none';
+            document.getElementById('amazon_div').style.display= 'block';
         }
+
 
     }
 </script>
@@ -32,14 +39,14 @@
         </tr>
         <tr>
           <td>
-            <%= select("vendor_type","vendor_type",[['Rackspace','rackspace'],['Amazon EC2','amazon']], {:prompt => "Please Select"}, { :onchange => "vendorType()","data-validation" => "required" }) %>
+            <%= select("vendor_type","vendor_type",[['Rackspace Cloud','rackspace'],['Amazon EC2 Cloud','amazon']], {:prompt => "Please Select"}, { :onchange => "vendorType()","data-validation" => "required" }) %>
           </td>
         </tr>
       </table>
 
-        <%= render :template => 'cloud_vendors/rackspace' %>
+      <%= render :template => 'cloud_vendors/rackspace' %>
 
-        <%= render :template => 'cloud_vendors/amazon' %>
+      <%= render :template => 'cloud_vendors/amazon' %>
 
 
       <div class="modal-footer">

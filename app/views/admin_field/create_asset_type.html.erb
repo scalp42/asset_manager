@@ -1,4 +1,31 @@
 <div class="modal hide" id="myCreateAssetTypeModal" style="display: none;">
+  <script type="text/javascript">
+      function vendorType()
+      {
+          var select_list_field = document.getElementById('vendor_vendor_type_description');
+          var select_list_selected_index = select_list_field.selectedIndex;
+
+          var text = select_list_field.options[select_list_selected_index].text;
+          var value = select_list_field.value;
+
+          if(text == 'Rackspace Cloud')
+          {
+              document.getElementById('rackspace_row').style.display= 'block';
+              document.getElementById('amazon_row').style.display= 'none';
+          }
+          else if(text == 'Amazon EC2 Cloud')
+          {
+              document.getElementById('rackspace_row').style.display= 'none';
+              document.getElementById('amazon_row').style.display= 'block';
+          }
+          else
+          {
+              document.getElementById('rackspace_row').style.display= 'none';
+              document.getElementById('amazon_row').style.display= 'none';
+          }
+
+      }
+  </script>
   <div class="modal-header">
     <button class="close" data-toggle="modal" href="#myCreateAssetTypeModal">×</button>
     <h3>Create Asset Type</h3>
@@ -15,7 +42,13 @@
           <td>  <%= text_field("description","asset_type_description",:placeholder => "Description") %> </td>
         </tr>
         <tr>
-          <td>  <%= select("vendor","vendor_type_description",CloudVendorType.all.collect {|p| [ p.vendor_name, p.id ] },{:prompt => "None"}) %> </td>
+          <td>  <%= select("vendor","vendor_type_description",CloudVendorType.all.collect {|p| [ p.vendor_name, p.id ] },{:prompt => "None"},:onchange => "vendorType()") %> </td>
+        </tr>
+        <tr id="rackspace_row" style="display: none;">
+          <td>  <%= select("vendor","vendor_type_rs",CloudVendor.where(:cloud_vendor_type => CloudVendorType.first(:vendor_name => 'Rackspace Cloud').id).collect {|p| [ p.name, p.id ] },{:prompt => "None"}) %> </td>
+        </tr>
+        <tr id="amazon_row" style="display: none;">
+          <td>  <%= select("vendor","vendor_type_amazon",CloudVendor.where(:cloud_vendor_type => CloudVendorType.first(:vendor_name => 'Amazon EC2 Cloud').id).collect {|p| [ p.name, p.id ] },{:prompt => "None"}) %> </td>
         </tr>
         <tr>
           <td style="text-align: center;">

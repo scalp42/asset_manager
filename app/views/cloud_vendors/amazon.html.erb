@@ -1,4 +1,5 @@
 <div id="amazon_div" style="display: none;">
+  <table>
   <tr>
     <td><%=  text_field('amazon','username',:placeholder => "AWS Username") %></td>
   </tr>
@@ -6,4 +7,5 @@
     <td><%=  text_field('amazon','api_key',:placeholder => "API Key") %></td>
   </tr>
   <%= hidden_field('vendor','vendor',:value=>'amazon') %>
+      </table>
 </div>

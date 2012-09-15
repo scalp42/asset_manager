@@ -8,7 +8,7 @@
     <form method="get" class="well" action="/admin_field/update_rs_asset_type_screen" onsubmit="return $(this).validate()">
       <table>
         <tr>
-          <td> <%=  select("field", "rs_fields", [['Flavor','flavor'],['Size','size'],['Public IP','public_ip'],['Private IP','private_ip']], {},{:multiple => true,"data-validation" => "required"}) %> </td>
+          <td> <%=  select("field", "rs_fields", [['Flavor','flavor'],['Operating System','operating_system'],['Public IP','public_ip'],['Private IP','private_ip']], {},{:multiple => true,"data-validation" => "required"}) %> </td>
           <%= hidden_field('asset_type', 'asset_type_id',:value=>asset.id) %>
         </tr>
       </table>
