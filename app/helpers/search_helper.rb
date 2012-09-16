@@ -155,7 +155,6 @@ module SearchHelper
     end
 
     @assets = results.results
-
   end
 
   def accessibleAssetTypes
