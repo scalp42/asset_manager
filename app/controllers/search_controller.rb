@@ -47,9 +47,11 @@ class SearchController < ApplicationController
 
     @searchCriteria.fields = fields
 
-    createFilter(params,fields)
 
     @searchJson = @searchCriteria.to_json
+
+    createFilter(params,fields)
+
     search_elastic(@searchJson)
 
     @filters = Filter.all
