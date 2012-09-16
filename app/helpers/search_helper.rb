@@ -85,7 +85,11 @@ module SearchHelper
 
   def search_elastic(searchCriteria)
 
-    results = Tire.search 'assets' do
+    from = 0
+    if params[:page].present?
+      from = 25 * params[:page]
+    end
+    query = Tire.search('assets',{:page=>params[:page]|| 1, :per_page=>25, :size=>25, :from=>from})  do
       query do
         boolean do
           if searchCriteria.name != nil
@@ -154,7 +158,8 @@ module SearchHelper
       end
     end
 
-    @assets = results.results
+    @assets = query.results
+
   end
 
   def accessibleAssetTypes

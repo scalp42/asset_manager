@@ -66,3 +66,5 @@ gem 'hex_string'
 gem 'wikicloth'
 
 gem 'cloudservers'
+
+#gem 'will_paginate'

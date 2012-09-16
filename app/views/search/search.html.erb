@@ -8,7 +8,7 @@
     <th>Description</th>
     <th>Actions</th>
   </tr>
-  <% @assets.each do |asset| %>
+  <% for asset in @assets %>
       <% if can_view(asset.asset_type_id) %>
           <tr style="background-color: white;">
             <td style="text-align: center;">
