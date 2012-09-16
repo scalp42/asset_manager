@@ -1,85 +1,93 @@
 module SearchHelper
 
-  def createFilter(params,fields)
+  def createFilter(params,search_criteria_json)
+
+    #if params[:filter_value] != nil and params[:filter_value] != ''
+    #  filter = Filter.new(:available => true,:name => params[:filter_value],:user_id => current_user.id)
+    #
+    #  if params[:asset_type][:asset_type_id] != nil and params[:asset_type][:asset_type_id].count > 1
+    #    params[:asset_type][:asset_type_id].each do |asset_type|
+    #      if asset_type != ''
+    #        filter.filter_detail.build(:asset_type_id => asset_type,:filter_id=> filter.id )
+    #      end
+    #    end
+    #  end
+    #
+    #  if params[:name][:name] != ''
+    #    filter.filter_detail.build(:name => params[:name][:name],:filter_id=> filter.id )
+    #  end
+    #
+    #  if params[:description][:description] != ''
+    #    filter.filter_detail.build(:description => params[:description][:description],:filter_id=> filter.id )
+    #  end
+    #
+    #  fields.each do |key, value|
+    #    field = Field.find(key)
+    #    if(FieldType.find(field.field_type_id)).use_option?
+    #      value.each do |option|
+    #        if option != ''
+    #          filter.filter_detail.build(:field_option_id => option,:field_id => key,:filter_id=> filter.id )
+    #        end
+    #      end
+    #    elsif (FieldType.find(field.field_type_id)).use_date?
+    #      filter.filter_details.build(:date_search => value,:field_id => key,:filter_id=> filter.id )
+    #    elsif (FieldType.find(field.field_type_id)).use_text?
+    #      filter.filter_detail.build(:text_search => value,:field_id => key,:filter_id=> filter.id )
+    #    end
+    #  end
+    #
+    #  filter.save
+    #end
 
     if params[:filter_value] != nil and params[:filter_value] != ''
       filter = Filter.new(:available => true,:name => params[:filter_value],:user_id => current_user.id)
-
-      if params[:asset_type][:asset_type_id] != nil and params[:asset_type][:asset_type_id].count > 1
-        params[:asset_type][:asset_type_id].each do |asset_type|
-          if asset_type != ''
-            filter.filter_detail.build(:asset_type_id => asset_type,:filter_id=> filter.id )
-          end
-        end
-      end
-
-      if params[:name][:name] != ''
-        filter.filter_detail.build(:name => params[:name][:name],:filter_id=> filter.id )
-      end
-
-      if params[:description][:description] != ''
-        filter.filter_detail.build(:description => params[:description][:description],:filter_id=> filter.id )
-      end
-
-      fields.each do |key, value|
-        field = Field.find(key)
-        if(FieldType.find(field.field_type_id)).use_option?
-          value.each do |option|
-            if option != ''
-              filter.filter_detail.build(:field_option_id => option,:field_id => key,:filter_id=> filter.id )
-            end
-          end
-        elsif (FieldType.find(field.field_type_id)).use_date?
-          filter.filter_details.build(:date_search => value,:field_id => key,:filter_id=> filter.id )
-        elsif (FieldType.find(field.field_type_id)).use_text?
-          filter.filter_detail.build(:text_search => value,:field_id => key,:filter_id=> filter.id )
-        end
-      end
-
+      filter.search_criteria = search_criteria_json
       filter.save
     end
+
 
   end
 
   def buildSearchCriteria(filter_id)
 
     filter = Filter.find(filter_id)
-    @searchCriteria = SearchCriteria.new
-
-    asset_types = Array.new
-    fields = Hash.new
-    filter.filter_detail.each do |filterDetail|
-      if filterDetail.asset_type_id != nil
-        asset_types.push(filterDetail.asset_type_id)
-      end
-
-      if filterDetail.name != nil
-        @searchCriteria.name = filterDetails.name
-      end
-
-      if filterDetail.description != nil
-        @searchCriteria.description = filterDetails.description
-      end
-
-      if filterDetail.field_id != nil and FieldType.find(Field.find(filterDetail.field_id).field_type_id).use_option?
-        if fields.has_key?(filterDetail.field_id)
-          options = fields[filterDetail.field_id]
-          options.push(filterDetail.field_option_id)
-          fields[filterDetail.field_id] = options
-        else
-          options = Array.new
-          options.push(filterDetail.field_option_id)
-          fields[filterDetail.field_id] = options
-        end
-      elsif filterDetail.field_id != nil and FieldType.find(Field.find(filterDetail.field_id).field_type_id).use_text?
-        fields[filterDetail.field_id] = filterDetail.text_search
-      elsif filterDetail.field_id != nil and FieldType.find(Field.find(filterDetail.field_id).field_type_id).use_date?
-        fields[filterDetail.field_id] = filterDetail.date_search
-      end
-
-    end
-    @searchCriteria.asset_types = asset_types
-    @searchCriteria.fields = fields
+    @searchJson = filter.search_criteria
+    #@searchCriteria = SearchCriteria.new
+    #
+    #asset_types = Array.new
+    #fields = Hash.new
+    #filter.filter_detail.each do |filterDetail|
+    #  if filterDetail.asset_type_id != nil
+    #    asset_types.push(filterDetail.asset_type_id)
+    #  end
+    #
+    #  if filterDetail.name != nil
+    #    @searchCriteria.name = filterDetails.name
+    #  end
+    #
+    #  if filterDetail.description != nil
+    #    @searchCriteria.description = filterDetails.description
+    #  end
+    #
+    #  if filterDetail.field_id != nil and FieldType.find(Field.find(filterDetail.field_id).field_type_id).use_option?
+    #    if fields.has_key?(filterDetail.field_id)
+    #      options = fields[filterDetail.field_id]
+    #      options.push(filterDetail.field_option_id)
+    #      fields[filterDetail.field_id] = options
+    #    else
+    #      options = Array.new
+    #      options.push(filterDetail.field_option_id)
+    #      fields[filterDetail.field_id] = options
+    #    end
+    #  elsif filterDetail.field_id != nil and FieldType.find(Field.find(filterDetail.field_id).field_type_id).use_text?
+    #    fields[filterDetail.field_id] = filterDetail.text_search
+    #  elsif filterDetail.field_id != nil and FieldType.find(Field.find(filterDetail.field_id).field_type_id).use_date?
+    #    fields[filterDetail.field_id] = filterDetail.date_search
+    #  end
+    #
+    #end
+    #@searchCriteria.asset_types = asset_types
+    #@searchCriteria.fields = fields
 
   end
 

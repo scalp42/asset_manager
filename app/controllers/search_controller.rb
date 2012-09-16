@@ -50,7 +50,7 @@ class SearchController < ApplicationController
 
     @searchJson = @searchCriteria.to_json
 
-    createFilter(params,fields)
+    createFilter(params,@searchJson)
 
     search_elastic(@searchJson)
 
@@ -78,7 +78,7 @@ class SearchController < ApplicationController
   def load_filter
     buildSearchCriteria(params[:filter_id])
 
-    search_elastic(@searchCriteria)
+    search_elastic(@searchJson)
 
     @filters = Filter.all
 
