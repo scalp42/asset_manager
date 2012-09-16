@@ -17,6 +17,12 @@ module CloudVendorsHelper
     @vendorAction = vendorAction
   end
 
+  def vendorErrorAlert(vendorErrorName,vendorErrorAction)
+    @vendorErrorName = vendorErrorName
+    @vendorErrorAction = vendorErrorAction
+  end
+
+
   def add_rs_fields(fields,asset)
     cloudVendor = CloudVendor.find(asset.vendor_creds)
     cs = CloudServers::Connection.new(:username => cloudVendor.username, :api_key => cloudVendor.api_key)
