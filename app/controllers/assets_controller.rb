@@ -181,26 +181,29 @@ class AssetsController < ApplicationController
                   asset.field_value.build(:asset_id => asset.id,
                                           :text_value => serverDetails.addresses[:public][0],
                                           :field_name_value => {field.name.downcase.gsub(" ","_") => serverDetails.addresses[:public] } ,
-                                          :field_id => field.id)
+                                          :field_id => field.id,
+                                          :locked => true)
                 when 'RS Private IP'
                   asset.field_value.build(:asset_id => asset.id,
                                           :text_value => serverDetails.addresses[:private][0],
                                           :field_name_value => {field.name.downcase.gsub(" ","_") => serverDetails.addresses[:private] } ,
-                                          :field_id => field.id)
+                                          :field_id => field.id,
+                                          :locked => true)
                 when 'RS Flavor'
                   option = field.field_option.detect {|c|c.option == cs.get_flavor(serverDetails.flavorId).name}
                   asset.field_value.build(:asset_id => asset.id,
-                                          :field_option_id => option.id,
+                                          :field_option_id => option.id.to_s,
                                           :field_id => field.id,
                                           :field_name_value => {field.name.downcase.gsub(" ","_") =>option.id} ,
-                                          :text_value =>option.option)
-                when 'RS Operating System'
-                  option = field.field_option.detect {|c|c.option == cs.get_image(serverDetails.imageId).name}
-                  asset.field_value.build(:asset_id => asset.id,
-                                          :field_option_id => option.id,
-                                          :field_id => field.id,
-                                          :field_name_value => {field.name.downcase.gsub(" ","_") =>option.id} ,
-                                          :text_value =>option.option)
+                                          :text_value => option.option,
+                                          :locked => true)
+                #when 'RS Operating System'
+                #  option = field.field_option.detect {|c|c.option == cs.get_image(serverDetails.imageId).name}
+                #  asset.field_value.build(:asset_id => asset.id,
+                #                          :field_option_id => option.id.to_s,
+                #                          :field_id => field.id,
+                #                          :field_name_value => {field.name.downcase.gsub(" ","_") =>option.id} ,
+                #                          :text_value =>option.option)
               end
             end
 
@@ -222,14 +225,14 @@ class AssetsController < ApplicationController
                   asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.field_name_value = {field.name.downcase.gsub(" ","_") => serverDetails.addresses[:private][0] } }
                 when 'RS Flavor'
                   option = field.field_option.detect {|c|c.option == cs.get_flavor(serverDetails.flavorId).name}
-                  asset.field_value.select { |b| b.field_id == field.id }.each { |b|  b.field_option_id = option.id}
+                  asset.field_value.select { |b| b.field_id == field.id }.each { |b|  b.field_option_id = option.id.to_s}
                   asset.field_value.select {|b| b.field_id == field.id}.each {|b| b.text_value = option.option}
-                  asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.field_name_value = {field.name.downcase.gsub(" ","_") => option.id } }
-                when 'RS Operating System'
-                  option = field.field_option.detect {|c|c.option == cs.get_image(serverDetails.imageId).name}
-                  asset.field_value.select { |b| b.field_id == field.id }.each { |b|  b.field_option_id = option.id}
-                  asset.field_value.select {|b| b.field_id == field.id}.each {|b| b.text_value = option.option}
-                  asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.field_name_value = {field.name.downcase.gsub(" ","_") => option.id } }
+                  asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.field_name_value = {field.name.downcase.gsub(" ","_") => option.id.to_s } }
+                #when 'RS Operating System'
+                #  option = field.field_option.detect {|c|c.option == cs.get_image(serverDetails.imageId).name}
+                #  asset.field_value.select { |b| b.field_id == field.id }.each { |b|  b.field_option_id = option.id.to_s}
+                #  asset.field_value.select {|b| b.field_id == field.id}.each {|b| b.text_value = option.option}
+                #  asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.field_name_value = {field.name.downcase.gsub(" ","_") => option.id.to_s } }
               end
             end
 

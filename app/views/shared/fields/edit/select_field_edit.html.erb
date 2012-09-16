@@ -2,7 +2,11 @@
   <label class="control-label" style="color: #ffffff;"><%= field_name %></label>
   <div class="controls">
     <% if required %>
-        <%=  select(field_name,field_name, Field.find(field_id).field_option.collect {|p| [ p.option, p.id ] },{:prompt => "Please Select",:selected => value.field_option_id},"data-validation" => "required") %>
+        <% if value.locked %>
+            <%=  select(field_name,field_name, Field.find(field_id).field_option.collect {|p| [ p.option, p.id ] },{:prompt => "Please Select",:selected => value.field_option_id},{"data-validation" => "required",:disabled => true}) %>
+        <% else %>
+            <%=  select(field_name,field_name, Field.find(field_id).field_option.collect {|p| [ p.option, p.id ] },{:prompt => "Please Select",:selected => value.field_option_id},"data-validation" => "required") %>
+        <% end %>
     <% else %>
         <%=  select(field_name,field_name, Field.find(field_id).field_option.collect {|p| [ p.option, p.id ] },{:prompt => "Please Select",:selected => value.field_option_id}) %>
     <% end %>

@@ -16,7 +16,7 @@ class AdminFieldController < ApplicationController
   end
 
   def create
-    newField = Field.new(:field_type_id => params[:field_type][:field_type_id] ,:description => params[:description][:field_type_description],:name => params[:name][:field_type_name],:locked => false)
+    newField = Field.new(:field_type_id => params[:field_type][:field_type_id] ,:description => params[:description][:field_type_description],:name => params[:name][:field_type_name])
 
     if newField.save
       setSidebar(nil,true,nil,nil,nil)
