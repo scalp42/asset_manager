@@ -83,33 +83,37 @@ module SearchHelper
 
   end
 
-  def search_elastic(searchCriteria)
+  def search_elastic(searchCriteriaJson, page = 0)
+
+    searchCriteria = JSON.parse(searchCriteriaJson)
 
     from = 0
-    if params[:page].present?
-      from = 25 * params[:page]
+
+    if page > 0
+      from = 25 * page
     end
-    query = Tire.search('assets',{:page=>params[:page]|| 1, :per_page=>25, :size=>25, :from=>from})  do
+
+    query = Tire.search('assets',{:page => page , :per_page=>25, :size=>25, :from=>from})  do
       query do
         boolean do
-          if searchCriteria.name != nil
+          if searchCriteria['name'] != nil
             must do
               boolean do
-                should { string 'name:'+searchCriteria.name    }
+                should { string 'name:'+searchCriteria['name']    }
               end
             end
           end
-          if searchCriteria.description != nil
+          if searchCriteria['description'] != nil
             must do
               boolean do
-                should {string 'description:'+searchCriteria.description  }
+                should {string 'description:'+searchCriteria['description']  }
               end
             end
           end
-          if searchCriteria.asset_types != nil
+          if searchCriteria['asset_types'] != nil
             must do
               boolean do
-                searchCriteria.asset_types.each do |asset_type|
+                searchCriteria['asset_types'].each do |asset_type|
                   if asset_type != ''
                     should { string 'asset_type_id:'+asset_type }
                   end
@@ -117,7 +121,7 @@ module SearchHelper
               end
             end
           end
-          searchCriteria.fields.each_pair do |k,v|
+          searchCriteria['fields'].each_pair do |k,v|
             if FieldType.find(Field.find(BSON::ObjectId.from_string(k.to_s)).field_type_id).use_option
               if v.size > 1 and v[1] != ''
                 must do
@@ -144,7 +148,7 @@ module SearchHelper
             end
           end
         end
-        searchCriteria.fields.each_pair do |k,v|
+        searchCriteria['fields'].each_pair do |k,v|
           if FieldType.find(Field.find(k).field_type_id).use_text
             if v != nil and v != ''
               string 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+v

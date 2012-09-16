@@ -49,12 +49,28 @@ class SearchController < ApplicationController
 
     createFilter(params,fields)
 
-    search_elastic(@searchCriteria)
+    @searchJson = @searchCriteria.to_json
+    search_elastic(@searchJson)
 
     @filters = Filter.all
 
     @showCreateFilter = true
 
+  end
+
+  def next_page
+
+    object =  params[:search]
+
+    @searchJson = object.gsub("&quot;","\"")
+    search_elastic(@searchJson,Integer(params[:page]))
+
+
+    @filters = Filter.all
+
+        @showCreateFilter = true
+
+    render :template => 'search/search'
   end
 
   def load_filter

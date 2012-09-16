@@ -249,4 +249,12 @@ class AssetsController < ApplicationController
     redirect_to :controller => 'admin_field', :action => 'list_asset_types'
   end
 
+  def test
+    object =  params[:data]
+
+    search =   JSON.parse(object.gsub("&quot;","\""))
+
+    puts search[:name]
+    puts 'etersdsdfsewrdfs'
+  end
 end
