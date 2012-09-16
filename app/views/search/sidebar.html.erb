@@ -1,5 +1,7 @@
 <% content_for :sidebar do %>
-    <% search = JSON.parse(@searchJson) %>
+    <% if @searchJson != nil %>
+        <% search = JSON.parse(@searchJson) %>
+    <% end %>
     <div class="sidebar-nav">
       <div class="well" style="padding: 8px 0;">
         <ul class="nav nav-list">

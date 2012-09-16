@@ -2,13 +2,12 @@ class SearchController < ApplicationController
   include SearchHelper
 
   def index
-
-    @filters = Filter.all
+    @filters = Filter.where(:user_id => current_user.id)
   end
 
   def search
 
-    @searchCriteria = SearchCriteria.new
+    searchCriteria = SearchCriteria.new
 
     assetTypesArr = Array.new
 
@@ -18,15 +17,15 @@ class SearchController < ApplicationController
           assetTypesArr.push(asset_type_id)
         end
       end
-      @searchCriteria.asset_types = assetTypesArr
+      searchCriteria.asset_types = assetTypesArr
     end
 
     if params[:name][:name] != ''
-      @searchCriteria.name = (params[:name][:name])
+      searchCriteria.name = (params[:name][:name])
     end
 
     if params[:description][:description] != ''
-      @searchCriteria.description = (params[:description][:description])
+      searchCriteria.description = (params[:description][:description])
     end
 
     fields = Hash.new
@@ -45,22 +44,21 @@ class SearchController < ApplicationController
       end
     end
 
-    @searchCriteria.fields = fields
+    searchCriteria.fields = fields
 
-
-    @searchJson = @searchCriteria.to_json
+    @searchJson = searchCriteria.to_json
 
     createFilter(params,@searchJson)
 
     search_elastic(@searchJson)
 
-    @filters = Filter.all
+    @filters = Filter.where(:user_id => current_user.id)
 
     @showCreateFilter = true
 
   end
 
-  def next_page
+  def paginate
 
     object =  params[:search]
 
@@ -68,9 +66,9 @@ class SearchController < ApplicationController
     search_elastic(@searchJson,Integer(params[:page]))
 
 
-    @filters = Filter.all
+    @filters = Filter.where(:user_id => current_user.id)
 
-        @showCreateFilter = true
+    @showCreateFilter = true
 
     render :template => 'search/search'
   end
@@ -80,7 +78,7 @@ class SearchController < ApplicationController
 
     search_elastic(@searchJson)
 
-    @filters = Filter.all
+    @filters = Filter.where(:user_id => current_user.id)
 
     @showCreateFilter = true
 
