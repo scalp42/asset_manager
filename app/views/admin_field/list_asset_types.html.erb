@@ -37,7 +37,9 @@
         </td>
         <td style="text-align: center;">
           <%= render :template => 'shared/edit_asset_type', :locals => {:asset_type => asset_type} %>
-          <%= link_to 'Fetch Servers',{ :controller => 'assets' ,:action => 'pull_all_vendor_assets' ,:vendor_creds => asset_type.vendor_creds,:asset_type_id => asset_type.id},:class => 'btn'  %>
+          <% if asset_type.vendor != nil %>
+              <%= link_to 'Fetch Servers',{ :controller => 'assets' ,:action => 'pull_all_vendor_assets' ,:vendor_creds => asset_type.vendor_creds,:asset_type_id => asset_type.id},:class => 'btn'  %>
+          <% end %>
           <%= link_to 'Configure',{ :action => 'list_asset_screen_fields' ,:id => asset_type.id},:class => 'btn'  %>
           <%= render :template => 'shared/delete_asset_type' ,:locals => { :asset_type => asset_type }%>
         </td>
