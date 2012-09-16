@@ -1,0 +1,64 @@
+<%= render :template => 'shared/navbar' ,:locals => {:assetsNav => false, :searchNav => false,:adminNav => true}%>
+<ul class="breadcrumb">
+  <li><%= link_to "Mail", :controller =>"mail_settings",:action =>"index" %></li>
+</ul>
+<% if @mail == nil %>
+    <div align="right">
+      <%= render :template => 'mail_settings/create' %>
+    </div>
+<% else %>
+    <table class="table table-hover">>
+      <thead>
+      <tr style="background-color: white;">
+        <th width="30%">
+          Name
+        </th>
+        <th>
+          Details
+        </th>
+        <th width="10%">
+          Operations
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr style="background-color: white;">
+        <td style="text-align: center;">
+          <strong><%= @mail.name %></strong>
+          <div class="description"><%= @mail.description %></div>
+        </td>
+        <td style="text-align: center;">
+          <ul class="item-details" style="text-align: center;">
+
+            <dl style="text-align: center;">
+              <dt>From:</dt>
+              <dd><%= @mail.from_email %></dd>
+            </dl>
+
+            <dl>
+              <dt>Host:</dt>
+              <dd><%= @mail.server %></dd>
+            </dl>
+
+            <dl>
+              <dt>SMTP Port:</dt>
+              <dd><%= @mail.port %></dd>
+            </dl>
+            <dl>
+              <dt>Username:</dt>
+              <dd><%= @mail.username %></dd>
+            </dl>
+
+          </ul>
+        </td>
+        <td style="text-align: center;">
+          <ul class="operations-list">
+            <%= render :template => 'mail_settings/edit', :locals => {:mail => @mail} %>
+            <%= render :template => 'mail_settings/delete', :locals => {:mail => @mail} %>
+            <%= render :template => 'mail_settings/send_test_email' %>
+          </ul>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+<% end %>

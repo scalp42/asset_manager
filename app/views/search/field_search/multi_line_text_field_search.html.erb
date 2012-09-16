@@ -1,0 +1,5 @@
+<% if value != nil %>
+    <%=  text_area(field.name,field.name, {  :rows => 5,:class => "span10",:value => value}) %>
+<% else %>
+    <%=  text_area(field.name,field.name, {:rows => 5,:class => "span10"}) %>
+<% end %>

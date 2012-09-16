@@ -6,13 +6,20 @@
   <form method="post" class="well" action="edit_field" onsubmit="return $(this).validate()">
     <div class="modal-body">
       <input name="authenticity_token" type="hidden" value="token_value">
-      <table>
+      <table width="100%">
         <tr>
-          <td><%=  text_field("field_name","field_name",:value => value,:placeholder => "Name","data-validation"=>"required") %></td>
+          <td style="text-align: center;"><%=  text_field("field_name","field_name",:value => field.name,:placeholder => "Name","data-validation"=>"required") %></td>
         </tr>
         <tr>
-          <td><%=  text_field("field_description","field_description",:value => description,:placeholder => "Description") %></td>
+          <td style="text-align: center;"><%=  text_field("field_description","field_description",:value => field.description,:placeholder => "Description") %></td>
         </tr>
+        <% if FieldType.find(BSON::ObjectId.from_string(field.field_type_id)).allows_wiki %>
+        <tr>
+          <td style="text-align: center;">
+              <%= select('allows_wiki','allows_wiki',[ ["Text",false], ["Wiki",true]],:selected=> field.wiki_enabled ) %>
+          </td>
+        </tr>
+            <% end %>
       </table>
       <%= hidden_field('field_id', 'field_id',:value=>field.id) %>
     </div>
@@ -22,4 +29,4 @@
     </div>
   </form>
 </div>
-<a class="btn" data-toggle="modal" href="#myEditFieldModal<%= field.id %>" >Edit</a>
+<a class="btn"z data-toggle="modal" href="#myEditFieldModal<%= field.id %>" >Edit</a>

@@ -37,11 +37,20 @@ module GroupHelper
     users = Array.new
 
     Group.find(group_id).membership.each do |membership|
-      puts 'sdkljfklsdjfljslkjdf'
       users.push(User.find(membership.user_id))
     end
 
-    puts users.inspect
     return users
   end
+
+
+  def isUserMemberOf(user,group_id)
+
+    if Group.where(:id => group_id,'membership.user_id'=>user.id).count > 0
+      return true
+    end
+
+    return false
+  end
+
 end

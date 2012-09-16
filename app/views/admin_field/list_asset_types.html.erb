@@ -16,6 +16,7 @@
   <tr>
     <th>Name</th>
     <th>Description</th>
+    <th>Vendor</th>
     <th>Actions</th>
   </tr>
   <% @asset_types.each do |asset_type| %>
@@ -28,7 +29,17 @@
           <%= asset_type.description %>
         </td>
         <td style="text-align: center;">
+          <% if asset_type.vendor != nil %>
+              <%= CloudVendorType.find(asset_type.vendor).vendor_name %>
+          <% else %>
+              Local
+          <% end %>
+        </td>
+        <td style="text-align: center;">
           <%= render :template => 'shared/edit_asset_type', :locals => {:asset_type => asset_type} %>
+          <% if asset_type.vendor != nil %>
+              <%= link_to 'Fetch Servers',{ :controller => 'assets' ,:action => 'pull_all_vendor_assets' ,:vendor_creds => asset_type.vendor_creds,:asset_type_id => asset_type.id},:class => 'btn'  %>
+          <% end %>
           <%= link_to 'Configure',{ :action => 'list_asset_screen_fields' ,:id => asset_type.id},:class => 'btn'  %>
           <%= render :template => 'shared/delete_asset_type' ,:locals => { :asset_type => asset_type }%>
         </td>

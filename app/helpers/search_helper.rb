@@ -87,13 +87,21 @@ module SearchHelper
 
     results = Tire.search 'assets' do
       query do
-        if searchCriteria.name != nil
-          string 'name:'+searchCriteria.name
-        end
-        if searchCriteria.description != nil
-          string 'description:'+searchCriteria.description
-        end
         boolean do
+          if searchCriteria.name != nil
+            must do
+              boolean do
+                should { string 'name:'+searchCriteria.name    }
+              end
+            end
+          end
+          if searchCriteria.description != nil
+            must do
+              boolean do
+                should {string 'description:'+searchCriteria.description  }
+              end
+            end
+          end
           if searchCriteria.asset_types != nil
             must do
               boolean do
@@ -149,4 +157,17 @@ module SearchHelper
     @assets = results.results
 
   end
+
+  def accessibleAssetTypes
+    assetTypes = Array.new
+
+    AssetType.all.each do |assetType|
+      if can_view(assetType.id.to_s)
+        assetTypes.push(assetType)
+      end
+    end
+
+    return assetTypes
+  end
+
 end

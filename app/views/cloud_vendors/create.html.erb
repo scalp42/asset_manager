@@ -1,0 +1,59 @@
+<script type="text/javascript">
+    function vendorType()
+    {
+
+        var select_list_field = document.getElementById('vendor_type_vendor_type');
+        var select_list_selected_index = select_list_field.selectedIndex;
+
+        var text = select_list_field.options[select_list_selected_index].text;
+        var value = select_list_field.value;
+
+        if(text == 'Rackspace Cloud')
+        {
+            document.getElementById('rackspace_div').style.display= 'block';
+            document.getElementById('amazon_div').style.display= 'none';
+        }
+        else if(text == 'Amazon EC2 Cloud')
+        {
+            document.getElementById('rackspace_div').style.display= 'none';
+            document.getElementById('amazon_div').style.display= 'block';
+        }
+
+
+    }
+</script>
+<div class="modal hide" id="myCreateVendor" style="display: none;">
+  <div class="modal-header">
+    <button class="close" data-toggle="modal" href="#myCreateVendor">×</button>
+    <h3 style="text-align: center;">Add Third Party Vendor</h3>
+  </div>
+  <div class="modal-body" align="center">
+    <form method="post" class="well" action="/cloud_vendors/create" onsubmit="return $(this).validate()">
+      <input name="authenticity_token" type="hidden" value="token_value">
+      <table>
+        <tr>
+          <td><%=  text_field('name','name',:placeholder => "Name","data-validation" => "required") %></td>
+        </tr>
+        <tr>
+          <td><%=  text_field('description','description',:placeholder => "Description") %></td>
+        </tr>
+        <tr>
+          <td>
+            <%= select("vendor_type","vendor_type",[['Rackspace Cloud','rackspace'],['Amazon EC2 Cloud','amazon']], {:prompt => "Please Select"}, { :onchange => "vendorType()","data-validation" => "required" }) %>
+          </td>
+        </tr>
+      </table>
+
+      <%= render :template => 'cloud_vendors/rackspace' %>
+
+      <%= render :template => 'cloud_vendors/amazon' %>
+
+
+      <div class="modal-footer">
+        <%= submit_tag "Create" ,:class => 'btn btn-primary'%>
+        <a data-toggle="modal" href="#myCreateVendor" class="btn secondary">No</a>
+      </div>
+    </form>
+  </div>
+</div>
+<a class="btn btn-primary" data-toggle="modal" href="#myCreateVendor" >Add Vendor</a>

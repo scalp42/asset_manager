@@ -1,0 +1,14 @@
+<div class="modal hide" id="myModal<%= security.id %>" style="display: none;">
+  <div class="modal-header">
+    <button class="close" data-toggle="modal" href="#myModal<%= security.id %>">×</button>
+    <h3>Delete Record</h3>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure?</p>
+  </div>
+  <div class="modal-footer">
+    <%= link_to "Yes", { :controller => "security",:action=>"delete", :security_id=>security.id }, :id => 'field' , :class => "btn btn-danger"  %>
+    <a data-toggle="modal" href="#myModal<%= security.id %>" class="btn secondary">No</a>
+  </div>
+</div>
+<a class="btn" data-toggle="modal" href="#myModal<%= security.id %>" >Delete</a>

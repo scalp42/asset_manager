@@ -1,0 +1,40 @@
+<div class="modal hide" id="myEditMailServer" style="display: none;">
+  <div class="modal-header">
+    <button class="close" data-toggle="modal" href="#myEditMailServer">×</button>
+    <h3 style="text-align: center;">Edit Mail Server</h3>
+  </div>
+  <div class="modal-body" align="center">
+    <form method="post" class="well" action="/mail_settings/edit" onsubmit="return $(this).validate()">
+      <input name="authenticity_token" type="hidden" value="token_value">
+      <table>
+        <tr>
+          <td><%=  text_field('name','name',:placeholder => "Name",:value => mail.name, "data-validation" => "required") %></td>
+        </tr>
+        <tr>
+          <td><%=  text_field('description','description',:placeholder => "Description",:value => mail.description) %></td>
+        </tr>
+        <tr>
+          <td><%=  text_field('from_email','from_email',:placeholder => "From Email",:value => mail.from_email,"data-validation" => "required validate_email") %></td>
+        </tr>
+        <tr>
+          <td><%=  text_field('server','server',:placeholder => "Mail Server",:value => mail.server,"data-validation" => "required") %></td>
+        </tr>
+        <tr>
+          <td><%=  text_field('port','port',:placeholder => "Port",:value => 25,:value => mail.port,"data-validation" => "required") %></td>
+        </tr>
+        <tr>
+          <td><%=  text_field('username','username',:placeholder => "Username",:value => mail.username) %></td>
+        </tr>
+        <tr>
+          <td><%= password_field('password','password',:placeholder => "Password",:value => mail.password) %></td>
+        </tr>
+      </table>
+      <%= hidden_field('mail', 'mail_id',:value=>mail.id) %>
+      <div class="modal-footer">
+        <%= submit_tag "Edit" ,:class => 'btn btn-primary'%>
+        <a data-toggle="modal" href="#myEditMailServer" class="btn secondary">No</a>
+      </div>
+    </form>
+  </div>
+</div>
+<a class="btn" data-toggle="modal" href="#myEditMailServer" >Edit Mail Server</a>

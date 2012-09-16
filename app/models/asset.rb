@@ -13,6 +13,8 @@ class Asset
   key :created_at, Time
   key :created_by, ObjectId
 
+  key :vendor_server_id, Integer
+
   many :field_value
 
   has_many :field_value

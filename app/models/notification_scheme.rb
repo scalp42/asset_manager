@@ -4,7 +4,10 @@ class NotificationScheme
   key :name, String
   key :description, String
 
-  key :email_addresses, Array
-  key :users, Array
+  key :asset_type_id, ObjectId
+
+  key :create_email, Hash
+  key :edit_email, Hash
+  key :delete_email, Hash
 
 end

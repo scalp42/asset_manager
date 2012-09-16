@@ -1,6 +1,7 @@
 class AdminFieldController < ApplicationController
   layout 'admin'
   include AdminFieldHelper
+  include CloudVendorsHelper
 
   def list_fields
     @fields = Field.all.entries
@@ -36,6 +37,8 @@ class AdminFieldController < ApplicationController
       field.description = params['field_description']['field_description']
     end
 
+    field.wiki_enabled = params['allows_wiki']['allows_wiki']
+
     if field.save
       setSidebar(nil,true,nil,nil,nil)
       setFieldReturn(field.name,"Edited")
@@ -65,6 +68,18 @@ class AdminFieldController < ApplicationController
       newAssetType = AssetType.new(:description => params[:description][:asset_type_description],:name => params[:name][:asset_type_name],:photo => params[:asset_image][:asset_image])
     else
       newAssetType = AssetType.new(:description => params[:description][:asset_type_description],:name => params[:name][:asset_type_name])
+    end
+
+    if params[:vendor][:vendor_type_description] != ''
+      newAssetType.vendor = params[:vendor][:vendor_type_description]
+
+      if params[:vendor][:vendor_type_rs] != ''
+        newAssetType.vendor_creds = params[:vendor][:vendor_type_rs]
+      end
+
+      if params[:vendor][:vendor_type_amazon] != ''
+        newAssetType.vendor_creds = params[:vendor][:vendor_type_amazon]
+      end
     end
 
     if newAssetType.save
@@ -113,6 +128,19 @@ class AdminFieldController < ApplicationController
       @field = Field.find(params['id'])
     end
     setSidebar(nil,true,nil,nil,nil)
+  end
+
+  def update_rs_asset_type_screen
+    asset = AssetType.find(BSON::ObjectId.from_string(params[:asset_type][:asset_type_id]))
+
+    if params[:field][:rs_fields] != ''
+      add_rs_fields(params[:field][:rs_fields],asset)
+      assetScreenReturn("RS Fields",asset.name,"Added")
+    end
+
+    listAssetScreens(asset.id)
+    setSidebar(true,nil,nil,nil,nil)
+    render :template => 'admin_field/list_asset_screen_fields'
   end
 
   def configure_child_field

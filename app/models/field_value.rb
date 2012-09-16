@@ -11,6 +11,7 @@ class FieldValue
   key :parent_field_option_id, ObjectId
   key :field_option_id, Array
   key :field_name_value, Hash
+  key :locked, Boolean
 
   has_attachment :photo, {:styles => { :thumb => '100x100>' },  :storage => 'gridfs' }
   validates_attachment_presence :photo

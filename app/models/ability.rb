@@ -1,28 +1,78 @@
 class Ability
   include CanCan::Ability
+  include GroupHelper
 
-  def initialize(user)
-    # Define abilities for the passed in user here. For example:
-    #
-    #   user ||= User.new # guest user (not logged in)
-    #   if user.admin?
-    #     can :manage, :all
-    #   else
-    #     can :read, :all
-    #   end
-    #
-    # The first argument to `can` is the action you are giving the user permission to do.
-    # If you pass :manage it will apply to every action. Other common actions here are
-    # :read, :create, :update and :destroy.
-    #
-    # The second argument is the resource the user can perform the action on. If you pass
-    # :all it will apply to every resource. Otherwise pass a Ruby class of the resource.
-    #
-    # The third argument is an optional hash of conditions to further filter the objects.
-    # For example, here the user can only update published articles.
-    #
-    #   can :update, Article, :published => true
-    #
-    # See the wiki for details: https://github.com/ryanb/cancan/wiki/Defining-Abilities
+  def initialize(user,asset_type_id)
+    user ||= User.new
+
+    securities = SecurityScheme.where(:asset_type_id => BSON::ObjectId.from_string(asset_type_id)).all
+
+    if securities.size == 0
+      can :manage, Asset, :asset_type_id => asset_type_id
+    else
+      securities.each do |security|
+        security.create_restrictions[:users].each do |privilegedUsers|
+          privilegedUsers.each do |privilegedUser|
+            if privilegedUser == user.id.to_s
+              can :create, Asset, :asset_type_id => security.asset_type_id.to_s
+            end
+          end
+        end
+        security.create_restrictions[:groups].each do |privilegedGroups|
+          privilegedGroups.each do |privilegedGroup|
+            if isUserMemberOf(user,privilegedGroup)
+              can :create, Asset, :asset_type_id => security.asset_type_id.to_s
+            end
+          end
+        end
+
+        security.edit_restrictions[:users].each do |privilegedUsers|
+          privilegedUsers.each do |privilegedUser|
+            if privilegedUser == user.id.to_s
+              can :update, Asset, :asset_type_id => security.asset_type_id.to_s
+            end
+          end
+        end
+        security.edit_restrictions[:groups].each do |privilegedGroups|
+          privilegedGroups.each do |privilegedGroup|
+            if isUserMemberOf(user,privilegedGroup)
+              can :create, Asset, :asset_type_id => security.asset_type_id.to_s
+            end
+          end
+        end
+
+        security.view_restrictions[:users].each do |privilegedUsers|
+          privilegedUsers.each do |privilegedUser|
+            if privilegedUser == user.id.to_s
+              can :read, Asset, :asset_type_id => security.asset_type_id.to_s
+            end
+          end
+        end
+        security.view_restrictions[:groups].each do |privilegedGroups|
+          privilegedGroups.each do |privilegedGroup|
+            if isUserMemberOf(user,privilegedGroup)
+              can :create, Asset, :asset_type_id => security.asset_type_id.to_s
+            end
+          end
+        end
+
+        security.delete_restrictions[:users].each do |privilegedUsers|
+          privilegedUsers.each do |privilegedUser|
+            if privilegedUser == user.id.to_s
+              can :destroy, Asset, :asset_type_id => security.asset_type_id.to_s
+            end
+          end
+        end
+        security.delete_restrictions[:groups].each do |privilegedGroups|
+          privilegedGroups.each do |privilegedGroup|
+            if isUserMemberOf(user,privilegedGroup)
+              can :create, Asset, :asset_type_id => security.asset_type_id.to_s
+            end
+          end
+        end
+
+      end
+    end
   end
+
 end

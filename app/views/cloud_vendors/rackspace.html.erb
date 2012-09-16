@@ -1,0 +1,11 @@
+<div id="rackspace_div" style="display: none;">
+  <table>
+    <tr>
+      <td><%=  text_field('rackspace','username',:placeholder => "Username","data-validation" => "required") %></td>
+    </tr>
+    <tr>
+      <td><%=  text_field('rackspace','api_key',:placeholder => "API Key","data-validation" => "required") %></td>
+    </tr>
+  </table>
+  <%= hidden_field('vendor','vendor',:value=>'rackspace') %>
+</div>

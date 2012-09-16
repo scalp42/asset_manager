@@ -1,4 +1,5 @@
 module AssetsHelper
+  include EncryptDecryptPasswordHelper
 
   def setCascadeValue(params,fieldObj,asset)
     if params[fieldObj.name.gsub(" ","_")+"_child"][fieldObj.name.gsub(" ","_")+"_child"] != "null"
@@ -45,7 +46,6 @@ module AssetsHelper
                                 :field_option_id => options,
                                 :field_name_value => {fieldObj.name.downcase.gsub(" ","_") =>options } ,
                                 :field_id => fieldObj.id)
-      # :text_value => fieldObj.field_option.find(BSON::ObjectId.from_string(params[fieldObj.name][fieldObj.name])).option)
       when 'text'
         asset.field_value.build(:asset_id => asset.id,
                                 :text_value => params[fieldObj.name][fieldObj.name],
@@ -59,6 +59,11 @@ module AssetsHelper
       when 'file_upload'
         asset.field_value.build(:asset_id => asset.id,
                                 :photo => params[fieldObj.name][fieldObj.name],
+                                :field_id => fieldObj.id)
+      when 'password'
+        asset.field_value.build(:asset_id => asset.id,
+                                :password_value => encryptPassword(params[fieldObj.name][fieldObj.name]),
+                                :field_name_value => {fieldObj.name.downcase.gsub(" ","_") =>encryptPassword(params[fieldObj.name][fieldObj.name]) } ,
                                 :field_id => fieldObj.id)
       else
         puts "field not found"
@@ -88,6 +93,9 @@ module AssetsHelper
         asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.field_name_value = {fieldObj.name.downcase.gsub(" ","_")=> params[fieldObj.name][fieldObj.name] } }
       when 'file_upload'
         asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.photo = params[fieldObj.name][fieldObj.name] }
+      when 'password'
+        asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.field_name_value = {fieldObj.name.downcase.gsub(" ","_")=> encryptPassword(params[fieldObj.name][fieldObj.name])} }
+        asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.password_value = encryptPassword(params[fieldObj.name][fieldObj.name])}
       else
         puts "field not found"
     end
@@ -112,16 +120,56 @@ module AssetsHelper
     counter = 0
 
     ChangeHistory.sort(:changed_at.desc).each do |changeHistoryItem|
-     unless changeHistoryAsset.has_key? changeHistoryItem.asset_id
-       changeHistoryAsset[changeHistoryItem.asset_id] = changeHistoryItem.id
-       counter += 1
-     end
-       if counter > 10
-         break
-       end
+      unless changeHistoryAsset.has_key? changeHistoryItem.asset_id
+        changeHistoryAsset[changeHistoryItem.asset_id] = changeHistoryItem.id
+        counter += 1
+      end
+      if counter > 10
+        break
+      end
     end
 
     return changeHistoryAsset
+
+  end
+
+  def sendNotificationEmailsViaScheme(asset,action)
+    notification = NotificationScheme.first(:asset_type_id => BSON::ObjectId.from_string(asset.asset_type_id))
+
+    addresses = Array.new
+
+    if notification
+      case action
+        when 'create'
+          notification.create_email['users'][0].each do |user|
+            if user != ''
+              addresses.push(User.find(BSON::ObjectId.from_string(user)).email)
+            end
+          end
+          addresses.each do |address|
+            AssetMailer.create(asset,address).deliver
+          end
+        when 'edit'
+          notification.edit_email['users'][0].each do |user|
+            if user != ''
+              addresses.push(User.find(BSON::ObjectId.from_string(user)).email)
+            end
+          end
+          addresses.each do |address|
+            AssetMailer.edit(asset,address).deliver
+          end
+        when 'delete'
+          notification.delete_email['users'][0].each do |user|
+            if user != ''
+              addresses.push(User.find(BSON::ObjectId.from_string(user)).email)
+            end
+          end
+          addresses.each do |address|
+            AssetMailer.delete(asset,address).deliver
+          end
+      end
+    end
+
 
   end
 

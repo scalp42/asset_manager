@@ -9,18 +9,23 @@
     <th>Actions</th>
   </tr>
   <% @assets.each do |asset| %>
-      <tr style="background-color: white;">
-        <td style="text-align: center;">
-          <%= asset.name %>
-        </td>
-        <td style="text-align: center;">
-          <%= asset.description %>
-        </td>
-        <td style="text-align: center;">
-          <%= link_to 'Edit',{ :controller => 'assets', :action => 'edit', :id => asset.id},:class => 'btn' %>
-          <%= link_to 'View',{ :controller => 'assets', :action => 'view', :id => asset.id},:class => 'btn' %>
-          <%= link_to 'Delete',{ :controller => 'assets', :action => 'delete', :asset_id => asset.id},:class => 'btn' %>
-        </td>
-      </tr>
+      <% if can_view(asset.asset_type_id) %>
+          <tr style="background-color: white;">
+            <td style="text-align: center;">
+              <%= asset.name %>
+            </td>
+            <td style="text-align: center;">
+              <%= asset.description %>
+            </td>
+            <td style="text-align: center;">
+              <% if can_edit(asset.asset_type_id) %>
+                  <%= link_to 'Edit',{ :controller => 'assets', :action => 'edit', :id => asset.id},:class => 'btn' %>
+              <% end %>
+              <% if can_destroy(asset.asset_type_id) %>
+                  <%= link_to 'Delete',{ :controller => 'assets', :action => 'delete', :asset_id => asset.id},:class => 'btn' %>
+              <% end %>
+            </td>
+          </tr>
+      <% end %>
   <% end %>
 </table>
