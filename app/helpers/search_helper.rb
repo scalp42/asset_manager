@@ -154,8 +154,6 @@ module SearchHelper
       end
     end
 
-    puts results.inspect
-    puts 'jhfkjsdkfjksldjfkljsdklfjksldjfklsdj'
     @assets = results.results
 
   end

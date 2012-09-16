@@ -1,5 +1,5 @@
 <% if value != nil %>
-    <%=  select(field.name,field.name,field.field_option.collect {|p| [ p.option, p.id ] },{:selected  => value},{:multiple => true}) %>
+    <%=  text_area(field.name,field.name, {  :rows => 5,:class => "span10",:value => value}) %>
 <% else %>
-    <%=  select(field.name,field.name,field.field_option.collect {|p| [ p.option, p.id ] },{},{:multiple => true}) %>
+    <%=  text_area(field.name,field.name, {:rows => 5,:class => "span10"}) %>
 <% end %>
