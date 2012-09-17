@@ -228,12 +228,16 @@ class AssetsController < ApplicationController
                   asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.text_value = serverDetails.addresses[:private][0] }
                   asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.field_name_value = {field.name.downcase.gsub(" ","_") => serverDetails.addresses[:private][0] } }
                 when 'RS Flavor'
-                  option = field.field_option.detect {|c|c.option == cs.get_flavor(serverDetails.flavorId).name}
+                  option = field.field_option.detect {|c|c.option == serverDetails.flavor.name}
                   asset.field_value.select { |b| b.field_id == field.id }.each { |b|  b.field_option_id = option.id.to_s}
                   asset.field_value.select {|b| b.field_id == field.id}.each {|b| b.text_value = option.option}
                   asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.field_name_value = {field.name.downcase.gsub(" ","_") => option.id.to_s } }
                 when 'RS Operating System'
-                  option = field.field_option.detect {|c|c.option == cs.get_image(serverDetails.imageId).name}
+                  option = field.field_option.detect {|c|c.option == serverDetails.image.name}
+                  if option == nil
+                    create_field_option(field,serverDetails.image.name)
+                    option = field.field_option.detect {|c|c.option == serverDetails.image.name}
+                  end
                   asset.field_value.select { |b| b.field_id == field.id }.each { |b|  b.field_option_id = option.id.to_s}
                   asset.field_value.select {|b| b.field_id == field.id}.each {|b| b.text_value = option.option}
                   asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.field_name_value = {field.name.downcase.gsub(" ","_") => option.id.to_s } }
