@@ -1,5 +1,6 @@
 class AssetsController < ApplicationController
   include AssetsHelper
+  include AdminFieldHelper
   include EncryptDecryptPasswordHelper
 
   respond_to :html, :xml, :json
@@ -190,23 +191,26 @@ class AssetsController < ApplicationController
                                           :field_id => field.id,
                                           :locked => true)
                 when 'RS Flavor'
-                  option = field.field_option.detect {|c|c.option == cs.get_flavor(serverDetails.flavorId).name}
+                  option = field.field_option.detect {|c|c.option == serverDetails.flavor.name}
                   asset.field_value.build(:asset_id => asset.id,
                                           :field_option_id => option.id.to_s,
                                           :field_id => field.id,
                                           :field_name_value => {field.name.downcase.gsub(" ","_") =>option.id} ,
                                           :text_value => option.option,
                                           :locked => true)
-                #when 'RS Operating System'
-                #  option = field.field_option.detect {|c|c.option == cs.get_image(serverDetails.imageId).name}
-                #  asset.field_value.build(:asset_id => asset.id,
-                #                          :field_option_id => option.id.to_s,
-                #                          :field_id => field.id,
-                #                          :field_name_value => {field.name.downcase.gsub(" ","_") =>option.id} ,
-                #                          :text_value =>option.option)
+                when 'RS Operating System'
+                  option = field.field_option.detect {|c|c.option == serverDetails.image.name}
+                  if option == nil
+                    create_field_option(field,serverDetails.image.name)
+                    option = field.field_option.detect {|c|c.option == serverDetails.image.name}
+                  end
+                    asset.field_value.build(:asset_id => asset.id,
+                                            :field_option_id => option.id.to_s,
+                                            :field_id => field.id,
+                                            :field_name_value => {field.name.downcase.gsub(" ","_") =>option.id} ,
+                                            :text_value =>option.option)
               end
             end
-
             asset.save
           else
             asset = Asset.first(:asset_vendor_id => server[:id])
@@ -228,11 +232,11 @@ class AssetsController < ApplicationController
                   asset.field_value.select { |b| b.field_id == field.id }.each { |b|  b.field_option_id = option.id.to_s}
                   asset.field_value.select {|b| b.field_id == field.id}.each {|b| b.text_value = option.option}
                   asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.field_name_value = {field.name.downcase.gsub(" ","_") => option.id.to_s } }
-                #when 'RS Operating System'
-                #  option = field.field_option.detect {|c|c.option == cs.get_image(serverDetails.imageId).name}
-                #  asset.field_value.select { |b| b.field_id == field.id }.each { |b|  b.field_option_id = option.id.to_s}
-                #  asset.field_value.select {|b| b.field_id == field.id}.each {|b| b.text_value = option.option}
-                #  asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.field_name_value = {field.name.downcase.gsub(" ","_") => option.id.to_s } }
+                when 'RS Operating System'
+                  option = field.field_option.detect {|c|c.option == cs.get_image(serverDetails.imageId).name}
+                  asset.field_value.select { |b| b.field_id == field.id }.each { |b|  b.field_option_id = option.id.to_s}
+                  asset.field_value.select {|b| b.field_id == field.id}.each {|b| b.text_value = option.option}
+                  asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.field_name_value = {field.name.downcase.gsub(" ","_") => option.id.to_s } }
               end
             end
 
@@ -240,8 +244,9 @@ class AssetsController < ApplicationController
           end
         end
 
-      rescue
-
+      rescue Exception => e
+        puts e.message
+        puts e.backtrace.inspect
       end
 
     end
@@ -249,12 +254,4 @@ class AssetsController < ApplicationController
     redirect_to :controller => 'admin_field', :action => 'list_asset_types'
   end
 
-  def test
-    object =  params[:data]
-
-    search =   JSON.parse(object.gsub("&quot;","\""))
-
-    puts search[:name]
-    puts 'etersdsdfsewrdfs'
-  end
 end

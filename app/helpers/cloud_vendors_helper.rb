@@ -43,7 +43,9 @@ module CloudVendorsHelper
             if Field.where(:name => 'RS Operating System').count == 0
               image = Field.create(:field_type_id => FieldType.first(:type_name => "Select Field").id ,:description => 'RS Operating System',:name => 'RS Operating System',:vendor_type => cloudVendor.cloud_vendor_type,:locked => true)
               cs.images.each do |image_rs|
-                image.field_option.build(:option => image_rs[:name],:field_id => image.id)
+                if !image_rs[:serverId].present? and !image_rs[:created].present?
+                  image.field_option.build(:option => image_rs[:name],:field_id => image.id)
+                end
               end
               image.save
               asset.asset_screen.build(:field_id => image.id.to_s ,:asset_id => asset.id,:required => true,:vendor_type => cloudVendor.cloud_vendor_type)
