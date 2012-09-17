@@ -72,45 +72,45 @@ class AssetsController < ApplicationController
 
   def update
 
-    asset = Asset.find(params[:asset][:asset_id])
+    @asset = Asset.find(params[:asset][:asset_id])
 
-    changeHistory = ChangeHistory.new(:asset_id => asset.id,:asset_type_id => asset.asset_type_id,:changed_by => current_user.id)
+    changeHistory = ChangeHistory.new(:asset_id => @asset.id,:asset_type_id => @asset.asset_type_id,:changed_by => current_user.id)
 
-    if asset.name != params[:name][:name]
-      changeHistory.change_history_detail.build(:string_previous_value => asset.name,:string_new_value => params[:name][:name])
+    if @asset.name != params[:name][:name]
+      changeHistory.change_history_detail.build(:string_previous_value => @asset.name,:string_new_value => params[:name][:name])
     end
-    asset.name = params[:name][:name]
+    @asset.name = params[:name][:name]
 
     if params[:description][:description] != nil
-      asset.description = params[:description][:description]
+      @asset.description = params[:description][:description]
     else
-      asset.description = nil
+      @asset.description = nil
     end
 
-    if asset.description != params[:description][:description]
-      changeHistory.change_history_detail.build(:string_previous_value => asset.description,:string_new_value => params[:description][:description])
+    if @asset.description != params[:description][:description]
+      changeHistory.change_history_detail.build(:string_previous_value => @asset.description,:string_new_value => params[:description][:description])
     end
 
     fieldsToDelete = Array.new
 
-    AssetType.find(asset.asset_type_id).asset_screen.each do |field|
+    AssetType.find(@asset.asset_type_id).asset_screen.each do |field|
       fieldObj = Field.find(field.field_id)
       createField = true
       if params[fieldObj.name][fieldObj.name] != nil and params[fieldObj.name][fieldObj.name]  != ''
-        asset.field_value.each do |fieldValue|
+        @asset.field_value.each do |fieldValue|
           if fieldObj.id == fieldValue.field_id
             createField = false
-            updateFieldValue(params,fieldObj,fieldValue,asset)
+            updateFieldValue(params,fieldObj,fieldValue,@asset)
           end
         end
         if createField
-          setFieldValue(params,fieldObj,asset)
+          setFieldValue(params,fieldObj,@asset)
         end
       elsif params[fieldObj.name.gsub(" ","_")+"_parent"] != nil and params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] != ""
-        updateCascadeValue(params,fieldObj,asset)
-      elsif params[fieldObj.name.gsub(" ","_")+"_parent"] != nil and params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] == "" and  asset.field_value.detect {|c|c.field_id == fieldObj.id} != nil
+        updateCascadeValue(params,fieldObj,@asset)
+      elsif params[fieldObj.name.gsub(" ","_")+"_parent"] != nil and params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] == "" and  @asset.field_value.detect {|c|c.field_id == fieldObj.id} != nil
         fieldsToDelete.push(fieldObj.id)
-      elsif params[fieldObj.name][fieldObj.name]  == '' and  asset.field_value.detect {|c|c.field_id == fieldObj.id} != nil
+      elsif params[fieldObj.name][fieldObj.name]  == '' and  @asset.field_value.detect {|c|c.field_id == fieldObj.id} != nil
         fieldsToDelete.push(fieldObj.id)
       end
     end
@@ -118,17 +118,15 @@ class AssetsController < ApplicationController
     changeHistory.changed_at = DateTime.now
     changeHistory.save
 
-    asset.save
+    @asset.save
 
-    sendNotificationEmailsViaScheme(asset,'edit')
+    sendNotificationEmailsViaScheme(@asset,'edit')
 
-    deleteFields(fieldsToDelete,asset)
+    deleteFields(fieldsToDelete,@asset)
 
-    assetAlert(asset.name,"Updated")
+    assetAlert(@asset.name,"Updated")
 
-    @assets = Asset.all
-
-    render :template => 'assets/index'
+    render :template => 'assets/view'
   end
 
   def view
