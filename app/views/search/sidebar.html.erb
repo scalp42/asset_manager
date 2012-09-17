@@ -14,11 +14,11 @@
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="tab1">
+                <% if @showCreateFilter %>
+                    <%= render :template => 'search/create_filter' %>
+                <% end %>
                 <form method="post" action="/search/search">
                   <input name="authenticity_token" type="hidden" value="token_value">
-                  <% if @showCreateFilter %>
-                      <%= render :template => 'search/create_filter' %>
-                  <% end %>
                   <div style="text-align: right;">
                     <%= submit_tag "Search" ,:class => 'btn btn-primary' %>
                   </div>

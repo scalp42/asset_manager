@@ -48,8 +48,6 @@ class SearchController < ApplicationController
 
     @searchJson = searchCriteria.to_json
 
-    createFilter(params,@searchJson)
-
     search_elastic(@searchJson)
 
     @filters = Filter.where(:user_id => current_user.id)
@@ -73,6 +71,23 @@ class SearchController < ApplicationController
     render :template => 'search/search'
   end
 
+  def create_filter
+
+    searchObj =  params[:search][:search_json]
+
+    @searchJson = searchObj.gsub("&quot;","\"")
+
+    createFilter(params,@searchJson)
+
+    search_elastic(@searchJson)
+
+    @filters = Filter.where(:user_id => current_user.id)
+
+    @showCreateFilter = true
+
+    render :template => 'search/search'
+  end
+
   def load_filter
     buildSearchCriteria(params[:filter_id])
 
@@ -87,9 +102,12 @@ class SearchController < ApplicationController
   end
 
   def delete_filter
+    @filters = Filter.where(:user_id => current_user.id)
+
     if Filter.delete(BSON::ObjectId.from_string(params['filter_id']))
-      redirect_to :back
     end
+
+    render :template => 'search/index'
   end
 
 end
