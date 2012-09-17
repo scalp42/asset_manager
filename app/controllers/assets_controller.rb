@@ -208,7 +208,8 @@ class AssetsController < ApplicationController
                                             :field_option_id => option.id.to_s,
                                             :field_id => field.id,
                                             :field_name_value => {field.name.downcase.gsub(" ","_") =>option.id} ,
-                                            :text_value =>option.option)
+                                            :text_value =>option.option,
+                                            :locked => true)
               end
             end
             asset.save
