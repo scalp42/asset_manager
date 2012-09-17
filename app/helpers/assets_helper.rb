@@ -173,4 +173,97 @@ module AssetsHelper
 
   end
 
+  def create_update_vendor_assets(params)
+    cloud_vendor = CloudVendor.find(params[:vendor_creds])
+
+    if CloudVendorType.find(cloud_vendor.cloud_vendor_type).vendor_name == "Rackspace Cloud"
+         begin
+           cs = CloudServers::Connection.new(:username => cloud_vendor.username, :api_key => cloud_vendor.api_key)
+           cs.servers.each do |server|
+             if Asset.where(:asset_vendor_id => server[:id]).count == 0
+               asset = Asset.create(:name => server[:name],:asset_type_id =>params[:asset_type_id],:asset_vendor_id => server[:id],:created_by => current_user.id ,:created_at => DateTime.now )
+               serverDetails = cs.server(server[:id])
+
+               Field.where(:vendor_type => cloud_vendor.cloud_vendor_type).each do |field|
+
+                 case field.name
+                   when 'RS Public IP'
+                     asset.field_value.build(:asset_id => asset.id,
+                                             :text_value => serverDetails.addresses[:public][0],
+                                             :field_name_value => {field.name.downcase.gsub(" ","_") => serverDetails.addresses[:public] } ,
+                                             :field_id => field.id,
+                                             :locked => true)
+                   when 'RS Private IP'
+                     asset.field_value.build(:asset_id => asset.id,
+                                             :text_value => serverDetails.addresses[:private][0],
+                                             :field_name_value => {field.name.downcase.gsub(" ","_") => serverDetails.addresses[:private] } ,
+                                             :field_id => field.id,
+                                             :locked => true)
+                   when 'RS Flavor'
+                     option = field.field_option.detect {|c|c.option == serverDetails.flavor.name}
+                     asset.field_value.build(:asset_id => asset.id,
+                                             :field_option_id => option.id.to_s,
+                                             :field_id => field.id,
+                                             :field_name_value => {field.name.downcase.gsub(" ","_") =>option.id} ,
+                                             :text_value => option.option,
+                                             :locked => true)
+                   when 'RS Operating System'
+                     option = field.field_option.detect {|c|c.option == serverDetails.image.name}
+                     if option == nil
+                       create_field_option(field,serverDetails.image.name)
+                       option = field.field_option.detect {|c|c.option == serverDetails.image.name}
+                     end
+                       asset.field_value.build(:asset_id => asset.id,
+                                               :field_option_id => option.id.to_s,
+                                               :field_id => field.id,
+                                               :field_name_value => {field.name.downcase.gsub(" ","_") =>option.id} ,
+                                               :text_value =>option.option,
+                                               :locked => true)
+                 end
+               end
+               asset.save
+             else
+               asset = Asset.first(:asset_vendor_id => server[:id])
+               asset.name = server[:name]
+
+               serverDetails = cs.server(server[:id])
+
+               Field.where(:vendor_type => cloud_vendor.cloud_vendor_type).each do |field|
+
+                 case field.name
+                   when 'RS Public IP'
+                     asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.text_value = serverDetails.addresses[:public][0] }
+                     asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.field_name_value = {field.name.downcase.gsub(" ","_") => serverDetails.addresses[:public][0] } }
+                   when 'RS Private IP'
+                     asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.text_value = serverDetails.addresses[:private][0] }
+                     asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.field_name_value = {field.name.downcase.gsub(" ","_") => serverDetails.addresses[:private][0] } }
+                   when 'RS Flavor'
+                     option = field.field_option.detect {|c|c.option == serverDetails.flavor.name}
+                     asset.field_value.select { |b| b.field_id == field.id }.each { |b|  b.field_option_id = option.id.to_s}
+                     asset.field_value.select {|b| b.field_id == field.id}.each {|b| b.text_value = option.option}
+                     asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.field_name_value = {field.name.downcase.gsub(" ","_") => option.id.to_s } }
+                   when 'RS Operating System'
+                     option = field.field_option.detect {|c|c.option == serverDetails.image.name}
+                     if option == nil
+                       create_field_option(field,serverDetails.image.name)
+                       option = field.field_option.detect {|c|c.option == serverDetails.image.name}
+                     end
+                     asset.field_value.select { |b| b.field_id == field.id }.each { |b|  b.field_option_id = option.id.to_s}
+                     asset.field_value.select {|b| b.field_id == field.id}.each {|b| b.text_value = option.option}
+                     asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.field_name_value = {field.name.downcase.gsub(" ","_") => option.id.to_s } }
+                 end
+               end
+
+               asset.save
+             end
+           end
+
+         rescue Exception => e
+           puts e.message
+           puts e.backtrace.inspect
+         end
+
+       end
+  end
+
 end
