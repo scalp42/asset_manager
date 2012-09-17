@@ -49,29 +49,12 @@ module AdminFieldHelper
       fields.push(Field.find(assetScreen.field_id).name)
     end
 
-    #vendor_fields = Array.new
-    #@asset.asset_screen.each do |assetScreen|
-    #  if Field.find(assetScreen.field_id).vendor_type == @asset.vendor
-    #    vendor_fields.push(Field.find(assetScreen.field_id).name)
-    #  end
-    #end
-
     @fieldToBeAdded = Array.new
     Field.all.each do |field|
       if(!fields.include?(field.name))
         @fieldToBeAdded.push(field)
       end
     end
-
-    #@vendorFieldToBeAdded
-    #if @asset.vendor != nil
-    #  Field.where(:vendor_type => @asset.vendor).each do |field|
-    #     if !vendor_fields.include?(field.name)
-    #       @vendorFieldToBeAdded.push(field);
-    #     end
-    #  end
-    #end
-
   end
 
   def setSidebar(assetsMenu,fieldsMenu,usersMenu,indexMenu,notificationMenu)
