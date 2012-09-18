@@ -181,7 +181,7 @@ module AssetsHelper
            cs = CloudServers::Connection.new(:username => cloud_vendor.username, :api_key => cloud_vendor.api_key)
            cs.servers.each do |server|
              if Asset.where(:asset_vendor_id => server[:id]).count == 0
-               asset = Asset.create(:name => server[:name],:asset_type_id =>params[:asset_type_id],:asset_vendor_id => server[:id],:created_by => current_user.id ,:created_at => DateTime.now )
+               asset = Asset.create(:asset_name => server[:name],:asset_type_id =>params[:asset_type_id],:asset_vendor_id => server[:id],:created_by => current_user.id ,:created_at => DateTime.now )
                serverDetails = cs.server(server[:id])
 
                Field.where(:vendor_type => cloud_vendor.cloud_vendor_type).each do |field|
@@ -224,7 +224,7 @@ module AssetsHelper
                asset.save
              else
                asset = Asset.first(:asset_vendor_id => server[:id])
-               asset.name = server[:name]
+               asset.asset_name = server[:name]
 
                serverDetails = cs.server(server[:id])
 
