@@ -1,11 +1,16 @@
 <%= render :template => 'shared/navbar' ,:locals => {:assetsNav => false, :searchNav => true,:adminNav => false}%>
 
 <%= render :template => 'search/sidebar'  %>
-
+<%= render :template => 'search/custom_columns' %>
 <table class="table table-hover table-bordered">
   <tr>
     <th>Name</th>
     <th>Description</th>
+    <% SearchColumn.first(:user_id => current_user.id).search_columns.each do |search| %>
+        <% if search != '' %>
+            <th><%=  Field.find(BSON::ObjectId.from_string(search)).name %> </th>
+        <% end %>
+    <% end %>
     <th>Actions</th>
   </tr>
   <% for asset in @assets %>
@@ -25,6 +30,14 @@
                 <td style="text-align: center;">
                   <%= asset.description %>
                 </td>
+            <% end %>
+            <% SearchColumn.first(:user_id => current_user.id).search_columns.each do |search| %>
+                <% if search != '' %>
+                    <td style="text-align: center;">
+                      <%= render :template => 'search/field_column_display/'+FieldType.find(Field.find(BSON::ObjectId.from_string(search)).field_type_id).type_name.downcase.gsub(' ','_')+'_column_display' ,
+                                 :locals => { :value => asset.field_value.detect {|c|c.field_id == search}} %>
+                    </td>
+                <% end %>
             <% end %>
             <td style="text-align: center;">
               <div class="btn-group">

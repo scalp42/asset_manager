@@ -110,4 +110,25 @@ class SearchController < ApplicationController
     render :template => 'search/index'
   end
 
+  def update_search_columns
+    search_column = SearchColumn.first_or_create(:user_id => current_user.id)
+
+    search_column.search_columns = params[:custom_columns][:custom_columns]
+
+    if search_column.save
+
+      searchObj =  params[:search][:search_json]
+
+      @searchJson = searchObj.gsub("&quot;","\"")
+
+      search_elastic(@searchJson)
+
+      @filters = Filter.where(:user_id => current_user.id)
+
+      @showCreateFilter = true
+
+      render :template => 'search/search'
+    end
+  end
+
 end
