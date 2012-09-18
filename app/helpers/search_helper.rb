@@ -34,14 +34,14 @@ module SearchHelper
           if searchCriteria['name'] != nil
             must do
               boolean do
-                should { string 'name:'+searchCriteria['name']    }
+                should { string 'name~'+searchCriteria['name']+'*'    }
               end
             end
           end
           if searchCriteria['description'] != nil
             must do
               boolean do
-                should {string 'description:'+searchCriteria['description']  }
+                should {string 'description~'+searchCriteria['description']+'*'  }
               end
             end
           end
@@ -86,7 +86,7 @@ module SearchHelper
         searchCriteria['fields'].each_pair do |k,v|
           if FieldType.find(Field.find(k).field_type_id).use_text
             if v != nil and v != ''
-              string 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+v
+              string 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_")+'~'+v+'*'
             end
             #elsif FieldType.find(Field.find(k).field_type_id).use_date
             #  date 'field_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+v
