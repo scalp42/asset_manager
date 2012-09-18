@@ -6,9 +6,11 @@
   <tr>
     <th>Name</th>
     <th>Description</th>
-    <% SearchColumn.first(:user_id => current_user.id).search_columns.each do |search| %>
-        <% if search != '' %>
-            <th><%=  Field.find(BSON::ObjectId.from_string(search)).name %> </th>
+    <% if @search_columns != nil %>
+        <% @search_columns.search_columns.each do |search| %>
+            <% if search != '' %>
+                <th><%=  Field.find(BSON::ObjectId.from_string(search)).name %> </th>
+            <% end %>
         <% end %>
     <% end %>
     <th>Actions</th>
@@ -31,16 +33,21 @@
                   <%= asset.description %>
                 </td>
             <% end %>
-            <% SearchColumn.first(:user_id => current_user.id).search_columns.each do |search| %>
-                <% if search != '' %>
-                    <td style="text-align: center;">
-                      <%= render :template => 'search/field_column_display/'+FieldType.find(Field.find(BSON::ObjectId.from_string(search)).field_type_id).type_name.downcase.gsub(' ','_')+'_column_display' ,
-                                 :locals => { :value => asset.field_value.detect {|c|c.field_id == search}} %>
-                    </td>
+            <% if @search_columns != nil %>
+                <% @search_columns.search_columns.each do |search| %>
+                    <% if search != '' %>
+                        <% field = Field.find(BSON::ObjectId.from_string(search)) %>
+                        <% fieldType = FieldType.find(field.field_type_id) %>
+                        <td style="text-align: center;">
+                          <%= render :template => 'search/field_column_display/'+fieldType.type_name.downcase.gsub(' ','_')+'_column_display' ,
+                                     :locals => { :value => asset.field_value.detect {|c|c.field_id == search} ,
+                                     :wiki_enabled => field.wiki_enabled} %>
+                        </td>
+                    <% end %>
                 <% end %>
             <% end %>
             <td style="text-align: center;">
-              <div class="btn-group">
+              <div class="btn-group" style="text-align: center;">
                 <button class="btn">Action</button>
                 <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
                 <ul class="dropdown-menu">

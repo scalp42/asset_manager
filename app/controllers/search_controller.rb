@@ -54,6 +54,8 @@ class SearchController < ApplicationController
 
     @showCreateFilter = true
 
+    @search_columns = SearchColumn.first(:user_id => current_user.id)
+
   end
 
   def paginate
@@ -67,6 +69,8 @@ class SearchController < ApplicationController
     @filters = Filter.where(:user_id => current_user.id)
 
     @showCreateFilter = true
+
+    @search_columns = SearchColumn.first(:user_id => current_user.id)
 
     render :template => 'search/search'
   end
@@ -85,6 +89,8 @@ class SearchController < ApplicationController
 
     @showCreateFilter = true
 
+    @search_columns = SearchColumn.first(:user_id => current_user.id)
+
     render :template => 'search/search'
   end
 
@@ -97,6 +103,8 @@ class SearchController < ApplicationController
 
     @showCreateFilter = true
 
+    @search_columns = SearchColumn.first(:user_id => current_user.id)
+
     render :template => 'search/search'
 
   end
@@ -106,6 +114,8 @@ class SearchController < ApplicationController
 
     if Filter.delete(BSON::ObjectId.from_string(params['filter_id']))
     end
+
+    @search_columns = SearchColumn.first(:user_id => current_user.id)
 
     render :template => 'search/index'
   end
@@ -126,6 +136,8 @@ class SearchController < ApplicationController
       @filters = Filter.where(:user_id => current_user.id)
 
       @showCreateFilter = true
+
+      @search_columns = SearchColumn.first(:user_id => current_user.id)
 
       render :template => 'search/search'
     end

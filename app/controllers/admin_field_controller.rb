@@ -53,10 +53,13 @@ class AdminFieldController < ApplicationController
   def update_asset_type_screen
 
     asset = AssetType.find(BSON::ObjectId.from_string(params[:asset_type][:asset_type_id]))
-    asset.asset_screen.build(:field_id => params[:field][:field_id] ,:asset_id => params[:asset_type][:asset_type_id],:required =>params[:required][:required])
-
+    params[:field][:field_id].each do |field|
+      if field != ''
+        asset.asset_screen.build(:field_id => field ,:asset_id => params[:asset_type][:asset_type_id],:required =>params[:required][:required])
+      end
+    end
     if asset.save
-      assetScreenReturn(Field.find(params[:field][:field_id]).name,asset.name,"Added")
+      assetScreenReturn('Fields',asset.name,"Added")
       listAssetScreens(asset.id)
       setSidebar(true,nil,nil,nil,nil)
       render :template => 'admin_field/list_asset_screen_fields'

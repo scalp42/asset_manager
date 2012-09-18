@@ -7,7 +7,13 @@
     <div class="modal-body" style="text-align: center;">
 
       <table style="text-align: center;width: 100%;" >
-        <tr><td><%= select('custom_columns','custom_columns',Field.all.collect {|p|[ p.name, p.id ]},{:prompt => "None",:selected=>SearchColumn.first(:user_id => current_user.id).search_columns},{:multiple=>true}) %> </td></tr>
+        <tr><td>
+          <% if @search_columns != nil %>
+              <%= select('custom_columns','custom_columns',Field.all.collect {|p|[ p.name, p.id ]},{:prompt => "None",:selected=>@search_columns.search_columns},{:multiple=>true}) %>
+          <% else %>
+              <%= select('custom_columns','custom_columns',Field.all.collect {|p|[ p.name, p.id ]},{:prompt => "None"},{:multiple=>true}) %>
+          <% end %>
+        </td></tr>
       </table>
 
     </div>
