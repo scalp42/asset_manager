@@ -65,7 +65,7 @@
                         <%= link_to AssetType.find(BSON::ObjectId.from_string(asset.asset_type_id)).name,{:action => 'view',:id =>asset.id} %>
                       </td>
                       <td style="text-align: center;">
-                        <%= link_to asset.name,{:action => 'view',:id =>asset.id} %>
+                        <%= link_to asset.asset_name,{:action => 'view',:id =>asset.id} %>
                       </td>
                       <td style="text-align: center;">
                         <%= link_to User.find(asset.created_by).full_name,{:action => 'view',:id =>asset.id} %>
