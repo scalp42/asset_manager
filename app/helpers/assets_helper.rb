@@ -46,7 +46,7 @@ module AssetsHelper
                                 :field_option_id => options,
                                 :field_name_value => {fieldObj.name.downcase.gsub(" ","_") =>options } ,
                                 :field_id => fieldObj.id)
-      when 'text'
+      when 'text','ip'
         asset.field_value.build(:asset_id => asset.id,
                                 :text_value => params[fieldObj.name][fieldObj.name],
                                 :field_name_value => {fieldObj.name.downcase.gsub(" ","_") =>params[fieldObj.name][fieldObj.name] } ,
@@ -81,7 +81,7 @@ module AssetsHelper
         options.push(params[fieldObj.name][fieldObj.name])
         asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.field_option_id = options}
         asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.field_name_value = {fieldObj.name.downcase.gsub(" ","_")=> options} }
-      when 'text'
+      when 'text','ip'
         if params[fieldObj.name][fieldObj.name] != ''
           asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.text_value = params[fieldObj.name][fieldObj.name] }
           asset.field_value.select { |b| b.field_id == fieldObj.id }.each { |b| b.field_name_value = {fieldObj.name.downcase.gsub(" ","_") => params[fieldObj.name][fieldObj.name] } }

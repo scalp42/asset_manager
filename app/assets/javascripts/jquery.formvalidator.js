@@ -367,6 +367,14 @@ jQueryFormUtils.validateEmail = function(email) {
     return false;
 };
 
+jQueryFormUtils.validateIP = function(ip) {
+    var ipFilter = /^(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]){3}$/;
+    if(ipFilter.test(ip)) {
+       return true ;
+    }
+    return false;
+};
+
 /**
  * Validate phone number, at least 7 digits only one hyphen and plus allowed
  *
@@ -966,6 +974,11 @@ jQueryFormUtils.validate = function(value, el, language, config, form) {
             return validationErrorMsg || language.badUKVatAnswer;
         }
 
+        // ip validation check
+        else if (validationRules.indexOf('validate_ip') > -1 && !jQueryFormUtils.validateIP(value)) {
+            return validationErrorMsg || language.badIP;
+        }
+
         // Custom regexp validation
         if (validationRules.indexOf('validate_custom') > -1 && validationRules.indexOf('regexp/') > -1) {
             var regexp = new RegExp(validationRules.split('regexp/')[1].split('/')[0]);
@@ -1022,7 +1035,8 @@ jQueryFormUtils.LANG =  {
     badSecurityNumber : 'Your social security number was incorrect',
     badUKVatAnswer : 'Incorrect UK VAT Number',
     badNumberOfSelectedOptionsStart : 'You have to choose at least ',
-    badNumberOfSelectedOptionsEnd : ' answers'
+    badNumberOfSelectedOptionsEnd : ' answers',
+    badIP : 'Incorrect IP Format'
 };
 
 

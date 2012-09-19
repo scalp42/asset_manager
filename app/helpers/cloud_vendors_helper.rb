@@ -52,12 +52,12 @@ module CloudVendorsHelper
             end
           when 'public_ip'
             if Field.where(:name => 'RS Public IP').count == 0
-              public = Field.create(:field_type_id => FieldType.first(:type_name => "Single Line Text Field").id ,:description => 'RS Public IP',:name => 'RS Public IP',:vendor_type => cloudVendor.cloud_vendor_type,:locked => true)
+              public = Field.create(:field_type_id => FieldType.first(:type_name => "IP Field").id ,:description => 'RS Public IP',:name => 'RS Public IP',:vendor_type => cloudVendor.cloud_vendor_type,:locked => true)
               asset.asset_screen.build(:field_id => public.id.to_s ,:asset_id => asset.id,:required => true)
             end
           when 'private_ip'
             if Field.where(:name => 'RS Private IP').count == 0
-              private = Field.create(:field_type_id => FieldType.first(:type_name => "Single Line Text Field").id ,:description => 'RS Private IP',:name => 'RS Private IP',:vendor_type => cloudVendor.cloud_vendor_type,:locked => true)
+              private = Field.create(:field_type_id => FieldType.first(:type_name => "IP Field").id ,:description => 'RS Private IP',:name => 'RS Private IP',:vendor_type => cloudVendor.cloud_vendor_type,:locked => true)
               asset.asset_screen.build(:field_id => private.id.to_s ,:asset_id => asset.id,:required => true)
             end
         end

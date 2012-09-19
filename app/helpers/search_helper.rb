@@ -32,16 +32,14 @@ module SearchHelper
       query do
         boolean do
           if searchCriteria['name'] != nil
-            must do
-              boolean do
-                should { string 'name~'+searchCriteria['name']+'*'    }
-              end
-            end
+
+                should { text 'asset_name', searchCriteria['name']    }
+
           end
           if searchCriteria['description'] != nil
             must do
               boolean do
-                should {string 'description~'+searchCriteria['description']+'*'  }
+                should {text 'description' ,searchCriteria['description']  }
               end
             end
           end
@@ -82,21 +80,31 @@ module SearchHelper
               end
             end
           end
-        end
-        searchCriteria['fields'].each_pair do |k,v|
-          if FieldType.find(Field.find(k).field_type_id).use_text
-            if v != nil and v != ''
-              string 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_")+'~'+v+'*'
+          searchCriteria['fields'].each_pair do |k,v|
+            if FieldType.find(Field.find(k).field_type_id).use_text
+              if v != nil and v != ''
+                must do
+                  boolean do
+                    should { text 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_"), v }
+                  end
+                end
+              end
+            elsif FieldType.find(Field.find(k).field_type_id).use_ip
+              if v != nil and v != ''
+                must do
+                  boolean do
+                    should {text 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_"),v }
+                  end
+                end
+              end
             end
-            #elsif FieldType.find(Field.find(k).field_type_id).use_date
-            #  date 'field_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+v
-            #elsif FieldType.find(Field.find(k).field_type_id).use_radio_option
-            #  string 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+v
           end
         end
       end
     end
 
+    puts query.as_json
+    puts 'kldsjfklsdfdsdfsdjfkljsdkfjlsd'
     @assets = query.results
 
   end
