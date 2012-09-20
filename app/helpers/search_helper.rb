@@ -32,9 +32,7 @@ module SearchHelper
       query do
         boolean do
           if searchCriteria['name'] != nil
-
-                should { text 'asset_name', searchCriteria['name']    }
-
+              should { string 'searchable_name:'+searchCriteria['name']  }
           end
           if searchCriteria['description'] != nil
             must do

@@ -20,7 +20,7 @@ class AssetsController < ApplicationController
 
   def save
 
-    asset = Asset.new(:asset_name => params[:name][:name],:description => params[:description][:description])
+    asset = Asset.new(:asset_name => params[:name][:name],:searchable_name =>(params[:name][:name]).gsub("-"," "),:description => params[:description][:description])
 
     asset_type = AssetType.find(BSON::ObjectId.from_string(params[:asset_type][:asset_type_id]))
 
@@ -80,6 +80,7 @@ class AssetsController < ApplicationController
       changeHistory.change_history_detail.build(:string_previous_value => @asset.asset_name,:string_new_value => params[:name][:name])
     end
     @asset.asset_name = params[:name][:name]
+    @asset.searchable_name = (params[:name][:name]).gsub("-"," ")
 
     if params[:description][:description] != nil
       @asset.description = params[:description][:description]
