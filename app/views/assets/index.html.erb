@@ -113,7 +113,7 @@
                         <%= link_to  AssetType.find(Asset.find(asset_id).asset_type_id).name,{:action => 'view',:id =>asset_id} %>
                       </td>
                       <td style="text-align: center;">
-                        <%= link_to  Asset.find(asset_id).name,{:action => 'view',:id =>asset_id} %>
+                        <%= link_to  Asset.find(asset_id).asset_name,{:action => 'view',:id =>asset_id} %>
                       </td>
                       <td style="text-align: center;">
                         <%= link_to  User.find(ChangeHistory.find(changeHistory_id).changed_by).full_name,{:action => 'view',:id =>asset_id} %>
