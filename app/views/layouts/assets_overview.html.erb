@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AssetManager</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+  <%= favicon_link_tag 'assetmanagement.jpg' %>
+</head>
+<body>
+<%= yield :head %>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span3 container">
+      <%= yield :sidebar %>
+    </div>
+    <div class="span8 container">
+      <%= yield %>
+    </div>
+  </div>
+</div>
+</body>
+</html>

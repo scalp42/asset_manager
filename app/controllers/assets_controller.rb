@@ -14,6 +14,16 @@ class AssetsController < ApplicationController
     end
   end
 
+  def overview
+    @asset_by_type = Hash.new
+
+    AssetType.all.each do |asset_type|
+      @asset_by_type[asset_type.name] = Asset.where(:asset_type_id => asset_type.id.to_s).all
+    end
+
+    render :template => 'assets/overview'
+  end
+
   def create
     @asset_type = AssetType.find(BSON::ObjectId.from_string(params[:id]))
   end
