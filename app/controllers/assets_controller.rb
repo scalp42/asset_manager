@@ -15,14 +15,35 @@ class AssetsController < ApplicationController
   end
 
   def overview
-    @asset_by_type = Hash.new
 
-    AssetType.all.each do |asset_type|
-      @asset_by_type[asset_type.name] = Asset.where(:asset_type_id => asset_type.id.to_s).all
-    end
+    @asset_types = AssetType.all
 
-    render :template => 'assets/overview'
+    render :template => 'assets/overview/overview', :layout => 'assets_overview'
   end
+
+  def get_assets_from_asset_type
+    @asset_types = AssetType.all
+    @assets = Asset.where(:asset_type_id => params[:asset_type_id]).all
+
+    @asset_type_id = params[:asset_type_id]
+
+    @overview_columns = OverviewColumn.first(:user_id => current_user.id)
+
+    render :template => 'assets/overview/overview', :layout => 'assets_overview'
+  end
+
+  def update_overview_columns
+      overview_column = OverviewColumn.first_or_create(:user_id => current_user.id)
+
+      overview_column.overview_columns = params[:custom_columns][:custom_columns]
+
+      if overview_column.save
+
+        @overview_columns = OverviewColumn.first(:user_id => current_user.id)
+
+        render :template => 'assets/overview/overview', :layout => 'assets_overview'
+      end
+    end
 
   def create
     @asset_type = AssetType.find(BSON::ObjectId.from_string(params[:id]))
@@ -180,5 +201,7 @@ class AssetsController < ApplicationController
 
     redirect_to :controller => 'admin_field', :action => 'list_asset_types'
   end
+
+
 
 end

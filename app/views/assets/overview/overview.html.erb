@@ -1,0 +1,47 @@
+<%= render :template => 'shared/navbar' ,:locals => {:assetsNav => true, :searchNav => false,:adminNav => false}%>
+
+<%= render :template => 'assets/overview/sidebar'  %>
+
+<% if @assets != nil and can_view(@asset_type_id)%>
+    <%= render :template => 'assets/overview/custom_columns' %>
+    <table class="table table-hover" style="width: 100%;">
+      <tr>
+        <th style="font-size: 14px;">
+          Name
+        </th>
+        <th style="font-size: 14px;">
+          Description
+        </th>
+        <% if @overview_columns != nil %>
+            <% @overview_columns.overview_columns.each do |overview_field| %>
+                <% if overview_field != '' %>
+                    <th style="font-size: 14px;"><%=  Field.find(BSON::ObjectId.from_string(overview_field)).name %> </th>
+                <% end %>
+            <% end %>
+        <% end %>
+      </tr>
+      <% @assets.each do |asset| %>
+          <tr style="background-color: white;">
+            <td style="text-align: center;">
+              <%= link_to asset.asset_name ,{:controller => 'assets',:action => 'view',:id => asset.id } %>
+            </td>
+            <td style="text-align: center;">
+              <%= link_to asset.description ,{:controller => 'assets',:action => 'view',:id => asset.id } %>
+            </td>
+            <% if @overview_columns != nil %>
+                <% @overview_columns.overview_columns.each do |overview_field| %>
+                    <% if overview_field != '' %>
+                        <% field = Field.find(BSON::ObjectId.from_string(overview_field)) %>
+                        <% fieldType = FieldType.find(field.field_type_id) %>
+                        <td style="text-align: center;">
+                          <%= render :template => 'search/field_column_display/'+fieldType.type_name.downcase.gsub(' ','_')+'_column_display' ,
+                                     :locals => { :value => asset.field_value.detect {|c|c.field_id == field.id} ,
+                                                  :wiki_enabled => field.wiki_enabled} %>
+                        </td>
+                    <% end %>
+                <% end %>
+            <% end %>
+          </tr>
+      <% end %>
+    </table>
+<% end %>
