@@ -99,8 +99,10 @@ module SearchHelper
           end
         end
       end
+      sort do
+        by 'asset_name', 'asc'
+      end
     end
-
     @assets = query.results
 
   end
@@ -122,6 +124,9 @@ module SearchHelper
             end
           end
         end
+      end
+      sort do
+        by 'asset_name', 'asc'
       end
     end
 
