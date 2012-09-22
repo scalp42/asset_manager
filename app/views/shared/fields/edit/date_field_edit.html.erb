@@ -2,7 +2,7 @@
   <label class="control-label" style="color: #ffffff;"><%= field_name %></label>
   <div class="controls">
     <% if required != nil %>
-        <%= text_field(field_name,field_name, {:value => value.date},"data-validaiton" => "required")     %>
+        <%= text_field(field_name,field_name, {:value => value.date,"data-validation" => "required"})     %>
     <% else %>
         <%= text_field(field_name,field_name, {:value => value.date})     %>
     <% end %>

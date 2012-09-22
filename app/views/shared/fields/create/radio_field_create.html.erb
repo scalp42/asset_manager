@@ -1,12 +1,27 @@
-<td xmlns="http://www.w3.org/1999/html"><%= field_name %></td>
-<td>
-  <table border="0">
-    <% Field.find(field_id).field_option.each do |field| %>
-        <tr>
-          <td><%= field.option %></td>
-          <td><%= radio_button(field_name,field_name, field.id) %></td>
-        </tr>
+<div class="control-group">
+  <label class="control-label" style="color: #ffffff;"><%= field_name %></label>
+  <div class="controls">
+    <% if required %>
+        <td>
+          <table border="0">
+            <% Field.find(field_id).field_option.each do |field| %>
+                <tr>
+                  <td><%= field.option %></td>
+                  <td><%= radio_button(field_name,field_name, field.id,"data-validation" => "required") %></td>
+                </tr>
+            <% end %>
+          </table>
+        </td>
+    <% else %>
+        <td>  <table border="0">
+          <% Field.find(field_id).field_option.each do |field| %>
+              <tr>
+                <td><%= field.option %></td>
+                <td><%= radio_button(field_name,field_name, field.id) %></td>
+              </tr>
+          <% end %>
+        </table></td>
     <% end %>
-  </table>
-</td>
-<%= hidden_field(field_name, field_name+'_type',:value=> 'single_option') %>
+    <%= hidden_field(field_name, field_name+'_type',:value=> 'single_option') %>
+  </div>
+</div>

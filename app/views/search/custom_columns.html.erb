@@ -1,0 +1,31 @@
+<div class="modal hide" id="myCustomColumns" style="display: none;">
+  <div class="modal-header">
+    <button class="close" data-toggle="modal" href="#myCustomColumns">×</button>
+    <h3>Add Remove Columns</h3>
+  </div>
+  <form method="POST" action="/search/update_search_columns">
+    <div class="modal-body" style="text-align: center;">
+
+      <table style="text-align: center;width: 100%;" >
+        <tr><td>
+          <% if @search_columns != nil %>
+              <%= select('custom_columns','custom_columns',Field.all.collect {|p|[ p.name, p.id ]},{:prompt => "None",:selected=>@search_columns.search_columns},{:multiple=>true}) %>
+          <% else %>
+              <%= select('custom_columns','custom_columns',Field.all.collect {|p|[ p.name, p.id ]},{:prompt => "None"},{:multiple=>true}) %>
+          <% end %>
+        </td></tr>
+      </table>
+
+    </div>
+    <div class="modal-footer">
+
+      <%= submit_tag "Set Columns" ,:class => 'btn btn-primary' %>
+      <a data-toggle="modal" href="#myCustomColumns" class="btn secondary">No</a>
+    </div>
+
+    <input name="authenticity_token" type="hidden" value="token_value">
+    <%= hidden_field('search', 'search_json',:value=>@searchJson) %>
+  </form>
+
+</div>
+<a class="btn btn-primary" data-toggle="modal" href="#myCustomColumns" >Set Columns</a>

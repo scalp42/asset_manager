@@ -8,7 +8,7 @@
     <form method="get" class="well" action="/admin_field/update_asset_type_screen" onsubmit="return $(this).validate()">
         <table>
           <tr>
-          <td> <%=  select("field", "field_id", fieldsToBeAdded.collect {|p| [ p.name, p.id ] }, {:prompt => 'Select Field'},"data-validation" => "required") %> </td>
+          <td> <%=  select("field", "field_id", fieldsToBeAdded.collect {|p| [ p.name, p.id ] }, {:prompt => 'Select Field'},{:multiple => true}) %> </td>
 
             <%= hidden_field('asset_type', 'asset_type_id',:value=>asset.id) %>
           </tr>

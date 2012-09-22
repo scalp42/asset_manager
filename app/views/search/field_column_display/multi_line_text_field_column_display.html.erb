@@ -1,0 +1,7 @@
+<% if value != nil %>
+    <% if wiki_enabled %>
+        <%= raw(WikiCloth::Parser.new({ :data => value.text_value}).to_html) %>
+    <% else %>
+        <%= value.text_value %>
+    <% end %>
+<% end %>

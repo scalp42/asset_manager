@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class FiltersControllerTest < ActionController::TestCase
+class OverviewColumnTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

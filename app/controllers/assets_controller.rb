@@ -1,5 +1,6 @@
 class AssetsController < ApplicationController
   include AssetsHelper
+  include AdminFieldHelper
   include EncryptDecryptPasswordHelper
 
   respond_to :html, :xml, :json
@@ -13,13 +14,44 @@ class AssetsController < ApplicationController
     end
   end
 
+  def overview
+
+    @asset_types = AssetType.all
+
+    render :template => 'assets/overview/overview', :layout => 'assets_overview'
+  end
+
+  def get_assets_from_asset_type
+    @asset_types = AssetType.all
+    @assets = Asset.where(:asset_type_id => params[:asset_type_id]).all
+
+    @asset_type_id = params[:asset_type_id]
+
+    @overview_columns = OverviewColumn.first(:user_id => current_user.id)
+
+    render :template => 'assets/overview/overview', :layout => 'assets_overview'
+  end
+
+  def update_overview_columns
+      overview_column = OverviewColumn.first_or_create(:user_id => current_user.id)
+
+      overview_column.overview_columns = params[:custom_columns][:custom_columns]
+
+      if overview_column.save
+
+        @overview_columns = OverviewColumn.first(:user_id => current_user.id)
+
+        render :template => 'assets/overview/overview', :layout => 'assets_overview'
+      end
+    end
+
   def create
     @asset_type = AssetType.find(BSON::ObjectId.from_string(params[:id]))
   end
 
   def save
 
-    asset = Asset.new(:name => params[:name][:name],:description => params[:description][:description])
+    asset = Asset.new(:asset_name => params[:name][:name],:searchable_name =>(params[:name][:name]).gsub("-"," "),:description => params[:description][:description])
 
     asset_type = AssetType.find(BSON::ObjectId.from_string(params[:asset_type][:asset_type_id]))
 
@@ -71,45 +103,46 @@ class AssetsController < ApplicationController
 
   def update
 
-    asset = Asset.find(params[:asset][:asset_id])
+    @asset = Asset.find(params[:asset][:asset_id])
 
-    changeHistory = ChangeHistory.new(:asset_id => asset.id,:asset_type_id => asset.asset_type_id,:changed_by => current_user.id)
+    changeHistory = ChangeHistory.new(:asset_id => @asset.id,:asset_type_id => @asset.asset_type_id,:changed_by => current_user.id)
 
-    if asset.name != params[:name][:name]
-      changeHistory.change_history_detail.build(:string_previous_value => asset.name,:string_new_value => params[:name][:name])
+    if @asset.asset_name != params[:name][:name]
+      changeHistory.change_history_detail.build(:string_previous_value => @asset.asset_name,:string_new_value => params[:name][:name])
     end
-    asset.name = params[:name][:name]
+    @asset.asset_name = params[:name][:name]
+    @asset.searchable_name = (params[:name][:name]).gsub("-"," ")
 
     if params[:description][:description] != nil
-      asset.description = params[:description][:description]
+      @asset.description = params[:description][:description]
     else
-      asset.description = nil
+      @asset.description = nil
     end
 
-    if asset.description != params[:description][:description]
-      changeHistory.change_history_detail.build(:string_previous_value => asset.description,:string_new_value => params[:description][:description])
+    if @asset.description != params[:description][:description]
+      changeHistory.change_history_detail.build(:string_previous_value => @asset.description,:string_new_value => params[:description][:description])
     end
 
     fieldsToDelete = Array.new
 
-    AssetType.find(asset.asset_type_id).asset_screen.each do |field|
+    AssetType.find(@asset.asset_type_id).asset_screen.each do |field|
       fieldObj = Field.find(field.field_id)
       createField = true
       if params[fieldObj.name][fieldObj.name] != nil and params[fieldObj.name][fieldObj.name]  != ''
-        asset.field_value.each do |fieldValue|
+        @asset.field_value.each do |fieldValue|
           if fieldObj.id == fieldValue.field_id
             createField = false
-            updateFieldValue(params,fieldObj,fieldValue,asset)
+            updateFieldValue(params,fieldObj,fieldValue,@asset)
           end
         end
         if createField
-          setFieldValue(params,fieldObj,asset)
+          setFieldValue(params,fieldObj,@asset)
         end
       elsif params[fieldObj.name.gsub(" ","_")+"_parent"] != nil and params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] != ""
-        updateCascadeValue(params,fieldObj,asset)
-      elsif params[fieldObj.name.gsub(" ","_")+"_parent"] != nil and params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] == "" and  asset.field_value.detect {|c|c.field_id == fieldObj.id} != nil
+        updateCascadeValue(params,fieldObj,@asset)
+      elsif params[fieldObj.name.gsub(" ","_")+"_parent"] != nil and params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] == "" and  @asset.field_value.detect {|c|c.field_id == fieldObj.id} != nil
         fieldsToDelete.push(fieldObj.id)
-      elsif params[fieldObj.name][fieldObj.name]  == '' and  asset.field_value.detect {|c|c.field_id == fieldObj.id} != nil
+      elsif params[fieldObj.name][fieldObj.name]  == '' and  @asset.field_value.detect {|c|c.field_id == fieldObj.id} != nil
         fieldsToDelete.push(fieldObj.id)
       end
     end
@@ -117,17 +150,15 @@ class AssetsController < ApplicationController
     changeHistory.changed_at = DateTime.now
     changeHistory.save
 
-    asset.save
+    @asset.save
 
-    sendNotificationEmailsViaScheme(asset,'edit')
+    sendNotificationEmailsViaScheme(@asset,'edit')
 
-    deleteFields(fieldsToDelete,asset)
+    deleteFields(fieldsToDelete,@asset)
 
-    assetAlert(asset.name,"Updated")
+    assetAlert(@asset.name,"Updated")
 
-    @assets = Asset.all
-
-    render :template => 'assets/index'
+    render :template => 'assets/view'
   end
 
   def view
@@ -164,89 +195,13 @@ class AssetsController < ApplicationController
   end
 
   def pull_all_vendor_assets
-    cloud_vendor = CloudVendor.find(params[:vendor_creds])
 
-    if CloudVendorType.find(cloud_vendor.cloud_vendor_type).vendor_name == "Rackspace Cloud"
-      begin
-        cs = CloudServers::Connection.new(:username => cloud_vendor.username, :api_key => cloud_vendor.api_key)
-        cs.servers.each do |server|
-          if Asset.where(:asset_vendor_id => server[:id]).count == 0
-            asset = Asset.create(:name => server[:name],:asset_type_id =>params[:asset_type_id],:asset_vendor_id => server[:id],:created_by => current_user.id ,:created_at => DateTime.now )
-            serverDetails = cs.server(server[:id])
-
-            Field.where(:vendor_type => cloud_vendor.cloud_vendor_type).each do |field|
-
-              case field.name
-                when 'RS Public IP'
-                  asset.field_value.build(:asset_id => asset.id,
-                                          :text_value => serverDetails.addresses[:public][0],
-                                          :field_name_value => {field.name.downcase.gsub(" ","_") => serverDetails.addresses[:public] } ,
-                                          :field_id => field.id,
-                                          :locked => true)
-                when 'RS Private IP'
-                  asset.field_value.build(:asset_id => asset.id,
-                                          :text_value => serverDetails.addresses[:private][0],
-                                          :field_name_value => {field.name.downcase.gsub(" ","_") => serverDetails.addresses[:private] } ,
-                                          :field_id => field.id,
-                                          :locked => true)
-                when 'RS Flavor'
-                  option = field.field_option.detect {|c|c.option == cs.get_flavor(serverDetails.flavorId).name}
-                  asset.field_value.build(:asset_id => asset.id,
-                                          :field_option_id => option.id.to_s,
-                                          :field_id => field.id,
-                                          :field_name_value => {field.name.downcase.gsub(" ","_") =>option.id} ,
-                                          :text_value => option.option,
-                                          :locked => true)
-                #when 'RS Operating System'
-                #  option = field.field_option.detect {|c|c.option == cs.get_image(serverDetails.imageId).name}
-                #  asset.field_value.build(:asset_id => asset.id,
-                #                          :field_option_id => option.id.to_s,
-                #                          :field_id => field.id,
-                #                          :field_name_value => {field.name.downcase.gsub(" ","_") =>option.id} ,
-                #                          :text_value =>option.option)
-              end
-            end
-
-            asset.save
-          else
-            asset = Asset.first(:asset_vendor_id => server[:id])
-            asset.name = server[:name]
-
-            serverDetails = cs.server(server[:id])
-
-            Field.where(:vendor_type => cloud_vendor.cloud_vendor_type).each do |field|
-
-              case field.name
-                when 'RS Public IP'
-                  asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.text_value = serverDetails.addresses[:public][0] }
-                  asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.field_name_value = {field.name.downcase.gsub(" ","_") => serverDetails.addresses[:public][0] } }
-                when 'RS Private IP'
-                  asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.text_value = serverDetails.addresses[:private][0] }
-                  asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.field_name_value = {field.name.downcase.gsub(" ","_") => serverDetails.addresses[:private][0] } }
-                when 'RS Flavor'
-                  option = field.field_option.detect {|c|c.option == cs.get_flavor(serverDetails.flavorId).name}
-                  asset.field_value.select { |b| b.field_id == field.id }.each { |b|  b.field_option_id = option.id.to_s}
-                  asset.field_value.select {|b| b.field_id == field.id}.each {|b| b.text_value = option.option}
-                  asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.field_name_value = {field.name.downcase.gsub(" ","_") => option.id.to_s } }
-                #when 'RS Operating System'
-                #  option = field.field_option.detect {|c|c.option == cs.get_image(serverDetails.imageId).name}
-                #  asset.field_value.select { |b| b.field_id == field.id }.each { |b|  b.field_option_id = option.id.to_s}
-                #  asset.field_value.select {|b| b.field_id == field.id}.each {|b| b.text_value = option.option}
-                #  asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.field_name_value = {field.name.downcase.gsub(" ","_") => option.id.to_s } }
-              end
-            end
-
-            asset.save
-          end
-        end
-
-      rescue
-
-      end
-
-    end
+    # Create or update vendor assets for third party vendors
+    create_update_vendor_assets(params)
 
     redirect_to :controller => 'admin_field', :action => 'list_asset_types'
   end
+
+
 
 end

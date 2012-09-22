@@ -1,7 +1,7 @@
 <%= render :template => 'shared/navbar' ,:locals => {:assetsNav => true, :searchNav => false,:adminNav => false} %>
 <ul class="breadcrumb">
   <li><%= link_to "Assets", :controller =>"assets",:action =>"index" %><span class="divider">/</span></li>
-  <li class="active"><%= link_to @asset.name, :controller =>"assets",:action =>"view" ,:id => @asset.id %> </li>
+  <li class="active"><%= link_to @asset.asset_name, :controller =>"assets",:action =>"view" ,:id => @asset.id %> </li>
 </ul>
 
 <div class="container well">
@@ -9,7 +9,7 @@
     <h2>Default Fields</h2>
     <table class="table table-hover " width="100%">
       <tr><td>Name</td>
-        <td><%=  @asset.name %></td>
+        <td><%=  @asset.asset_name %></td>
       </tr>
       <tr>
         <td>Description</td>

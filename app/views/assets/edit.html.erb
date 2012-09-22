@@ -1,14 +1,14 @@
 <%= render :template => 'shared/navbar' ,:locals => {:assetsNav => true, :searchNav => false,:adminNav => false}%>
 <ul class="breadcrumb">
   <li><%= link_to "Assets", :controller =>"assets",:action =>"index" %><span class="divider">/</span></li>
-  <li class="active"><%= link_to @asset.name, :controller =>"assets",:action =>"view" ,:id => @asset.id %> </li>
+  <li class="active"><%= link_to @asset.asset_name, :controller =>"assets",:action =>"view" ,:id => @asset.id %> </li>
 </ul>
 <form method="post" class="form-horizontal" action="/assets/update" enctype="multipart/form-data" onsubmit="return $(this).validate()">
   <input name="authenticity_token" type="hidden" value="token_value">
   <div class="control-group">
     <label class="control-label" style="color: #ffffff;">Name</label>
     <div class="controls">
-      <%=  text_field('name','name',"data-validation" => "required",:value => @asset.name,:class => "span10") %>
+      <%=  text_field('name','name',"data-validation" => "required",:value => @asset.asset_name,:class => "span10") %>
     </div>
   </div>
   <div class="control-group">

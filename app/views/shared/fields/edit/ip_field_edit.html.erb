@@ -1,0 +1,15 @@
+<div class="control-group">
+  <label class="control-label" style="color: #ffffff;"><%= field_name %></label>
+  <div class="controls">
+    <% if required %>
+        <% if value.locked %>
+            <%=  text_field(field_name,field_name, {:value => value.text_value,"data-validation" => "required validate_ip",:class => "span10",:disabled => true}) %>
+        <% else %>
+            <%=  text_field(field_name,field_name, {:value => value.text_value,"data-validation" => "required validate_ip",:class => "span10"}) %>
+        <% end %>
+    <% else %>
+        <%=  text_field(field_name,field_name, {:value => value.text_value,:class => "span10"}) %>
+    <% end %>
+  </div>
+</div>
+<%= hidden_field(field_name, field_name+'_type',:value=> 'ip') %>

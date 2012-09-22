@@ -2,13 +2,12 @@ class SearchController < ApplicationController
   include SearchHelper
 
   def index
-
-    @filters = Filter.all
+    @filters = Filter.where(:user_id => current_user.id)
   end
 
   def search
 
-    @searchCriteria = SearchCriteria.new
+    searchCriteria = SearchCriteria.new
 
     assetTypesArr = Array.new
 
@@ -18,15 +17,15 @@ class SearchController < ApplicationController
           assetTypesArr.push(asset_type_id)
         end
       end
-      @searchCriteria.asset_types = assetTypesArr
+      searchCriteria.asset_types = assetTypesArr
     end
 
     if params[:name][:name] != ''
-      @searchCriteria.name = (params[:name][:name])
+      searchCriteria.name = (params[:name][:name])
     end
 
     if params[:description][:description] != ''
-      @searchCriteria.description = (params[:description][:description])
+      searchCriteria.description = (params[:description][:description])
     end
 
     fields = Hash.new
@@ -45,34 +44,102 @@ class SearchController < ApplicationController
       end
     end
 
-    @searchCriteria.fields = fields
+    searchCriteria.fields = fields
 
-    createFilter(params,fields)
+    @searchJson = searchCriteria.to_json
 
-    search_elastic(@searchCriteria)
+    search_elastic(@searchJson)
 
-    @filters = Filter.all
+    @filters = Filter.where(:user_id => current_user.id)
 
     @showCreateFilter = true
 
+    @search_columns = SearchColumn.first(:user_id => current_user.id)
+
+  end
+
+  def paginate
+
+    object =  params[:search]
+
+    @searchJson = object.gsub("&quot;","\"")
+    search_elastic(@searchJson,Integer(params[:page]))
+
+
+    @filters = Filter.where(:user_id => current_user.id)
+
+    @showCreateFilter = true
+
+    @search_columns = SearchColumn.first(:user_id => current_user.id)
+
+    render :template => 'search/search'
+  end
+
+  def create_filter
+
+    searchObj =  params[:search][:search_json]
+
+    @searchJson = searchObj.gsub("&quot;","\"")
+
+    createFilter(params,@searchJson)
+
+    search_elastic(@searchJson)
+
+    @filters = Filter.where(:user_id => current_user.id)
+
+    @showCreateFilter = true
+
+    @search_columns = SearchColumn.first(:user_id => current_user.id)
+
+    render :template => 'search/search'
   end
 
   def load_filter
     buildSearchCriteria(params[:filter_id])
 
-    search_elastic(@searchCriteria)
+    search_elastic(@searchJson)
 
-    @filters = Filter.all
+    @filters = Filter.where(:user_id => current_user.id)
 
     @showCreateFilter = true
+
+    @search_columns = SearchColumn.first(:user_id => current_user.id)
 
     render :template => 'search/search'
 
   end
 
   def delete_filter
+    @filters = Filter.where(:user_id => current_user.id)
+
     if Filter.delete(BSON::ObjectId.from_string(params['filter_id']))
-      redirect_to :back
+    end
+
+    @search_columns = SearchColumn.first(:user_id => current_user.id)
+
+    render :template => 'search/index'
+  end
+
+  def update_search_columns
+    search_column = SearchColumn.first_or_create(:user_id => current_user.id)
+
+    search_column.search_columns = params[:custom_columns][:custom_columns]
+
+    if search_column.save
+
+      searchObj =  params[:search][:search_json]
+
+      @searchJson = searchObj.gsub("&quot;","\"")
+
+      search_elastic(@searchJson)
+
+      @filters = Filter.where(:user_id => current_user.id)
+
+      @showCreateFilter = true
+
+      @search_columns = SearchColumn.first(:user_id => current_user.id)
+
+      render :template => 'search/search'
     end
   end
 

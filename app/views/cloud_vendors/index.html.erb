@@ -7,6 +7,11 @@
       Cloud Vendor <%= @vendorName %> Successfully <%= @vendorAction %>
     </div>
 <% end %>
+<%  if @vendorErrorName != nil %>
+    <div class="alert alert-error">
+      Cloud Vendor <%= @vendorErrorName %> <%= @vendorErrorAction %>
+    </div>
+<% end %>
 <div align="right">
   <%= render :template => 'cloud_vendors/create' %>
 </div>

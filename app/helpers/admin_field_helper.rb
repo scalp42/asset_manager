@@ -64,4 +64,12 @@ module AdminFieldHelper
     @indexMenu = indexMenu
     @notificationMenu = notificationMenu
   end
+
+  def create_field_option(field,option)
+    field.field_option.build(:option => option,:field_id => field.id)
+    if field.save
+
+    end
+  end
+
 end

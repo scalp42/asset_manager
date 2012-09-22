@@ -40,7 +40,7 @@ class CloudVendorsController < ApplicationController
       cs = CloudServers::Connection.new(:username => cloudVendor.username, :api_key => cloudVendor.api_key)
       vendorAlert(cloudVendor.name,"Connected")
       rescue
-        vendorAlert(cloudVendor.name,"Could Not Connect")
+        vendorErrorAlert(cloudVendor.name,"Could Not Connect")
       end
 
     end

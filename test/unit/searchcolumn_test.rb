@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class AdminAssetControllerTest < ActionController::TestCase
+class SearchColumnTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

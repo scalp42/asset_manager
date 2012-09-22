@@ -57,6 +57,8 @@ module AssetManager
     config.assets.enabled = true
     config.http_authenticatable = true
 
+    config.time_zone = 'America/Los_Angeles'
+
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
     config.autoload_paths += Dir["#{Rails.root}/lib/search"]

@@ -65,7 +65,7 @@
                         <%= link_to AssetType.find(BSON::ObjectId.from_string(asset.asset_type_id)).name,{:action => 'view',:id =>asset.id} %>
                       </td>
                       <td style="text-align: center;">
-                        <%= link_to asset.name,{:action => 'view',:id =>asset.id} %>
+                        <%= link_to asset.asset_name,{:action => 'view',:id =>asset.id} %>
                       </td>
                       <td style="text-align: center;">
                         <%= link_to User.find(asset.created_by).full_name,{:action => 'view',:id =>asset.id} %>
@@ -113,7 +113,7 @@
                         <%= link_to  AssetType.find(Asset.find(asset_id).asset_type_id).name,{:action => 'view',:id =>asset_id} %>
                       </td>
                       <td style="text-align: center;">
-                        <%= link_to  Asset.find(asset_id).name,{:action => 'view',:id =>asset_id} %>
+                        <%= link_to  Asset.find(asset_id).asset_name,{:action => 'view',:id =>asset_id} %>
                       </td>
                       <td style="text-align: center;">
                         <%= link_to  User.find(ChangeHistory.find(changeHistory_id).changed_by).full_name,{:action => 'view',:id =>asset_id} %>
@@ -125,15 +125,9 @@
                 <% end %>
             <% end %>
           </table>
-
-
           <a href="#" class="btn btn-duadua">View More</a>
-
         </div><!-- comments list -->
       </div>
     </div>
-
-
-
   </div>
 </div>

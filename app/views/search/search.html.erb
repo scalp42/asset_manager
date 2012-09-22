@@ -1,31 +1,68 @@
 <%= render :template => 'shared/navbar' ,:locals => {:assetsNav => false, :searchNav => true,:adminNav => false}%>
 
 <%= render :template => 'search/sidebar'  %>
-
+<%= render :template => 'search/custom_columns' %>
 <table class="table table-hover table-bordered">
   <tr>
     <th>Name</th>
     <th>Description</th>
+    <% if @search_columns != nil %>
+        <% @search_columns.search_columns.each do |search| %>
+            <% if search != '' %>
+                <th><%=  Field.find(BSON::ObjectId.from_string(search)).name %> </th>
+            <% end %>
+        <% end %>
+    <% end %>
     <th>Actions</th>
   </tr>
-  <% @assets.each do |asset| %>
+  <% for asset in @assets %>
       <% if can_view(asset.asset_type_id) %>
           <tr style="background-color: white;">
+            <% if can_view(asset.asset_type_id) %>
+                <td style="text-align: center;">
+                  <%= link_to asset.asset_name, {:controller => 'assets', :action => 'view',:id => asset.id} %>
+                </td>
+                <td style="text-align: center;">
+                  <%= asset.description %>
+                </td>
+            <% else %>
+                <td style="text-align: center;">
+                  <%= asset.asset_name %>
+                </td>
+                <td style="text-align: center;">
+                  <%= asset.description %>
+                </td>
+            <% end %>
+            <% if @search_columns != nil %>
+                <% @search_columns.search_columns.each do |search| %>
+                    <% if search != '' %>
+                        <% field = Field.find(BSON::ObjectId.from_string(search)) %>
+                        <% fieldType = FieldType.find(field.field_type_id) %>
+                        <td style="text-align: center;">
+                          <%= render :template => 'search/field_column_display/'+fieldType.type_name.downcase.gsub(' ','_')+'_column_display' ,
+                                     :locals => { :value => asset.field_value.detect {|c|c.field_id == search} ,
+                                     :wiki_enabled => field.wiki_enabled} %>
+                        </td>
+                    <% end %>
+                <% end %>
+            <% end %>
             <td style="text-align: center;">
-              <%= asset.name %>
-            </td>
-            <td style="text-align: center;">
-              <%= asset.description %>
-            </td>
-            <td style="text-align: center;">
-              <% if can_edit(asset.asset_type_id) %>
-                  <%= link_to 'Edit',{ :controller => 'assets', :action => 'edit', :id => asset.id},:class => 'btn' %>
-              <% end %>
-              <% if can_destroy(asset.asset_type_id) %>
-                  <%= link_to 'Delete',{ :controller => 'assets', :action => 'delete', :asset_id => asset.id},:class => 'btn' %>
-              <% end %>
+              <div class="btn-group" style="text-align: center;">
+                <button class="btn">Action</button>
+                <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                  <% if can_edit(asset.asset_type_id) %>
+                      <li><%= link_to 'Edit',{ :controller => 'assets', :action => 'edit', :id => asset.id} %></li>
+                  <% end %>
+                  <% if can_destroy(asset.asset_type_id) %>
+                      <li><%= link_to 'Delete',{ :controller => 'assets', :action => 'delete', :asset_id => asset.id} %></li>
+                  <% end %>
+
+                </ul>
+              </div>
             </td>
           </tr>
       <% end %>
   <% end %>
 </table>
+<%= render :template => 'search/pagination' %>

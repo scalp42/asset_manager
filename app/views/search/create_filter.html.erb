@@ -3,11 +3,11 @@
     <button class="close" data-toggle="modal" href="#myFilterModal1">×</button>
     <h3>Create Filter</h3>
   </div>
-
+  <form method="POST" action="/search/create_filter">
     <div class="modal-body">
 
       <table>
-      <tr><td>Filter Name:</td><td><input type="'text" id="filter_name" name="filter_value"/> </td></tr>
+        <tr><td>Filter Name:</td><td><input type="'text" id="filter_name" name="filter_value"/> </td></tr>
       </table>
 
     </div>
@@ -16,6 +16,10 @@
       <%= submit_tag "Create Filter" ,:class => 'btn btn-primary' %>
       <a data-toggle="modal" href="#myFilterModal1" class="btn secondary">No</a>
     </div>
+
+    <input name="authenticity_token" type="hidden" value="token_value">
+    <%= hidden_field('search', 'search_json',:value=>@searchJson) %>
+  </form>
 
 </div>
 <a class="btn btn-primary" data-toggle="modal" href="#myFilterModal1" >Create Filter</a>

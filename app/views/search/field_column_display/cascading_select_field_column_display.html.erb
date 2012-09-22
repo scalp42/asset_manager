@@ -1,0 +1,4 @@
+<% if value != nil %>
+    <%= (Field.find(value.field_id).field_option.detect{|c|c.id == value.parent_field_option_id}).option %> ,
+    <%= (Field.find(value.field_id).field_option.detect{|c|c.id == BSON::ObjectId.from_string(value.child_field_option_id)}).option %>
+<% end %>

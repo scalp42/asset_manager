@@ -6,6 +6,8 @@ class Asset
 
   key :description, String
   key :name, String
+  key :searchable_name, String
+  key :asset_name, String
   key :parent_id, Integer
   key :asset_type_id, String
   key :asset_type_name, ObjectId
