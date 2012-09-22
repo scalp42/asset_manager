@@ -32,7 +32,7 @@ module SearchHelper
       query do
         boolean do
           if searchCriteria['name'] != nil
-              should { string 'searchable_name:'+searchCriteria['name']  }
+            should { string 'searchable_name:'+searchCriteria['name']  }
           end
           if searchCriteria['description'] != nil
             must do
@@ -101,8 +101,30 @@ module SearchHelper
       end
     end
 
-    puts query.as_json
-    puts 'kldsjfklsdfdsdfsdjfkljsdkfjlsd'
+    @assets = query.results
+
+  end
+
+  def search_asset_type_assets(asset_type_id, page = 0)
+
+    from = 0
+
+    if page > 0
+      from = 25 * page
+    end
+
+    query = Tire.search('assets',{:page => page , :per_page=>25, :size=>25, :from=>from})  do
+      query do
+        boolean do
+          must do
+            boolean do
+                should { string 'asset_type_id:'+asset_type_id }
+            end
+          end
+        end
+      end
+    end
+
     @assets = query.results
 
   end

@@ -1,6 +1,7 @@
 class AssetsController < ApplicationController
   include AssetsHelper
   include AdminFieldHelper
+  include SearchHelper
   include EncryptDecryptPasswordHelper
 
   respond_to :html, :xml, :json
@@ -23,7 +24,7 @@ class AssetsController < ApplicationController
 
   def get_assets_from_asset_type
     @asset_types = AssetType.all
-    @assets = Asset.where(:asset_type_id => params[:asset_type_id]).all
+    search_asset_type_assets( params[:asset_type_id])
 
     @asset_type_id = params[:asset_type_id]
 
@@ -39,11 +40,29 @@ class AssetsController < ApplicationController
 
       if overview_column.save
 
+        @asset_types = AssetType.all
+
+        @asset_type_id = params[:asset_type_id]
+        search_asset_type_assets( params[:asset_type_id])
+
         @overview_columns = OverviewColumn.first(:user_id => current_user.id)
 
         render :template => 'assets/overview/overview', :layout => 'assets_overview'
       end
-    end
+  end
+
+  def paginate
+
+    @asset_types = AssetType.all
+
+    search_asset_type_assets(params[:asset_type_id],Integer(params[:page]))
+
+    @asset_type_id = params[:asset_type_id]
+
+    @overview_columns = OverviewColumn.first(:user_id => current_user.id)
+
+    render :template => 'assets/overview/overview', :layout => 'assets_overview'
+  end
 
   def create
     @asset_type = AssetType.find(BSON::ObjectId.from_string(params[:id]))

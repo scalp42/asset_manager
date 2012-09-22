@@ -21,4 +21,12 @@ class Asset
 
   has_many :field_value
 
+
+  mapping do
+    indexes :asset_name, :type => 'string', :index => :not_analyzed
+    indexes :searchable_name, :type => 'string'
+    indexes :description, :type => 'string'
+    indexes :asset_type_id, :type => 'string'
+    indexes :field_value, :type => 'object'
+  end
 end
