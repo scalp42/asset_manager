@@ -11,27 +11,32 @@ class SearchController < ApplicationController
 
     assetTypesArr = Array.new
 
+    non_empty_search = false
+
     if params[:asset_type][:asset_type_id] != nil and params[:asset_type][:asset_type_id].count > 1
       params[:asset_type][:asset_type_id].each do |asset_type_id|
         if asset_type_id != ''
           assetTypesArr.push(asset_type_id)
         end
       end
+      non_empty_search = true
       searchCriteria.asset_types = assetTypesArr
     end
 
     if params[:name][:name] != ''
+      non_empty_search  = true
       searchCriteria.name = (params[:name][:name])
     end
 
     if params[:description][:description] != ''
+      non_empty_search = true
       searchCriteria.description = (params[:description][:description])
     end
 
     fields = Hash.new
 
     Field.all.each do |field|
-      if params[field.name] != nil
+      if params[field.name] != nil and params[field.name][field.name] != ''
         if FieldType.find(field.field_type_id).use_casecade_option
           cascadingValues = Hash.new
           cascadingValues['parent'] = params[field.name.gsub(" ","_")+"_parent"][field.name.gsub(" ","_")+"_parent"]
@@ -44,11 +49,15 @@ class SearchController < ApplicationController
       end
     end
 
+    if fields.size > 0
+      non_empty_search = true
+    end
+
     searchCriteria.fields = fields
 
     @searchJson = searchCriteria.to_json
 
-    search_elastic(@searchJson)
+    search_elastic(@searchJson,0,non_empty_search)
 
     @filters = Filter.where(:user_id => current_user.id)
 
