@@ -23,14 +23,14 @@
                   <%= link_to asset.asset_name, {:controller => 'assets', :action => 'view',:id => asset.id} %>
                 </td>
                 <td style="text-align: center;">
-                  <%= asset.description %>
+                  <%= raw(WikiCloth::Parser.new({ :data =>  asset.description}).to_html) %>
                 </td>
             <% else %>
                 <td style="text-align: center;">
                   <%= asset.asset_name %>
                 </td>
                 <td style="text-align: center;">
-                  <%= asset.description %>
+                  <%= raw(WikiCloth::Parser.new({ :data =>  asset.description}).to_html) %>
                 </td>
             <% end %>
             <% if @search_columns != nil %>

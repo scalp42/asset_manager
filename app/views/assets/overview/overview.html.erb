@@ -26,7 +26,9 @@
               <%= link_to asset.asset_name ,{:controller => 'assets',:action => 'view',:id => asset.id } %>
             </td>
             <td style="text-align: center;">
-              <%= link_to asset.description ,{:controller => 'assets',:action => 'view',:id => asset.id } %>
+              <% if asset.description != '' %>
+                  <%= link_to raw(WikiCloth::Parser.new({ :data =>  asset.description}).to_html) ,{:controller => 'assets',:action => 'view',:id => asset.id } %>
+              <% end %>
             </td>
             <% if @overview_columns != nil %>
                 <% @overview_columns.overview_columns.each do |overview_field| %>
@@ -44,4 +46,5 @@
           </tr>
       <% end %>
     </table>
+    <%= render :template => 'assets/overview/pagination' %>
 <% end %>

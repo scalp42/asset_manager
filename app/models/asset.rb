@@ -21,4 +21,19 @@ class Asset
 
   has_many :field_value
 
+
+  mapping do
+
+    indexes :asset_name, :type => 'string', :index => :not_analyzed ,:include_in_all => :false
+
+    indexes :searchable_name, :type => 'string', :analyzer => 'snowball'
+    indexes :description, :type => 'string' ,:analyzer => 'snowball'
+    indexes :asset_type_id, :type => 'string'
+    indexes :field_value, :type => 'object'
+    indexes :created_at, :type => 'date' ,:index => :not_analyzed ,:include_in_all => :false
+    indexes :created_by, :type => 'string'
+
+    indexes :modified_at, :type => 'date' ,:index => :not_analyzed ,:include_in_all => :false
+    indexes :modified_by, :type => 'string'
+  end
 end

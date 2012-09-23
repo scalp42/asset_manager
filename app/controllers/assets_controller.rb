@@ -1,6 +1,7 @@
 class AssetsController < ApplicationController
   include AssetsHelper
   include AdminFieldHelper
+  include SearchHelper
   include EncryptDecryptPasswordHelper
 
   respond_to :html, :xml, :json
@@ -23,7 +24,7 @@ class AssetsController < ApplicationController
 
   def get_assets_from_asset_type
     @asset_types = AssetType.all
-    @assets = Asset.where(:asset_type_id => params[:asset_type_id]).all
+    @assets = search_asset_type_assets( params[:asset_type_id])
 
     @asset_type_id = params[:asset_type_id]
 
@@ -39,11 +40,29 @@ class AssetsController < ApplicationController
 
       if overview_column.save
 
+        @asset_types = AssetType.all
+
+        @asset_type_id = params[:asset_type_id]
+        search_asset_type_assets( params[:asset_type_id])
+
         @overview_columns = OverviewColumn.first(:user_id => current_user.id)
 
         render :template => 'assets/overview/overview', :layout => 'assets_overview'
       end
-    end
+  end
+
+  def paginate
+
+    @asset_types = AssetType.all
+
+    search_asset_type_assets(params[:asset_type_id],Integer(params[:page]))
+
+    @asset_type_id = params[:asset_type_id]
+
+    @overview_columns = OverviewColumn.first(:user_id => current_user.id)
+
+    render :template => 'assets/overview/overview', :layout => 'assets_overview'
+  end
 
   def create
     @asset_type = AssetType.find(BSON::ObjectId.from_string(params[:id]))
@@ -51,34 +70,34 @@ class AssetsController < ApplicationController
 
   def save
 
-    asset = Asset.new(:asset_name => params[:name][:name],:searchable_name =>(params[:name][:name]).gsub("-"," "),:description => params[:description][:description])
+    @asset = Asset.new(:asset_name => params[:name][:name],:searchable_name =>(params[:name][:name]).gsub("-"," "),:description => params[:description][:description])
 
     asset_type = AssetType.find(BSON::ObjectId.from_string(params[:asset_type][:asset_type_id]))
 
-    asset.asset_type_id = asset_type.id
-    asset.asset_type_name = asset_type.name
+    @asset.asset_type_id = asset_type.id
+    @asset.asset_type_name = asset_type.name
 
     asset_type.asset_screen.each do |field|
       fieldObj = Field.find(field.field_id)
       if params[fieldObj.name][fieldObj.name] != nil and params[fieldObj.name][fieldObj.name] != ''
-        setFieldValue(params,fieldObj,asset)
+        setFieldValue(params,fieldObj,@asset)
       elsif params[fieldObj.name.gsub(" ","_")+"_parent"] != nil and params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] != nil
-        setCascadeValue(params,fieldObj,asset)
+        setCascadeValue(params,fieldObj,@asset)
       end
     end
 
-    asset.created_at = DateTime.now
+    @asset.created_at = DateTime.now
 
-    asset.created_by = current_user.id
+    @asset.created_by = current_user.id
 
-    asset.save
+    @asset.save
 
-    assetAlert(asset.name,"Created")
+    assetAlert(@asset.name,"Created")
 
-    sendNotificationEmailsViaScheme(asset,'create')
-    @assets = Asset.all
+    sendNotificationEmailsViaScheme(@asset,'create')
 
-    render :template => 'assets/index'
+    render :template => 'assets/view'
+
   end
 
   def delete

@@ -23,7 +23,7 @@
           <% AssetType.each do |assetType| %>
               <% if can_view(assetType.id.to_s) %>
                   <tr>
-                    <td><a href="#"><b><%= Asset.where(:asset_type_id => assetType.id.to_s).count %></b> <i class="icon-large icon-list-alt"></i> <%= assetType.name %></a></td>
+                    <td><a href="#"><b><%= search_asset_type_assets(assetType.id.to_s,false).total %></b> <i class="icon-large icon-list-alt"></i> <%= assetType.name %></a></td>
                   </tr>
               <% end %>
           <% end %>
@@ -58,7 +58,7 @@
                 Created At
               </th>
             </tr>
-            <% Asset.sort(:created_at.desc).limit(10).each do |asset| %>
+            <% search_asset_type_assets('none',true,'created_at','desc',0,10,10).each do |asset| %>
                 <% if can_view(asset.asset_type_id) %>
                     <tr>
                       <td style="text-align: center;">

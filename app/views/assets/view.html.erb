@@ -13,7 +13,7 @@
       </tr>
       <tr>
         <td>Description</td>
-        <td><%=  @asset.description %></td>
+        <td><%=  raw(WikiCloth::Parser.new({ :data =>  @asset.description}).to_html) %></td>
       </tr>
     </table>
   </div>
