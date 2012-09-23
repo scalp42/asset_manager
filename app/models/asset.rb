@@ -33,5 +33,7 @@ class Asset
     indexes :created_at, :type => 'date' ,:index => :not_analyzed ,:include_in_all => :false
     indexes :created_by, :type => 'string'
 
+    indexes :modified_at, :type => 'date' ,:index => :not_analyzed ,:include_in_all => :false
+    indexes :modified_by, :type => 'string'
   end
 end

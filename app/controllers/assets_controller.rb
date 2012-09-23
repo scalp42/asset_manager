@@ -24,7 +24,7 @@ class AssetsController < ApplicationController
 
   def get_assets_from_asset_type
     @asset_types = AssetType.all
-    search_asset_type_assets( params[:asset_type_id])
+    @assets = search_asset_type_assets( params[:asset_type_id])
 
     @asset_type_id = params[:asset_type_id]
 
