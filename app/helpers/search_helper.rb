@@ -107,7 +107,7 @@ module SearchHelper
 
   end
 
-  def search_asset_type_assets(asset_type_id, page = 0)
+  def search_asset_type_assets(asset_type_id, sort = true, sort_field = 'asset_name',sort_type = 'asc', page = 0,per_page = 25, size = 25)
 
     from = 0
 
@@ -115,22 +115,32 @@ module SearchHelper
       from = 25 * page
     end
 
-    query = Tire.search('assets',{:page => page , :per_page=>25, :size=>25, :from=>from})  do
+    query = Tire.search('assets',{:page => page , :per_page=>per_page, :size=>size, :from=>from})  do
       query do
+        if asset_type_id != 'none'
         boolean do
           must do
             boolean do
-                should { string 'asset_type_id:'+asset_type_id }
+              should { string 'asset_type_id:'+asset_type_id }
             end
           end
         end
+        else
+          all
+        end
       end
-      sort do
-        by 'asset_name', 'asc'
+      if sort
+        sort do
+          by sort_field, sort_type
+        end
       end
     end
 
-    @assets = query.results
+    assets = query.results
+
+    puts assets.inspect
+    puts 'sdklfjklsdjfklsdjfkljsdklfjklsdjflkds'
+    return assets
 
   end
 
