@@ -63,4 +63,12 @@ class CloudVendorsController < ApplicationController
   def create_server
 
   end
+
+  def server_status
+    status = get_current_status(params[:cloud_vendor_id],params[:server_id])
+
+    respond_to do |format|
+      format.json { render :json => status }
+    end
+  end
 end

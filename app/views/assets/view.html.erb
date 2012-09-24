@@ -8,6 +8,11 @@
   <div class="control-group">
     <h2>Default Fields</h2>
     <table class="table table-hover " width="100%">
+      <% if AssetType.find(@asset.asset_type_id).vendor != nil %>
+          <tr><td>Status</td>
+            <td><%= render :template => 'assets/vendor/rackspace/status' %></td>
+          </tr>
+      <% end %>
       <tr><td>Name</td>
         <td><%=  @asset.asset_name %></td>
       </tr>
@@ -18,7 +23,6 @@
     </table>
   </div>
 </div>
-
 <% if @asset.field_value.count() > 0 %>
     <div class="container well">
       <div class="control-group">
@@ -37,6 +41,6 @@
 <% end %>
 <div class="control-group" style="text-align: center;">
   <% if can_edit(@asset.asset_type_id) %>
-  <%= link_to 'Edit',{:controller => 'assets', :action =>'edit', :id => @asset.id} ,:class => "btn btn-primary" %>
-      <% end %>
+      <%= link_to 'Edit',{:controller => 'assets', :action =>'edit', :id => @asset.id} ,:class => "btn btn-primary" %>
+  <% end %>
 </div>
