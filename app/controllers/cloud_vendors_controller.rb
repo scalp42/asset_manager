@@ -67,6 +67,13 @@ class CloudVendorsController < ApplicationController
     render :template => 'assets/view' ,:layout => 'assets'
   end
 
+  def resize_server
+    @asset = Asset.find(params[:id])
+
+    resize_server_vendor(@asset)
+    render :template => 'assets/view' ,:layout => 'assets'
+  end
+
   def server_status
     status = get_current_status(params[:cloud_vendor_id],params[:server_id])
 

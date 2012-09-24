@@ -75,7 +75,7 @@ module CloudVendorsHelper
 
     server = cs.server(server_id)
 
-    server.populate
+    server.refresh
 
     status = Hash.new
     status['text'] = server.status
@@ -99,6 +99,19 @@ module CloudVendorsHelper
     new_server = cs.create_server(:name => asset.asset_name , :imageId => Integer(operating_option.vendor_key) ,:flavorId => Integer(flavor_option.vendor_key))
 
     update_rs_asset(asset,new_server)
+  end
+
+  def resize_server_vendor(asset)
+    cloud_vendor = CloudVendor.find(AssetType.find(asset.asset_type_id).vendor_creds)
+    cs = CloudServers::Connection.new(:username => cloud_vendor.username, :api_key => cloud_vendor.api_key)
+
+    field = Field.first(:name => 'RS Flavor')
+    flavor_asset = asset.field_value.detect { |c| c.field_id == field.id }
+    flavor_option = field.field_option.detect {|c|c.option == flavor_asset.text_value}
+
+    server = cs.server(asset.vendor_server_id)
+    server.resize!(Integer(flavor_option.vendor_key))
+
   end
 
   def update_rs_asset(asset,server)
