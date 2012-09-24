@@ -103,9 +103,9 @@ module SearchHelper
           all
         end
       end
-      sort do
-        by 'asset_name', 'asc'
-      end
+      #sort do
+      #  by 'asset_name', 'asc'
+      #end
     end
     @assets = query.results
 

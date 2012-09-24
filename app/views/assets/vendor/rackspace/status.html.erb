@@ -1,38 +1,51 @@
 <script type="text/javascript">
-    $.ajax({
-        url: '/cloud_vendors/server_status',
-        dataType: 'json',
-        data: {
-            cloud_vendor_id: "<%= AssetType.find(@asset.asset_type_id).vendor_creds %>",
-            server_id: "<%= @asset.asset_vendor_id %>"
-        },
-        type: "POST",
-        success: function(data) {
-            alert('hello');
+    function updateServerStatus(){
+        $.ajax({
+            url: '/cloud_vendors/server_status',
+            dataType: 'json',
+            data: {
+                cloud_vendor_id: "<%= AssetType.find(@asset.asset_type_id).vendor_creds %>",
+                server_id: "<%= @asset.asset_vendor_id %>"
+            },
+            type: "POST",
+            success: function(data) {
 
-        },
-        complete: function(request)	{
-            if(request.responseText == 'ACTIVE')
-            {
-                document.getElementById("server_active").style.display= 'block';
-                document.getElementById("server_action").style.display= 'none';
+                if(data.text == 'ACTIVE')
+                {
+                    document.getElementById("server_active").style.display= 'block';
+                    document.getElementById("server_action").style.display= 'none';
+                    document.getElementById("server_active").innerHTML = data.text ;
+                }
+                else
+                {
+                    document.getElementById("server_active").style.display= 'none';
+                    document.getElementById("server_action").style.display= 'block';
+                    document.getElementById("bar").style.width= data.progress+'%';
+                    document.getElementById("status").innerHTML = data.text ;
+
+                }
+
+            },
+            complete: function(request)	{
+
+
             }
-            else
-            {
-                document.getElementById("server_active").style.display= 'none';
-                document.getElementById("server_action").style.display= 'block';
+        });
+    }
 
-            }
 
-        }
-    });
+    updateServerStatus();
+    setInterval( "updateServerStatus()", 5000 );
+
 </script>
 
-<div id="server_action"style="display: none;" class="progress progress-striped active">
-  <div class="bar" style="width: 40%;"></div>
+<div id="server_action"style="display: none;">
+  <div id="status"></div>
+  <div  class="progress progress-striped active">
+    <div id="bar" class="bar" style="width: 40%;"></div>
+  </div>
 </div>
 
 
 <div id="server_active" style="display: none;">
-  Active
 </div>
