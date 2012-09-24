@@ -67,4 +67,14 @@ module CloudVendorsHelper
     asset.save
 
   end
+
+  def get_current_status(vendor_creds,server_id)
+
+    cloud_vendor = CloudVendor.find(BSON::ObjectId.from_string(vendor_creds))
+    cs = CloudServers::Connection.new(:username => cloud_vendor.username, :api_key => cloud_vendor.api_key)
+
+    server = cs.server(server_id)
+
+    return server.status
+  end
 end

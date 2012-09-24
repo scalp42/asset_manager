@@ -1,0 +1,38 @@
+<script type="text/javascript">
+    $.ajax({
+        url: '/cloud_vendors/server_status',
+        dataType: 'json',
+        data: {
+            cloud_vendor_id: "<%= AssetType.find(@asset.asset_type_id).vendor_creds %>",
+            server_id: "<%= @asset.asset_vendor_id %>"
+        },
+        type: "POST",
+        success: function(data) {
+            alert('hello');
+
+        },
+        complete: function(request)	{
+            if(request.responseText == 'ACTIVE')
+            {
+                document.getElementById("server_active").style.display= 'block';
+                document.getElementById("server_action").style.display= 'none';
+            }
+            else
+            {
+                document.getElementById("server_active").style.display= 'none';
+                document.getElementById("server_action").style.display= 'block';
+
+            }
+
+        }
+    });
+</script>
+
+<div id="server_action"style="display: none;" class="progress progress-striped active">
+  <div class="bar" style="width: 40%;"></div>
+</div>
+
+
+<div id="server_active" style="display: none;">
+  Active
+</div>
