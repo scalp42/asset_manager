@@ -42,8 +42,8 @@ class AssetsController < ApplicationController
 
         @asset_types = AssetType.all
 
-        @asset_type_id = params[:asset_type_id]
-        search_asset_type_assets( params[:asset_type_id])
+        @asset_type_id = params[:asset_type][:asset_type_id]
+        @assets = search_asset_type_assets( params[:asset_type][:asset_type_id])
 
         @overview_columns = OverviewColumn.first(:user_id => current_user.id)
 

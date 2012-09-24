@@ -8,8 +8,8 @@
 
       <table style="text-align: center;width: 100%;" >
         <tr><td>
-          <% if @search_columns != nil %>
-              <%= select('custom_columns','custom_columns',Field.all.collect {|p|[ p.name, p.id ]},{:prompt => "None",:selected=>@search_columns.search_columns},{:multiple=>true}) %>
+          <% if @overview_columns != nil %>
+              <%= select('custom_columns','custom_columns',Field.all.collect {|p|[ p.name, p.id ]},{:prompt => "None",:selected=>@overview_columns.overview_columns},{:multiple=>true}) %>
           <% else %>
               <%= select('custom_columns','custom_columns',Field.all.collect {|p|[ p.name, p.id ]},{:prompt => "None"},{:multiple=>true}) %>
           <% end %>
@@ -25,6 +25,7 @@
 
     <input name="authenticity_token" type="hidden" value="token_value">
     <%= hidden_field('search', 'search_json',:value=>@searchJson) %>
+    <%= hidden_field('asset_type', 'asset_type_id',:value=>@asset_type_id) %>
   </form>
 
 </div>

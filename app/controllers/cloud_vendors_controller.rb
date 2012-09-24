@@ -59,4 +59,8 @@ class CloudVendorsController < ApplicationController
     @cloudVendors = CloudVendor.all
     render :template => 'cloud_vendors/index'
   end
+
+  def create_server
+
+  end
 end
