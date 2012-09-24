@@ -42,6 +42,8 @@
 <div class="control-group" style="text-align: center;">
   <% if AssetType.find(@asset.asset_type_id).vendor != nil and @asset.vendor_server_id == nil %>
        <%= render :template => 'assets/vendor/rackspace/create_server' %>
+      <% elsif  AssetType.find(@asset.asset_type_id).vendor != nil and @asset.vendor_server_id != nil  %>
+      <%= render :template => 'assets/vendor/rackspace/edit_delete_server' %>
   <% end %>
   <% if can_edit(@asset.asset_type_id) %>
       <%= link_to 'Edit',{:controller => 'assets', :action =>'edit', :id => @asset.id} ,:class => "btn btn-primary" %>
