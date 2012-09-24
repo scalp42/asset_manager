@@ -76,8 +76,7 @@ module CloudVendorsHelper
     server = cs.server(server_id)
 
     server.populate
-    puts server.inspect
-    puts 'ksdjfkljsdklfjklsdjf'
+
     status = Hash.new
     status['text'] = server.status
     status['progress'] = server.progress

@@ -133,11 +133,11 @@ module SearchHelper
           all
         end
       end
-      if sort
-        sort do
-          by sort_field, sort_type
-        end
-      end
+      #if sort
+      #  sort do
+      #    by sort_field, sort_type
+      #  end
+      #end
     end
 
     assets = query.results
