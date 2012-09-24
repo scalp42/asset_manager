@@ -6,4 +6,6 @@ class FieldOption
   key :option,  String
   key :parent_field_option, ObjectId
 
+  key :vendor_key, String
+
 end

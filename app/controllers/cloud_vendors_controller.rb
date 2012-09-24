@@ -61,7 +61,10 @@ class CloudVendorsController < ApplicationController
   end
 
   def create_server
+    @asset = Asset.find(params[:id])
 
+    create_server_vendor(@asset)
+    render :template => 'assets/view' ,:layout => 'assets'
   end
 
   def server_status

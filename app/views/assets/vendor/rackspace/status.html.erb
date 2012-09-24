@@ -5,7 +5,7 @@
             dataType: 'json',
             data: {
                 cloud_vendor_id: "<%= AssetType.find(@asset.asset_type_id).vendor_creds %>",
-                server_id: "<%= @asset.asset_vendor_id %>"
+                server_id: "<%= @asset.vendor_server_id %>"
             },
             type: "POST",
             success: function(data) {
@@ -42,7 +42,7 @@
 <div id="server_action"style="display: none;">
   <div id="status"></div>
   <div  class="progress progress-striped active">
-    <div id="bar" class="bar" style="width: 40%;"></div>
+    <div id="bar" class="bar" style="width: 0%;"></div>
   </div>
 </div>
 

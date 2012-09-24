@@ -34,7 +34,7 @@ module CloudVendorsHelper
             if Field.where(:name => 'RS Flavor').count == 0
               flavor = Field.create(:field_type_id => FieldType.first(:type_name => "Select Field").id ,:description => 'RS Flavor',:name => 'RS Flavor',:vendor_type => cloudVendor.cloud_vendor_type,:locked => true)
               cs.flavors.each do |flavor_rs|
-                flavor.field_option.build(:option => flavor_rs[:name],:field_id => flavor.id)
+                flavor.field_option.build(:option => flavor_rs[:name],:field_id => flavor.id,:vendor_key => flavor_rs[:id])
               end
               flavor.save
               asset.asset_screen.build(:field_id => flavor.id.to_s ,:asset_id => asset.id,:required => true)
@@ -44,7 +44,7 @@ module CloudVendorsHelper
               image = Field.create(:field_type_id => FieldType.first(:type_name => "Select Field").id ,:description => 'RS Operating System',:name => 'RS Operating System',:vendor_type => cloudVendor.cloud_vendor_type,:locked => true)
               cs.images.each do |image_rs|
                 if !image_rs[:serverId].present? and !image_rs[:created].present?
-                  image.field_option.build(:option => image_rs[:name],:field_id => image.id)
+                  image.field_option.build(:option => image_rs[:name],:field_id => image.id,:vendor_key => image_rs[:id])
                 end
               end
               image.save
@@ -82,5 +82,30 @@ module CloudVendorsHelper
     status['progress'] = server.progress
 
     return status
+  end
+
+  def create_server_vendor(asset)
+    cloud_vendor = CloudVendor.find(AssetType.find(asset.asset_type_id).vendor_creds)
+    cs = CloudServers::Connection.new(:username => cloud_vendor.username, :api_key => cloud_vendor.api_key)
+
+    field = Field.first(:name => 'RS Flavor')
+    flavor_asset = asset.field_value.detect { |c| c.field_id == field.id }
+    flavor_option = field.field_option.detect {|c|c.option == flavor_asset.text_value}
+
+    field = Field.first(:name => 'RS Operating System')
+    operating_asset = asset.field_value.detect { |c| c.field_id == field.id }
+    operating_option = field.field_option.detect {|c|c.option == operating_asset.text_value}
+
+    new_server = cs.create_server(:name => asset.asset_name , :imageId => Integer(operating_option.vendor_key) ,:flavorId => Integer(flavor_option.vendor_key))
+
+    update_rs_asset(asset,new_server)
+  end
+
+  def update_rs_asset(asset,server)
+
+    asset.vendor_server_id = server.id
+
+    asset.save
+
   end
 end
