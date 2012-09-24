@@ -37,7 +37,7 @@
                         <% fieldType = FieldType.find(field.field_type_id) %>
                         <td style="text-align: center;">
                           <%= render :template => 'search/field_column_display/'+fieldType.type_name.downcase.gsub(' ','_')+'_column_display' ,
-                                     :locals => { :value => asset.field_value.detect {|c|c.field_id == field.id} ,
+                                     :locals => { :value => asset.field_value.detect {|c|c.field_id == field.id.to_s} ,
                                                   :wiki_enabled => field.wiki_enabled} %>
                         </td>
                     <% end %>
