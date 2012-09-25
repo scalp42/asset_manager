@@ -53,12 +53,12 @@ module CloudVendorsHelper
           when 'public_ip'
             if Field.where(:name => 'RS Public IP').count == 0
               public = Field.create(:field_type_id => FieldType.first(:type_name => "IP Field").id ,:description => 'RS Public IP',:name => 'RS Public IP',:vendor_type => cloudVendor.cloud_vendor_type,:locked => true)
-              asset.asset_screen.build(:field_id => public.id.to_s ,:asset_id => asset.id,:required => true)
+              asset.asset_screen.build(:field_id => public.id.to_s ,:asset_id => asset.id,:required => false)
             end
           when 'private_ip'
             if Field.where(:name => 'RS Private IP').count == 0
               private = Field.create(:field_type_id => FieldType.first(:type_name => "IP Field").id ,:description => 'RS Private IP',:name => 'RS Private IP',:vendor_type => cloudVendor.cloud_vendor_type,:locked => true)
-              asset.asset_screen.build(:field_id => private.id.to_s ,:asset_id => asset.id,:required => true)
+              asset.asset_screen.build(:field_id => private.id.to_s ,:asset_id => asset.id,:required => false)
             end
         end
       end
@@ -101,6 +101,14 @@ module CloudVendorsHelper
     update_rs_asset(asset,new_server)
   end
 
+  def delete_server_vendor(asset)
+    cloud_vendor = CloudVendor.find(AssetType.find(asset.asset_type_id).vendor_creds)
+    cs = CloudServers::Connection.new(:username => cloud_vendor.username, :api_key => cloud_vendor.api_key)
+
+    cs.server(asset.vendor_server_id).delete!
+
+  end
+
   def resize_server_vendor(asset)
     cloud_vendor = CloudVendor.find(AssetType.find(asset.asset_type_id).vendor_creds)
     cs = CloudServers::Connection.new(:username => cloud_vendor.username, :api_key => cloud_vendor.api_key)
@@ -116,7 +124,39 @@ module CloudVendorsHelper
 
   def update_rs_asset(asset,server)
 
+    asset.asset_name = server.name
+    asset.searchable_name =  server.name.gsub("-"," ")
     asset.vendor_server_id = server.id
+
+    field = Field.first(:name => 'RS Flavor')
+    asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.locked = true }
+    update_existing_asset_rs(field,server,asset)
+
+    field = Field.first(:name => 'RS Operating System')
+    asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.locked = true }
+    update_existing_asset_rs(field,server,asset)
+
+    field = Field.first(:name => 'RS Public IP')
+    if  (asset.field_value.detect {|c|c.field_id == field.id}) != nil
+
+    else
+      asset.field_value.build(:asset_id => asset.id,
+                              :text_value => server.addresses[:public][0],
+                              :field_name_value => {field.name.downcase.gsub(" ","_") => server.addresses[:public] } ,
+                              :field_id => field.id,
+                              :locked => true)
+    end
+
+    field = Field.first(:name => 'RS Private IP')
+    if  (asset.field_value.detect {|c|c.field_id == field.id}) != nil
+
+    else
+      asset.field_value.build(:asset_id => asset.id,
+                              :text_value => server.addresses[:private][0],
+                              :field_name_value => {field.name.downcase.gsub(" ","_") => server.addresses[:private] } ,
+                              :field_id => field.id,
+                              :locked => true)
+    end
 
     asset.save
 

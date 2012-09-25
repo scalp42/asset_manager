@@ -103,13 +103,8 @@ class AssetsController < ApplicationController
   def delete
     asset = Asset.find(params[:asset_id])
 
-    Asset.destroy(params[:asset_id])
+    delete_asset(asset)
 
-    ChangeHistory.pull_all(:asset_id => asset.id)
-
-    assetAlert(asset.name,"Deleted")
-
-    sendNotificationEmailsViaScheme(asset,'delete')
     @assets = Asset.all
 
     render :template => 'assets/index'

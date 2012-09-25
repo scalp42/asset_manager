@@ -1,1 +1,16 @@
+<%= link_to 'Fetch Cloud Server',{:controller => 'cloud_vendors', :action =>'update_server', :id => @asset.id} ,:class => "btn btn-primary" %>
 <%= link_to 'Resize Cloud Server',{:controller => 'cloud_vendors', :action =>'resize_server', :id => @asset.id} ,:class => "btn btn-primary" %>
+<div class="modal hide" id="myModal<%= @asset.id %>" style="display: none;">
+          <div class="modal-header">
+            <button class="close" data-toggle="modal" href="#myModal<%= @asset.id %>">×</button>
+            <h3>Delete Cloud Server</h3>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure?</p>
+          </div>
+          <div class="modal-footer">
+            <%= link_to "Yes", { :controller => "cloud_vendors",:action=>"delete_server", :asset_id=>@asset.id }, :id => 'asset' , :class => "btn btn-danger"  %>
+            <a data-toggle="modal" href="#myModal<%= @asset.id %>" class="btn secondary">No</a>
+          </div>
+</div>
+<a class="btn btn-danger" data-toggle="modal" href="#myModal<%= @asset.id %>" >Delete Cloud Server</a>

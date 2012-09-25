@@ -1,6 +1,7 @@
 class CloudVendorsController < ApplicationController
   layout 'admin'
   include CloudVendorsHelper
+  include AssetsHelper
 
   def index
     setSidebar(nil,nil,nil,nil,nil,nil,nil,nil,true)
@@ -16,8 +17,11 @@ class CloudVendorsController < ApplicationController
       cloudVendor.cloud_vendor_type = cloudVendorType.id
       cloudVendor.username = params[:rackspace][:username]
       cloudVendor.api_key = params[:rackspace][:api_key]
-    elsif params[:vendor][:vendor].eql? 'amazon'
-
+    elsif params[:amazon][:access_id].present?
+      cloudVendorType = CloudVendorType.first(:vendor_name => 'Amazon EC2 Cloud')
+      cloudVendor.cloud_vendor_type = cloudVendorType.id
+      cloudVendor.username = params[:amazon][:access_id]
+      cloudVendor.api_key = params[:amazon][:secret_access_key]
     end
 
     if cloudVendor.save
@@ -37,12 +41,30 @@ class CloudVendorsController < ApplicationController
 
     if CloudVendorType.find(cloudVendor.cloud_vendor_type).vendor_name == "Rackspace Cloud"
       begin
-      cs = CloudServers::Connection.new(:username => cloudVendor.username, :api_key => cloudVendor.api_key)
-      vendorAlert(cloudVendor.name,"Connected")
+        cs = CloudServers::Connection.new(:username => cloudVendor.username, :api_key => cloudVendor.api_key)
+        vendorAlert(cloudVendor.name,"Connected")
       rescue
         vendorErrorAlert(cloudVendor.name,"Could Not Connect")
       end
+    elsif CloudVendorType.find(cloudVendor.cloud_vendor_type).vendor_name == "Amazon EC2 Cloud"
+      begin
+        AWS.config(:access_key_id => cloudVendor.aws_access_key_id,
+                    :secret_access_key => cloudVendor.aws_secret_access_key)
 
+        ec2 = AWS::EC2.new(
+            :access_key_id => cloudVendor.aws_access_key_id,
+            :secret_access_key => cloudVendor.aws_secret_access_key)
+
+
+        ec2.images.with_owner("amazon").map(&:name).each do |image|
+          puts image.inspect
+        end
+
+        vendorAlert(cloudVendor.name,"Connected")
+      rescue Exception => e
+        puts e.message
+        vendorErrorAlert(cloudVendor.name,"Could Not Connect")
+      end
     end
 
     setSidebar(nil,nil,nil,nil,nil,nil,nil,nil,true)
@@ -60,10 +82,35 @@ class CloudVendorsController < ApplicationController
     render :template => 'cloud_vendors/index'
   end
 
+  def delete_server
+    asset = Asset.find(params[:asset_id])
+
+    delete_server_vendor(asset)
+
+    delete_asset(asset)
+
+    @assets = Asset.all
+
+    render :template => 'assets/index' ,:layout => 'assets'
+  end
+
   def create_server
     @asset = Asset.find(params[:id])
 
     create_server_vendor(@asset)
+    render :template => 'assets/view' ,:layout => 'assets'
+  end
+
+  def update_server
+    @asset = Asset.find(params[:id])
+
+    cloud_vendor = CloudVendor.find(AssetType.find(@asset.asset_type_id).vendor_creds)
+    cs = CloudServers::Connection.new(:username => cloud_vendor.username, :api_key => cloud_vendor.api_key)
+
+   if  CloudVendorType.find(cloud_vendor.cloud_vendor_type).vendor_name == "Rackspace Cloud"
+     update_rs_asset(@asset,cs.server(@asset.vendor_server_id))
+   end
+
     render :template => 'assets/view' ,:layout => 'assets'
   end
 
