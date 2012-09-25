@@ -180,8 +180,8 @@ module AssetsHelper
       begin
         cs = CloudServers::Connection.new(:username => cloud_vendor.username, :api_key => cloud_vendor.api_key)
         cs.servers.each do |server|
-          if Asset.where(:asset_vendor_id => server[:id]).count == 0
-            asset = Asset.create(:asset_name => server[:name],:searchable_name => (server[:name]).gsub("-"," "),:asset_type_id =>params[:asset_type_id],:asset_vendor_id => server[:id],:created_by => current_user.id ,:created_at => DateTime.now )
+          if Asset.where(:vendor_server_id => server[:id]).count == 0
+            asset = Asset.create(:asset_name => server[:name],:searchable_name => (server[:name]).gsub("-"," "),:asset_type_id =>params[:asset_type_id],:vendor_server_id => server[:id],:created_by => current_user.id ,:created_at => DateTime.now )
             serverDetails = cs.server(server[:id])
 
             Field.where(:vendor_type => cloud_vendor.cloud_vendor_type).each do |field|
@@ -223,7 +223,7 @@ module AssetsHelper
             end
             asset.save
           else
-            asset = Asset.first(:asset_vendor_id => server[:id])
+            asset = Asset.first(:vendor_server_id => server[:id])
             asset.asset_name = server[:name]
             asset.searchable_name = (server[:name]).gsub("-"," ")
 
