@@ -44,6 +44,7 @@ gem 'hex_string'
 gem 'wikicloth'
 
 gem 'cloudservers'
+gem 'aws-sdk'
 
 gem 'chronic'
 gem 'packet'

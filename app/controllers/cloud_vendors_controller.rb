@@ -16,8 +16,11 @@ class CloudVendorsController < ApplicationController
       cloudVendor.cloud_vendor_type = cloudVendorType.id
       cloudVendor.username = params[:rackspace][:username]
       cloudVendor.api_key = params[:rackspace][:api_key]
-    elsif params[:vendor][:vendor].eql? 'amazon'
-
+    elsif params[:amazon][:access_id].present?
+      cloudVendorType = CloudVendorType.first(:vendor_name => 'Amazon EC2 Cloud')
+      cloudVendor.cloud_vendor_type = cloudVendorType.id
+      cloudVendor.username = params[:amazon][:access_id]
+      cloudVendor.api_key = params[:amazon][:secret_access_key]
     end
 
     if cloudVendor.save
@@ -37,12 +40,31 @@ class CloudVendorsController < ApplicationController
 
     if CloudVendorType.find(cloudVendor.cloud_vendor_type).vendor_name == "Rackspace Cloud"
       begin
-      cs = CloudServers::Connection.new(:username => cloudVendor.username, :api_key => cloudVendor.api_key)
-      vendorAlert(cloudVendor.name,"Connected")
+        cs = CloudServers::Connection.new(:username => cloudVendor.username, :api_key => cloudVendor.api_key)
+        vendorAlert(cloudVendor.name,"Connected")
       rescue
         vendorErrorAlert(cloudVendor.name,"Could Not Connect")
       end
+    elsif CloudVendorType.find(cloudVendor.cloud_vendor_type).vendor_name == "Amazon EC2 Cloud"
+      begin
+        AWS.config(:access_key_id => cloudVendor.aws_access_key_id,
+                    :secret_access_key => cloudVendor.aws_secret_access_key)
 
+        ec2 = AWS::EC2.new(
+            :access_key_id => cloudVendor.aws_access_key_id,
+            :secret_access_key => cloudVendor.aws_secret_access_key)
+
+
+        ec2.images.with_owner("amazon").map(&:name).each do |image|
+          puts image.inspect
+        end
+        puts 'ksdjfksjdlfjsdklfjlksdjfkl'
+        vendorAlert(cloudVendor.name,"Connected")
+      rescue Exception => e
+        puts e.message
+        puts 'ksdjfklsdfdssdjflkjdskfjlsdjf'
+        vendorErrorAlert(cloudVendor.name,"Could Not Connect")
+      end
     end
 
     setSidebar(nil,nil,nil,nil,nil,nil,nil,nil,true)
