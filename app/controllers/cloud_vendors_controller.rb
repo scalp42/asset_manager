@@ -59,11 +59,10 @@ class CloudVendorsController < ApplicationController
         ec2.images.with_owner("amazon").map(&:name).each do |image|
           puts image.inspect
         end
-        puts 'ksdjfksjdlfjsdklfjlksdjfkl'
+
         vendorAlert(cloudVendor.name,"Connected")
       rescue Exception => e
         puts e.message
-        puts 'ksdjfklsdfdssdjflkjdskfjlsdjf'
         vendorErrorAlert(cloudVendor.name,"Could Not Connect")
       end
     end
@@ -99,6 +98,19 @@ class CloudVendorsController < ApplicationController
     @asset = Asset.find(params[:id])
 
     create_server_vendor(@asset)
+    render :template => 'assets/view' ,:layout => 'assets'
+  end
+
+  def update_server
+    @asset = Asset.find(params[:id])
+
+    cloud_vendor = CloudVendor.find(AssetType.find(@asset.asset_type_id).vendor_creds)
+    cs = CloudServers::Connection.new(:username => cloud_vendor.username, :api_key => cloud_vendor.api_key)
+
+   if  CloudVendorType.find(cloud_vendor.cloud_vendor_type).vendor_name == "Rackspace Cloud"
+     update_rs_asset(@asset,cs.server(@asset.vendor_server_id))
+   end
+
     render :template => 'assets/view' ,:layout => 'assets'
   end
 

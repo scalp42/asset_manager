@@ -130,9 +130,11 @@ module CloudVendorsHelper
 
     field = Field.first(:name => 'RS Flavor')
     asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.locked = true }
+    update_existing_asset_rs(field,server,asset)
 
     field = Field.first(:name => 'RS Operating System')
     asset.field_value.select { |b| b.field_id == field.id }.each { |b| b.locked = true }
+    update_existing_asset_rs(field,server,asset)
 
     field = Field.first(:name => 'RS Public IP')
     if  (asset.field_value.detect {|c|c.field_id == field.id}) != nil

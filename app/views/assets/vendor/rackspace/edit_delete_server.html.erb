@@ -1,3 +1,4 @@
+<%= link_to 'Fetch Cloud Server',{:controller => 'cloud_vendors', :action =>'update_server', :id => @asset.id} ,:class => "btn btn-primary" %>
 <%= link_to 'Resize Cloud Server',{:controller => 'cloud_vendors', :action =>'resize_server', :id => @asset.id} ,:class => "btn btn-primary" %>
 <div class="modal hide" id="myModal<%= @asset.id %>" style="display: none;">
           <div class="modal-header">
