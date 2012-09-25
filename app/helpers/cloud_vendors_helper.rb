@@ -101,6 +101,14 @@ module CloudVendorsHelper
     update_rs_asset(asset,new_server)
   end
 
+  def delete_server_vendor(asset)
+    cloud_vendor = CloudVendor.find(AssetType.find(asset.asset_type_id).vendor_creds)
+    cs = CloudServers::Connection.new(:username => cloud_vendor.username, :api_key => cloud_vendor.api_key)
+
+    cs.server(asset.vendor_server_id).delete!
+
+  end
+
   def resize_server_vendor(asset)
     cloud_vendor = CloudVendor.find(AssetType.find(asset.asset_type_id).vendor_creds)
     cs = CloudServers::Connection.new(:username => cloud_vendor.username, :api_key => cloud_vendor.api_key)
@@ -130,22 +138,22 @@ module CloudVendorsHelper
     if  (asset.field_value.detect {|c|c.field_id == field.id}) != nil
 
     else
-    asset.field_value.build(:asset_id => asset.id,
-                            :text_value => server.addresses[:public][0],
-                            :field_name_value => {field.name.downcase.gsub(" ","_") => server.addresses[:public] } ,
-                            :field_id => field.id,
-                            :locked => true)
+      asset.field_value.build(:asset_id => asset.id,
+                              :text_value => server.addresses[:public][0],
+                              :field_name_value => {field.name.downcase.gsub(" ","_") => server.addresses[:public] } ,
+                              :field_id => field.id,
+                              :locked => true)
     end
 
     field = Field.first(:name => 'RS Private IP')
     if  (asset.field_value.detect {|c|c.field_id == field.id}) != nil
 
     else
-    asset.field_value.build(:asset_id => asset.id,
-                            :text_value => server.addresses[:private][0],
-                            :field_name_value => {field.name.downcase.gsub(" ","_") => server.addresses[:private] } ,
-                            :field_id => field.id,
-                            :locked => true)
+      asset.field_value.build(:asset_id => asset.id,
+                              :text_value => server.addresses[:private][0],
+                              :field_name_value => {field.name.downcase.gsub(" ","_") => server.addresses[:private] } ,
+                              :field_id => field.id,
+                              :locked => true)
     end
 
     asset.save

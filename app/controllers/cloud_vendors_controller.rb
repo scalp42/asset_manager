@@ -1,6 +1,7 @@
 class CloudVendorsController < ApplicationController
   layout 'admin'
   include CloudVendorsHelper
+  include AssetsHelper
 
   def index
     setSidebar(nil,nil,nil,nil,nil,nil,nil,nil,true)
@@ -80,6 +81,18 @@ class CloudVendorsController < ApplicationController
     vendorAlert('',"Deleted")
     @cloudVendors = CloudVendor.all
     render :template => 'cloud_vendors/index'
+  end
+
+  def delete_server
+    asset = Asset.find(params[:asset_id])
+
+    delete_server_vendor(asset)
+
+    delete_asset(asset)
+
+    @assets = Asset.all
+
+    render :template => 'assets/index' ,:layout => 'assets'
   end
 
   def create_server

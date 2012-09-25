@@ -267,4 +267,14 @@ module AssetsHelper
        end
   end
 
+  def delete_asset(asset)
+    Asset.destroy(asset.id)
+
+    ChangeHistory.pull_all(:asset_id => asset.id)
+
+    assetAlert(asset.name,"Deleted")
+
+    sendNotificationEmailsViaScheme(asset,'delete')
+  end
+
 end
