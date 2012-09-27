@@ -4,4 +4,14 @@ This is a Rails application with Mongo, and Elasticsearch to store IT assets. Th
 on the fly and add them to assets for tracking. Every field is searchable and filter can be created based on searches.
 The system can fetch servers from Rackspace and also create/resize/delete servers from the interface.
 
-![Admin Panel](https://www.dropbox.com/s/w1r6noogpyqsyb0/admin.tiff)
+== Installation
+
+The required software that is needed to run the Asset Manager is
+
+# Ruby 1.9.3
+# Mongo
+# Elasticsearch
+
+Once the code is downloaded and services install, install the bundler gem and then do a
+
+    bundle install
