@@ -28,86 +28,89 @@ module SearchHelper
       from = 25 * page
     end
 
-    query = Tire.search('assets',{:page => page , :per_page=>25, :size=>25, :from=>from})  do
-      query do
-        if non_empty_search
-          boolean do
-            if searchCriteria['name'] != nil
-              should { string 'searchable_name:'+searchCriteria['name']  }
-            end
-            if searchCriteria['description'] != nil
-              must do
-                boolean do
-                  should {text 'description' ,searchCriteria['description']  }
+    begin
+      query = Tire.search('assets',{:page => page , :per_page=>25, :size=>25, :from=>from})  do
+        query do
+          if non_empty_search
+            boolean do
+              if searchCriteria['name'] != nil
+                should { string 'searchable_name:'+searchCriteria['name']  }
+              end
+              if searchCriteria['description'] != nil
+                must do
+                  boolean do
+                    should {text 'description' ,searchCriteria['description']  }
+                  end
                 end
               end
-            end
-            if searchCriteria['asset_types'] != nil
-              must do
-                boolean do
-                  searchCriteria['asset_types'].each do |asset_type|
-                    if asset_type != ''
-                      should { string 'asset_type_id:'+asset_type }
+              if searchCriteria['asset_types'] != nil
+                must do
+                  boolean do
+                    searchCriteria['asset_types'].each do |asset_type|
+                      if asset_type != ''
+                        should { string 'asset_type_id:'+asset_type }
+                      end
                     end
                   end
                 end
               end
-            end
-            searchCriteria['fields'].each_pair do |k,v|
-              if FieldType.find(Field.find(BSON::ObjectId.from_string(k.to_s)).field_type_id).use_option
-                if v.size > 1 and v[1] != ''
-                  must do
-                    boolean do
-                      v.each do |value|
-                        if value != '' and !value.empty?
-                          should { string 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+value }
+              searchCriteria['fields'].each_pair do |k,v|
+                if FieldType.find(Field.find(BSON::ObjectId.from_string(k.to_s)).field_type_id).use_option
+                  if v.size > 1 and v[1] != ''
+                    must do
+                      boolean do
+                        v.each do |value|
+                          if value != '' and !value.empty?
+                            should { string 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_")+':'+value }
+                          end
+                        end
+                      end
+                    end
+                  end
+                elsif  FieldType.find(Field.find(BSON::ObjectId.from_string(k.to_s)).field_type_id).use_casecade_option
+                  if v['parent'] != ''
+                    must do
+                      boolean do
+                        should { string 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_")+'_parent:'+v['parent'] }
+                        if v['child']
+                          should { string 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_")+'_child:'+v['child'] }
                         end
                       end
                     end
                   end
                 end
-              elsif  FieldType.find(Field.find(BSON::ObjectId.from_string(k.to_s)).field_type_id).use_casecade_option
-                if v['parent'] != ''
-                  must do
-                    boolean do
-                      should { string 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_")+'_parent:'+v['parent'] }
-                      if v['child']
-                        should { string 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_")+'_child:'+v['child'] }
+              end
+              searchCriteria['fields'].each_pair do |k,v|
+                if FieldType.find(Field.find(k).field_type_id).use_text
+                  if v != nil and v != ''
+                    must do
+                      boolean do
+                        should { text 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_"), v }
+                      end
+                    end
+                  end
+                elsif FieldType.find(Field.find(k).field_type_id).use_ip
+                  if v != nil and v != ''
+                    must do
+                      boolean do
+                        should {text 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_"),v }
                       end
                     end
                   end
                 end
               end
             end
-            searchCriteria['fields'].each_pair do |k,v|
-              if FieldType.find(Field.find(k).field_type_id).use_text
-                if v != nil and v != ''
-                  must do
-                    boolean do
-                      should { text 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_"), v }
-                    end
-                  end
-                end
-              elsif FieldType.find(Field.find(k).field_type_id).use_ip
-                if v != nil and v != ''
-                  must do
-                    boolean do
-                      should {text 'field_value.field_name_value.'+Field.find(k).name.downcase.gsub(" ","_"),v }
-                    end
-                  end
-                end
-              end
-            end
+          else
+            all
           end
-        else
-          all
         end
+        #sort do
+        #  by 'asset_name', 'asc'
+        #end
       end
-      #sort do
-      #  by 'asset_name', 'asc'
-      #end
+      @assets = query.results
+    rescue
     end
-    @assets = query.results
 
   end
 
@@ -118,31 +121,33 @@ module SearchHelper
     if page > 0
       from = 25 * page
     end
-
-    query = Tire.search('assets',{:page => page , :per_page=>per_page, :size=>size, :from=>from})  do
-      query do
-        if asset_type_id != 'none'
-          boolean do
-            must do
-              boolean do
-                should { string 'asset_type_id:'+asset_type_id }
+    begin
+      query = Tire.search('assets',{:page => page , :per_page=>per_page, :size=>size, :from=>from})  do
+        query do
+          if asset_type_id != 'none'
+            boolean do
+              must do
+                boolean do
+                  should { string 'asset_type_id:'+asset_type_id }
+                end
               end
             end
+          else
+            all
           end
-        else
-          all
         end
+        #if sort
+        #  sort do
+        #    by sort_field, sort_type
+        #  end
+        #end
       end
-      #if sort
-      #  sort do
-      #    by sort_field, sort_type
-      #  end
-      #end
+      assets = query.results
+
+      return assets
+    rescue
     end
 
-    assets = query.results
-
-    return assets
 
   end
 
