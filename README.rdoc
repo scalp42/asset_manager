@@ -4,3 +4,4 @@ This is a Rails application with Mongo, and Elasticsearch to store IT assets. Th
 on the fly and add them to assets for tracking. Every field is searchable and filter can be created based on searches.
 The system can fetch servers from Rackspace and also create/resize/delete servers from the interface.
 
+![Admin Panel](https://www.dropbox.com/s/w1r6noogpyqsyb0/admin.tiff)
