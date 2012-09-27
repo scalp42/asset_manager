@@ -15,3 +15,12 @@ The required software that is needed to run the Asset Manager is
 Once the code is downloaded and services install, install the bundler gem and then do a
 
     bundle install
+
+Once the gems are installed you can use Sinatro or Passenger to run the app. Before the app is started run the following
+to setup some basic core database values
+
+    rake bootstrap:all
+
+The default login is
+
+    admin@assetmanager/assetmanager
