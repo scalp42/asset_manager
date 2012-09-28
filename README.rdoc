@@ -16,7 +16,7 @@ Once the code is downloaded and services install, install the bundler gem and th
 
     bundle install
 
-Once the gems are installed you can use Sinatro or Passenger to run the app. Before the app is started run the following
+Once the gems are installed you can use Sinatra or Passenger to run the app. Before the app is started run the following
 to setup some basic core database values
 
     rake bootstrap:all
