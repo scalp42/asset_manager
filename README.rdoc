@@ -12,7 +12,8 @@ The required software that is needed to run the Asset Manager is
 2. Mongo
 3. Elasticsearch
 
-Once the code is downloaded and services install, install the bundler gem and then do a
+Once the code is downloaded and services installed, install the bundler gem and run the following from the root directory
+for the asset_manager:
 
     bundle install
 
