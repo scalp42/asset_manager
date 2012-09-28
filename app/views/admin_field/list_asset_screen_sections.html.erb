@@ -1,14 +1,20 @@
 <%= render :template => 'shared/navbar' ,:locals => {:assetsNav => false, :searchNav => false,:adminNav => true}%>
 <ul class="breadcrumb">
   <li><%= link_to "Asset Types", :controller =>"admin_field",:action =>"list_asset_types" %> <span class="divider">/</span></li>
-  <li class="active"><%= link_to "Asset Type Screens "+@asset_type.name, :controller =>"admin_field",:action =>"list_asset_screen_sections",:id => @asset_type.id %></li>
+  <li class="active"><%= link_to "Asset Type Screen Sections "+@asset_type.name, :controller =>"admin_field",:action =>"list_asset_screen_sections",:id => @asset_type.id %></li>
 </ul>
 <%  if @fieldAlert != nil %>
     <div class="alert alert-success">
       Field <%= @fieldAlert %> <%= @fieldAlertType %> Successfully For Asset Type <%= @assetType %>
     </div>
 <% end %>
+<div style="text-align: right;">
+  <% if @asset_type.vendor != nil && CloudVendorType.find(@asset_type.vendor).vendor_name == "Rackspace Cloud" && @section == nil %>
+      <%= render :template => 'shared/screens/rs_cloud_vendor_fields' , :locals => { :asset => @asset_type} %>
+  <% end %>
+
 <%= render :template => 'admin_field/asset_screen_section/create_section' , :locals => { :asset => @asset_type} %>
+</div>
 <table class="table table-hover">
   <tr>
     <th>Name</th>
@@ -24,6 +30,8 @@
          <%= asset_screen_section.description %>
         </td>
         <td style="text-align: center;">
+          <%= render :template => 'admin_field/asset_screen_section/edit_section', :locals => {:section => asset_screen_section,:asset_type_id => @asset_type.id} %>
+          <%= render :template => 'admin_field/asset_screen_section/delete_section', :locals => {:section => asset_screen_section,:asset_type_id => @asset_type.id} %>
 
         </td>
       </tr>

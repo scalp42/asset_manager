@@ -52,6 +52,7 @@ class AdminFieldController < ApplicationController
 
   def list_asset_screen_sections
     @asset_type = AssetType.find(params[:id])
+    @section = @asset_type.asset_screen_section.detect {|c|c.name == 'Rackspace Cloud'}
     setSidebar(true,nil,nil,nil,nil)
   end
 
@@ -64,6 +65,17 @@ class AdminFieldController < ApplicationController
       setSidebar(true,nil,nil,nil,nil)
       render :template => 'admin_field/list_asset_screen_sections'
     end
+  end
+
+  def delete_asset_section
+    if AssetType.pull(BSON::ObjectId.from_string(params['asset_type_id']),{:asset_screen_section => {:_id => BSON::ObjectId.from_string(params['asset_section_id'])}})
+      @asset_type = AssetType.find(BSON::ObjectId.from_string(params['asset_type_id']))
+
+      @section = @asset_type.asset_screen_section.detect {|c|c.name == 'Rackspace Cloud'}
+      assetScreenReturn("",'Section',"Removed")
+      render :template => 'admin_field/list_asset_screen_sections'
+    end
+    setSidebar(true,nil,nil,nil,nil)
   end
 
   def update_asset_type_screen
@@ -152,13 +164,18 @@ class AdminFieldController < ApplicationController
 
   def update_rs_asset_type_screen
     asset = AssetType.find(BSON::ObjectId.from_string(params[:asset_type][:asset_type_id]))
+    section = asset.asset_screen_section.build(:name => "Rackspace Cloud")
+
+    if asset.save
+
+    end
 
     if params[:field][:rs_fields] != ''
-      add_rs_fields(params[:field][:rs_fields],asset)
+      add_rs_fields(params[:field][:rs_fields],asset,section)
       assetScreenReturn("RS Fields",asset.name,"Added")
     end
 
-    listAssetScreens(asset.id)
+    listAssetScreens(asset.id,section.id.to_s)
     setSidebar(true,nil,nil,nil,nil)
     render :template => 'admin_field/list_asset_screen_fields'
   end
@@ -187,9 +204,14 @@ class AdminFieldController < ApplicationController
   end
 
   def delete_asset_screen
-    if AssetType.pull(BSON::ObjectId.from_string(params['asset_id']),{:asset_screen => {:_id => BSON::ObjectId.from_string(params['asset_screen_id'])}})
-      asset = AssetType.find(BSON::ObjectId.from_string(params['asset_id']))
-      listAssetScreens(asset.id)
+    asset = AssetType.find(BSON::ObjectId.from_string(params['asset_id']))
+
+    section = asset.asset_screen_section.detect {|c|c.id == BSON::ObjectId.from_string(params['asset_section_id'])}
+
+    section.asset_screen.delete_if {|screen| screen.id == BSON::ObjectId.from_string(params['asset_screen_id'])}
+    if section.save
+
+      listAssetScreens(asset.id,section.id.to_s)
       assetScreenReturn("",asset.name,"Removed")
       render :template => 'admin_field/list_asset_screen_fields'
     end
@@ -236,6 +258,19 @@ class AdminFieldController < ApplicationController
       render :template => 'admin_field/list_asset_types'
     end
 
+  end
+
+  def edit_asset_screen_section
+    @asset_type = AssetType.find(BSON::ObjectId.from_string(params[:asset_type_id][:asset_type_id]))
+
+    @section = @asset_type.asset_screen_section.detect {|c|c.name == 'Rackspace Cloud'}
+    setSidebar(true,nil,nil,nil,nil)
+
+    @asset_type.asset_screen_section.select { |b| b.id == BSON::ObjectId.from_string(params[:asset_type_id][:section_id]) }.each { |b|  b.name = params[:asset_type_section_name][:asset_type_section_name]}
+
+    if @asset_type.save
+      render :template => 'admin_field/list_asset_screen_sections'
+    end
   end
 
 end

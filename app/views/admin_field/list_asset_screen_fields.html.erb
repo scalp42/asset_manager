@@ -1,6 +1,7 @@
 <%= render :template => 'shared/navbar' ,:locals => {:assetsNav => false, :searchNav => false,:adminNav => true}%>
 <ul class="breadcrumb">
   <li><%= link_to "Asset Types", :controller =>"admin_field",:action =>"list_asset_types" %> <span class="divider">/</span></li>
+  <li><%= link_to @section.name, :controller =>"admin_field",:action =>"list_asset_screen_sections" ,:id => @asset_type.id %> <span class="divider">/</span></li>
   <li class="active"><%= link_to "Asset Type Fields "+@asset_type.name, :controller =>"admin_field",:action =>"list_asset_screen_fields",:id => @asset_type.id %></li>
 </ul>
 <%  if @fieldAlert != nil %>
@@ -10,9 +11,6 @@
 <% end %>
 <%= render :template => 'shared/screens/configure_asset_type_screen' , :locals => { :asset => @asset_type,:fieldsToBeAdded => @fieldToBeAdded,:asset_section_id => @section.id} %>
 <div align="right">
-  <% if @asset_type.vendor != nil && CloudVendorType.find(@asset_type.vendor).vendor_name == "Rackspace Cloud" %>
-      <%= render :template => 'shared/screens/rs_cloud_vendor_fields' , :locals => { :asset => @asset_type} %>
-  <% end %>
   <a class="btn btn-primary" data-toggle="modal" href="#myCreateAssetFieldScreenModal">Add Field To Screen</a>
 </div>
 <table class="table table-hover">
@@ -35,7 +33,7 @@
         </td>
         <td style="text-align: center;">
           <%= link_to "Toggle Required",{:action => "toggle_required",:id => @asset_type.id,:asset_section_id => @section.id ,:asset_type_id => asset_screen.id , :field_id =>asset_screen.field_id,:required => asset_screen.required },:class =>"btn" %>
-          <%= render :template => 'shared/delete_asset_screen' ,:locals => { :asset_screen => asset_screen }%>
+          <%= render :template => 'shared/delete_asset_screen' ,:locals => { :section_id =>@section.id ,:asset_screen => asset_screen }%>
         </td>
       </tr>
   <% end %>
