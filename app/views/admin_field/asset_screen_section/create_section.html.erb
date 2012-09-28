@@ -1,0 +1,25 @@
+<div class="modal hide" id="myCreateAssetFieldSectionModal" style="display: none;">
+  <div class="modal-header">
+    <button class="close" data-toggle="modal" href="#myCreateAssetFieldSectionModal">×</button>
+    <h3>Add Field To Screen</h3>
+  </div>
+  <div class="modal-body" align="center">
+
+    <form method="post" class="well" action="/admin_field/update_asset_type_screen_section" onsubmit="return $(this).validate()">
+      <input name="authenticity_token" type="hidden" value="token_value">
+        <table>
+          <tr>
+            <td><%=  text_field("name","asset_type_section_name",:placeholder => "Name","data-validation"=>"required") %> </td>
+
+            <%= hidden_field('asset_type', 'asset_type_id',:value=>asset.id) %>
+          </tr>
+        </table>
+        <div class="modal-footer">
+
+          <%= submit_tag "Create" ,:class => 'btn btn-primary'%>
+          <a data-toggle="modal" href="#myCreateAssetFieldSectionModal" class="btn secondary">No</a>
+        </div>
+    </form>
+  </div>
+</div>
+  <a class="btn btn-primary" data-toggle="modal" href="#myCreateAssetFieldSectionModal">Add Screen Section</a>

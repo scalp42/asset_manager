@@ -21,6 +21,13 @@ namespace :bootstrap do
 
       end
 
+      desc "Reindex Assets"
+      task :reindex => :environment do
+        Tire.index('assets').delete
+
+         Asset.import :per_page => 1000
+      end
+
       desc "Add Cloud Vendor Types"
       task :cloud_vendor_types => :environment do
         CloudVendorType.create(:vendor_name => "Rackspace Cloud",:description => "")
@@ -28,5 +35,5 @@ namespace :bootstrap do
       end
 
       desc "Run all bootstrapping tasks"
-      task :all => [:field_type,:cloud_vendor_types]
+      task :all => [:field_type,:cloud_vendor_types,:reindex]
 end

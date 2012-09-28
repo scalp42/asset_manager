@@ -41,12 +41,15 @@ module AdminFieldHelper
     @assetAction = assetAction
   end
 
-  def listAssetScreens(asset_id)
-    @asset = AssetType.find(asset_id)
+  def listAssetScreens(asset_id,section_id)
+    @asset_type = AssetType.find(asset_id)
 
+    @section = @asset_type.asset_screen_section.detect {|c|c.id == BSON::ObjectId.from_string(section_id)}
     fields = Array.new
-    @asset.asset_screen.each do |assetScreen|
-      fields.push(Field.find(assetScreen.field_id).name)
+    @asset_type.asset_screen_section.each do |screen|
+      screen.asset_screen.each do |assetScreen|
+        fields.push(Field.find(assetScreen.field_id).name)
+      end
     end
 
     @fieldToBeAdded = Array.new

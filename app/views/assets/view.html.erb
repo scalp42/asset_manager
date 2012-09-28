@@ -5,8 +5,8 @@
 </ul>
 <div class="control-group" style="text-align: center;">
   <% if AssetType.find(@asset.asset_type_id).vendor != nil and @asset.vendor_server_id == nil %>
-       <%= render :template => 'assets/vendor/rackspace/create_server' %>
-      <% elsif  AssetType.find(@asset.asset_type_id).vendor != nil and @asset.vendor_server_id != nil  %>
+      <%= render :template => 'assets/vendor/rackspace/create_server' %>
+  <% elsif  AssetType.find(@asset.asset_type_id).vendor != nil and @asset.vendor_server_id != nil  %>
       <%= render :template => 'assets/vendor/rackspace/edit_delete_server' %>
   <% end %>
   <% if can_edit(@asset.asset_type_id) %>
@@ -34,25 +34,31 @@
   </div>
 </div>
 <% if @asset.field_value.count() > 0 %>
-    <div class="container well">
-      <div class="control-group">
-        <h2>Custom Fields</h2>
-        <table class="table table-hover " width="100%">
-          <%  AssetType.find(@asset.asset_type_id).asset_screen.each do |assetScreenField| %>
-              <tr>
-                <%= render :template => 'shared/fields/view/'+FieldType.find(Field.find(assetScreenField.field_id).field_type_id).type_name.downcase.gsub(' ','_')+'_view' ,
-                           :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id,
-                                        :value => @asset.field_value.detect {|c|c.field_id == BSON::ObjectId.from_string(assetScreenField.field_id)}, :wiki_enabled => Field.find(assetScreenField.field_id).wiki_enabled} %>
-              </tr>
-          <% end%>
-        </table>
-      </div>
-    </div>
+    <% AssetType.find(@asset.asset_type_id).asset_screen_section.each do |screen| %>
+        <% if screen.asset_screen.count() > 0 %>
+            <div class="container well">
+              <div class="control-group">
+                <h2><%= screen.name %></h2>
+                <table class="table table-hover " width="100%">
+
+                  <%  screen.asset_screen.each do |assetScreenField| %>
+                      <tr>
+                        <%= render :template => 'shared/fields/view/'+FieldType.find(Field.find(assetScreenField.field_id).field_type_id).type_name.downcase.gsub(' ','_')+'_view' ,
+                                   :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id,
+                                                :value => @asset.field_value.detect {|c|c.field_id == BSON::ObjectId.from_string(assetScreenField.field_id)}, :wiki_enabled => Field.find(assetScreenField.field_id).wiki_enabled} %>
+                      </tr>
+                  <% end%>
+
+                </table>
+              </div>
+            </div>
+        <% end %>
+    <% end %>
 <% end %>
 <div class="control-group" style="text-align: center;">
   <% if AssetType.find(@asset.asset_type_id).vendor != nil and @asset.vendor_server_id == nil %>
-       <%= render :template => 'assets/vendor/rackspace/create_server' %>
-      <% elsif  AssetType.find(@asset.asset_type_id).vendor != nil and @asset.vendor_server_id != nil  %>
+      <%= render :template => 'assets/vendor/rackspace/create_server' %>
+  <% elsif  AssetType.find(@asset.asset_type_id).vendor != nil and @asset.vendor_server_id != nil  %>
       <%= render :template => 'assets/vendor/rackspace/edit_delete_server' %>
   <% end %>
   <% if can_edit(@asset.asset_type_id) %>

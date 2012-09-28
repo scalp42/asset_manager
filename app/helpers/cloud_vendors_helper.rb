@@ -23,7 +23,7 @@ module CloudVendorsHelper
   end
 
 
-  def add_rs_fields(fields,asset)
+  def add_rs_fields(fields,asset,section)
     cloudVendor = CloudVendor.find(asset.vendor_creds)
     cs = CloudServers::Connection.new(:username => cloudVendor.username, :api_key => cloudVendor.api_key)
 
@@ -37,7 +37,7 @@ module CloudVendorsHelper
                 flavor.field_option.build(:option => flavor_rs[:name],:field_id => flavor.id,:vendor_key => flavor_rs[:id])
               end
               flavor.save
-              asset.asset_screen.build(:field_id => flavor.id.to_s ,:asset_id => asset.id,:required => true)
+              section.asset_screen.build(:field_id => flavor.id.to_s ,:asset_id => asset.id,:required => true)
             end
           when 'operating_system'
             if Field.where(:name => 'RS Operating System').count == 0
@@ -48,23 +48,23 @@ module CloudVendorsHelper
                 end
               end
               image.save
-              asset.asset_screen.build(:field_id => image.id.to_s ,:asset_id => asset.id,:required => true,:vendor_type => cloudVendor.cloud_vendor_type)
+              section.asset_screen.build(:field_id => image.id.to_s ,:asset_id => asset.id,:required => true,:vendor_type => cloudVendor.cloud_vendor_type)
             end
           when 'public_ip'
             if Field.where(:name => 'RS Public IP').count == 0
               public = Field.create(:field_type_id => FieldType.first(:type_name => "IP Field").id ,:description => 'RS Public IP',:name => 'RS Public IP',:vendor_type => cloudVendor.cloud_vendor_type,:locked => true)
-              asset.asset_screen.build(:field_id => public.id.to_s ,:asset_id => asset.id,:required => false)
+              section.asset_screen.build(:field_id => public.id.to_s ,:asset_id => asset.id,:required => false)
             end
           when 'private_ip'
             if Field.where(:name => 'RS Private IP').count == 0
               private = Field.create(:field_type_id => FieldType.first(:type_name => "IP Field").id ,:description => 'RS Private IP',:name => 'RS Private IP',:vendor_type => cloudVendor.cloud_vendor_type,:locked => true)
-              asset.asset_screen.build(:field_id => private.id.to_s ,:asset_id => asset.id,:required => false)
+              section.asset_screen.build(:field_id => private.id.to_s ,:asset_id => asset.id,:required => false)
             end
         end
       end
     end
 
-    asset.save
+    section.save
 
   end
 

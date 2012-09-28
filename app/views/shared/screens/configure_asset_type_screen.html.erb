@@ -5,11 +5,13 @@
   </div>
   <div class="modal-body" align="center">
 
-    <form method="get" class="well" action="/admin_field/update_asset_type_screen" onsubmit="return $(this).validate()">
+    <form method="post" class="well" action="/admin_field/update_asset_type_screen" onsubmit="return $(this).validate()">
+      <input name="authenticity_token" type="hidden" value="token_value">
         <table>
           <tr>
           <td> <%=  select("field", "field_id", fieldsToBeAdded.collect {|p| [ p.name, p.id ] }, {:prompt => 'Select Field'},{:multiple => true}) %> </td>
 
+            <%= hidden_field('asset_type', 'screen_id',:value=>asset_section_id) %>
             <%= hidden_field('asset_type', 'asset_type_id',:value=>asset.id) %>
           </tr>
           <tr>

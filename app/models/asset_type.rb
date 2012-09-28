@@ -9,7 +9,7 @@ class AssetType
   key  :vendor, ObjectId
   key  :vendor_creds, ObjectId
 
-  many :asset_screen
+  many :asset_screen_section
 
   validates :name, :presence => true
 

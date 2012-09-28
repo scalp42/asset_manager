@@ -63,6 +63,7 @@ class CloudVendorsController < ApplicationController
         vendorAlert(cloudVendor.name,"Connected")
       rescue Exception => e
         puts e.message
+
         vendorErrorAlert(cloudVendor.name,"Could Not Connect")
       end
     end
