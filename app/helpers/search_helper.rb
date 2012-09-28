@@ -34,7 +34,11 @@ module SearchHelper
           if non_empty_search
             boolean do
               if searchCriteria['name'] != nil
-                should { string 'searchable_name:'+searchCriteria['name']  }
+                must do
+                  boolean do
+                    should { string 'searchable_name:'+searchCriteria['name']  }
+                  end
+                end
               end
               if searchCriteria['description'] != nil
                 must do
