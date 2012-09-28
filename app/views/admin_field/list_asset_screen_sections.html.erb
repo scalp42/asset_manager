@@ -1,0 +1,32 @@
+<%= render :template => 'shared/navbar' ,:locals => {:assetsNav => false, :searchNav => false,:adminNav => true}%>
+<ul class="breadcrumb">
+  <li><%= link_to "Asset Types", :controller =>"admin_field",:action =>"list_asset_types" %> <span class="divider">/</span></li>
+  <li class="active"><%= link_to "Asset Type Screens "+@asset_type.name, :controller =>"admin_field",:action =>"list_asset_screen_sections",:id => @asset_type.id %></li>
+</ul>
+<%  if @fieldAlert != nil %>
+    <div class="alert alert-success">
+      Field <%= @fieldAlert %> <%= @fieldAlertType %> Successfully For Asset Type <%= @assetType %>
+    </div>
+<% end %>
+<%= render :template => 'admin_field/asset_screen_section/create_section' , :locals => { :asset => @asset_type} %>
+<table class="table table-hover">
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Actions</th>
+  </tr>
+  <% @asset_type.asset_screen_section.each do |asset_screen_section| %>
+      <tr style="background-color: white;">
+        <td style="text-align: center;">
+          <%= link_to asset_screen_section.name, {:controller => 'admin_field',:action => 'list_asset_screen_fields', :asset_section_id => asset_screen_section.id ,:id => @asset_type.id} %>
+        </td>
+        <td style="text-align: center;">
+         <%= asset_screen_section.description %>
+        </td>
+        <td style="text-align: center;">
+
+        </td>
+      </tr>
+  <% end %>
+</table>
+

@@ -17,12 +17,17 @@
       <%=  text_area('description','description',{:class =>"span10",:rows => 5}) %>
     </div>
   </div>
-  <%  @asset_type.asset_screen.each do |assetScreenField| %>
+  <% @asset_type.asset_screen_section.each do |section| %>
+      <ul class="breadcrumb entry-title">
+        <li class="active"><%= section.name %></li>
+      </ul>
+      <%  section.asset_screen.each do |assetScreenField| %>
 
-      <%= render :template => 'shared/fields/create/'+FieldType.find(Field.find(assetScreenField.field_id).field_type_id).type_name.downcase.gsub(' ','_')+'_create' ,
-                 :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id,:required => assetScreenField.required } %>
+          <%= render :template => 'shared/fields/create/'+FieldType.find(Field.find(assetScreenField.field_id).field_type_id).type_name.downcase.gsub(' ','_')+'_create' ,
+                     :locals => { :field_name => Field.find(assetScreenField.field_id).name, :field_id  => assetScreenField.field_id,:required => assetScreenField.required } %>
 
-  <% end%>
+      <% end%>
+  <% end %>
   <div class="control-group" style="text-align: center;">
 
     <%= hidden_field('asset_type', 'asset_type_id',:value=>@asset_type.id) %>

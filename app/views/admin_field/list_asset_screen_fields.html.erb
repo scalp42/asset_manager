@@ -1,17 +1,17 @@
 <%= render :template => 'shared/navbar' ,:locals => {:assetsNav => false, :searchNav => false,:adminNav => true}%>
 <ul class="breadcrumb">
   <li><%= link_to "Asset Types", :controller =>"admin_field",:action =>"list_asset_types" %> <span class="divider">/</span></li>
-  <li class="active"><%= link_to "Asset Type Fields "+@asset.name, :controller =>"admin_field",:action =>"list_asset_screen_fields",:id => @asset.id %></li>
+  <li class="active"><%= link_to "Asset Type Fields "+@asset_type.name, :controller =>"admin_field",:action =>"list_asset_screen_fields",:id => @asset_type.id %></li>
 </ul>
 <%  if @fieldAlert != nil %>
     <div class="alert alert-success">
       Field <%= @fieldAlert %> <%= @fieldAlertType %> Successfully For Asset Type <%= @assetType %>
     </div>
 <% end %>
-<%= render :template => 'shared/screens/configure_asset_type_screen' , :locals => { :asset => @asset,:fieldsToBeAdded => @fieldToBeAdded} %>
+<%= render :template => 'shared/screens/configure_asset_type_screen' , :locals => { :asset => @asset_type,:fieldsToBeAdded => @fieldToBeAdded,:asset_section_id => @section.id} %>
 <div align="right">
-  <% if @asset.vendor != nil && CloudVendorType.find(@asset.vendor).vendor_name == "Rackspace Cloud" %>
-      <%= render :template => 'shared/screens/rs_cloud_vendor_fields' , :locals => { :asset => @asset} %>
+  <% if @asset_type.vendor != nil && CloudVendorType.find(@asset_type.vendor).vendor_name == "Rackspace Cloud" %>
+      <%= render :template => 'shared/screens/rs_cloud_vendor_fields' , :locals => { :asset => @asset_type} %>
   <% end %>
   <a class="btn btn-primary" data-toggle="modal" href="#myCreateAssetFieldScreenModal">Add Field To Screen</a>
 </div>
@@ -21,7 +21,7 @@
     <th>Required</th>
     <th>Actions</th>
   </tr>
-  <% @asset.asset_screen.each do |asset_screen| %>
+  <% @section.asset_screen.each do |asset_screen| %>
       <tr style="background-color: white;">
         <td style="text-align: center;">
           <%= Field.find(asset_screen.field_id).name %>
@@ -34,7 +34,7 @@
           <% end %>
         </td>
         <td style="text-align: center;">
-          <%= link_to "Toggle Required",{:action => "toggle_required",:id => @asset.id ,:asset_type_id => asset_screen.id , :field_id =>asset_screen.field_id,:required => asset_screen.required },:class =>"btn" %>
+          <%= link_to "Toggle Required",{:action => "toggle_required",:id => @asset_type.id,:asset_section_id => @section.id ,:asset_type_id => asset_screen.id , :field_id =>asset_screen.field_id,:required => asset_screen.required },:class =>"btn" %>
           <%= render :template => 'shared/delete_asset_screen' ,:locals => { :asset_screen => asset_screen }%>
         </td>
       </tr>

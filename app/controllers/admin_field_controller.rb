@@ -46,21 +46,38 @@ class AdminFieldController < ApplicationController
   end
 
   def list_asset_screen_fields
-    listAssetScreens(params[:id])
+    listAssetScreens(params[:id],params[:asset_section_id])
     setSidebar(true,nil,nil,nil,nil)
+  end
+
+  def list_asset_screen_sections
+    @asset_type = AssetType.find(params[:id])
+    setSidebar(true,nil,nil,nil,nil)
+  end
+
+  def update_asset_type_screen_section
+    @asset_type = AssetType.find(BSON::ObjectId.from_string(params[:asset_type][:asset_type_id]))
+
+    @asset_type.asset_screen_section.build(:name => params[:name][:asset_type_section_name])
+
+    if @asset_type.save
+      setSidebar(true,nil,nil,nil,nil)
+      render :template => 'admin_field/list_asset_screen_sections'
+    end
   end
 
   def update_asset_type_screen
 
     asset = AssetType.find(BSON::ObjectId.from_string(params[:asset_type][:asset_type_id]))
+    section = asset.asset_screen_section.detect {|c|c.id == BSON::ObjectId.from_string(params[:asset_type][:screen_id])}
     params[:field][:field_id].each do |field|
       if field != ''
-        asset.asset_screen.build(:field_id => field ,:asset_id => params[:asset_type][:asset_type_id],:required =>params[:required][:required])
+        section.asset_screen.build(:field_id => field ,:asset_id => params[:asset_type][:asset_type_id],:required =>params[:required][:required])
       end
     end
-    if asset.save
+    if section.save
       assetScreenReturn('Fields',asset.name,"Added")
-      listAssetScreens(asset.id)
+      listAssetScreens(asset.id,section.id.to_s)
       setSidebar(true,nil,nil,nil,nil)
       render :template => 'admin_field/list_asset_screen_fields'
     end
@@ -183,15 +200,16 @@ class AdminFieldController < ApplicationController
   def toggle_required
 
     assetType = AssetType.find(BSON::ObjectId.from_string(params[:id]))
+    section = assetType.asset_screen_section.detect {|c|c.id == BSON::ObjectId.from_string(params[:asset_section_id])}
 
     if params[:required] == 'true'
-      assetType.asset_screen.select { |b| b.field_id == params[:field_id] }.each { |b|  b.required = FALSE}
+      section.asset_screen.select { |b| b.field_id == params[:field_id] }.each { |b|  b.required = FALSE}
     else
-      assetType.asset_screen.select { |b| b.field_id == params[:field_id] }.each { |b|  b.required = TRUE}
+      section.asset_screen.select { |b| b.field_id == params[:field_id] }.each { |b|  b.required = TRUE}
     end
 
-    if assetType.save
-      listAssetScreens(assetType.id)
+    if section.save
+      listAssetScreens(assetType.id,section.id.to_s)
       assetScreenReturn("",assetType.name,"Toggled")
       render :template => 'admin_field/list_asset_screen_fields'
     end
