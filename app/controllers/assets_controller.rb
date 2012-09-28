@@ -34,21 +34,21 @@ class AssetsController < ApplicationController
   end
 
   def update_overview_columns
-      overview_column = OverviewColumn.first_or_create(:user_id => current_user.id)
+    overview_column = OverviewColumn.first_or_create(:user_id => current_user.id)
 
-      overview_column.overview_columns = params[:custom_columns][:custom_columns]
+    overview_column.overview_columns = params[:custom_columns][:custom_columns]
 
-      if overview_column.save
+    if overview_column.save
 
-        @asset_types = AssetType.all
+      @asset_types = AssetType.all
 
-        @asset_type_id = params[:asset_type][:asset_type_id]
-        @assets = search_asset_type_assets( params[:asset_type][:asset_type_id])
+      @asset_type_id = params[:asset_type][:asset_type_id]
+      @assets = search_asset_type_assets( params[:asset_type][:asset_type_id])
 
-        @overview_columns = OverviewColumn.first(:user_id => current_user.id)
+      @overview_columns = OverviewColumn.first(:user_id => current_user.id)
 
-        render :template => 'assets/overview/overview', :layout => 'assets_overview'
-      end
+      render :template => 'assets/overview/overview', :layout => 'assets_overview'
+    end
   end
 
   def paginate
@@ -77,12 +77,14 @@ class AssetsController < ApplicationController
     @asset.asset_type_id = asset_type.id
     @asset.asset_type_name = asset_type.name
 
-    asset_type.asset_screen.each do |field|
-      fieldObj = Field.find(field.field_id)
-      if params[fieldObj.name][fieldObj.name] != nil and params[fieldObj.name][fieldObj.name] != ''
-        setFieldValue(params,fieldObj,@asset)
-      elsif params[fieldObj.name.gsub(" ","_")+"_parent"] != nil and params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] != nil
-        setCascadeValue(params,fieldObj,@asset)
+    asset_type.asset_screen_section.each do |section|
+      section.asset_screen.each do |field|
+        fieldObj = Field.find(field.field_id)
+        if params[fieldObj.name][fieldObj.name] != nil and params[fieldObj.name][fieldObj.name] != ''
+          setFieldValue(params,fieldObj,@asset)
+        elsif params[fieldObj.name.gsub(" ","_")+"_parent"] != nil and params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] != nil
+          setCascadeValue(params,fieldObj,@asset)
+        end
       end
     end
 
@@ -138,26 +140,27 @@ class AssetsController < ApplicationController
     end
 
     fieldsToDelete = Array.new
-
-    AssetType.find(@asset.asset_type_id).asset_screen.each do |field|
-      fieldObj = Field.find(field.field_id)
-      createField = true
-      if params[fieldObj.name][fieldObj.name] != nil and params[fieldObj.name][fieldObj.name]  != ''
-        @asset.field_value.each do |fieldValue|
-          if fieldObj.id == fieldValue.field_id
-            createField = false
-            updateFieldValue(params,fieldObj,fieldValue,@asset)
+    AssetType.find(@asset.asset_type_id).asset_screen_section.each do |section|
+      section.asset_screen.each do |field|
+        fieldObj = Field.find(field.field_id)
+        createField = true
+        if params[fieldObj.name][fieldObj.name] != nil and params[fieldObj.name][fieldObj.name]  != ''
+          @asset.field_value.each do |fieldValue|
+            if fieldObj.id == fieldValue.field_id
+              createField = false
+              updateFieldValue(params,fieldObj,fieldValue,@asset)
+            end
           end
+          if createField
+            setFieldValue(params,fieldObj,@asset)
+          end
+        elsif params[fieldObj.name.gsub(" ","_")+"_parent"] != nil and params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] != ""
+          updateCascadeValue(params,fieldObj,@asset)
+        elsif params[fieldObj.name.gsub(" ","_")+"_parent"] != nil and params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] == "" and  @asset.field_value.detect {|c|c.field_id == fieldObj.id} != nil
+          fieldsToDelete.push(fieldObj.id)
+        elsif params[fieldObj.name][fieldObj.name]  == '' and  @asset.field_value.detect {|c|c.field_id == fieldObj.id} != nil
+          fieldsToDelete.push(fieldObj.id)
         end
-        if createField
-          setFieldValue(params,fieldObj,@asset)
-        end
-      elsif params[fieldObj.name.gsub(" ","_")+"_parent"] != nil and params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] != ""
-        updateCascadeValue(params,fieldObj,@asset)
-      elsif params[fieldObj.name.gsub(" ","_")+"_parent"] != nil and params[fieldObj.name.gsub(" ","_")+"_parent"][fieldObj.name.gsub(" ","_")+"_parent"] == "" and  @asset.field_value.detect {|c|c.field_id == fieldObj.id} != nil
-        fieldsToDelete.push(fieldObj.id)
-      elsif params[fieldObj.name][fieldObj.name]  == '' and  @asset.field_value.detect {|c|c.field_id == fieldObj.id} != nil
-        fieldsToDelete.push(fieldObj.id)
       end
     end
 
