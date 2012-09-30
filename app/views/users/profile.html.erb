@@ -1,0 +1,67 @@
+<%= render :template => 'shared/navbar',:locals => {:assetsNav => false, :searchNav => false,:adminNav => true} %>
+<ul class="breadcrumb">
+  <li><%= link_to "Profile: "+current_user.full_name, :controller =>"users",:action =>"profile" %></li>
+</ul>
+<%  if @password_changed != nil and @password_changed %>
+    <div class="alert alert-success">
+     Password for <%= current_user.full_name %> Updated Successfully
+    </div>
+    <% elsif @password_changed != nil and !@password_changed %>
+    <div class="alert alert-error">
+     Password for <%= current_user.full_name %> Could Not Be Updated
+    </div>
+<% end %>
+<%= render :template => 'users/change_password' %>
+<table class="table table-hover table-bordered">
+
+  <tr style="background-color: white;">
+    <th>Full Name</th>
+    <td style="text-align: center;">
+      <%=  current_user.full_name %>
+    </td>
+  </tr>
+  <tr style="background-color: white;">
+    <th>First Name</th>
+    <td style="text-align: center;">
+      <%=  current_user.first_name %>
+    </td>
+  </tr>
+  <tr style="background-color: white;">
+    <th>Last Name</th>
+    <td style="text-align: center;">
+      <%=  current_user.last_name %>
+    </td>
+  </tr>
+  <tr style="background-color: white;">
+    <th>Email</th>
+    <td style="text-align: center;">
+      <%=  current_user.email %>
+    </td>
+  </tr>
+  <tr style="background-color: white;">
+    <th>Active</th>
+    <td style="text-align: center;">
+      <%=  current_user.active %>
+    </td>
+  </tr>
+  <tr style="background-color: white;">
+    <th>Admin</th>
+    <td style="text-align: center;">
+      <%=  current_user.is_admin %>
+    </td>
+  </tr>
+  <tr style="background-color: white;">
+    <th>Sign In Count</th>
+    <td style="text-align: center;">
+      <%=  current_user.sign_in_count %>
+    </td>
+  </tr>
+  <tr style="background-color: white;">
+    <th>Current Sign In IP</th>
+    <td style="text-align: center;">
+      <%=  current_user.current_sign_in_ip %>
+    </td>
+  </tr>
+
+
+</table>

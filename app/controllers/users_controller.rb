@@ -57,4 +57,20 @@ class UsersController < ApplicationController
     end
 
   end
+
+  def profile
+
+  end
+
+  def change_password
+    current_user.password = params['password']['password']
+    current_user.password_confirmation = params['password_confirmation']['password_confirmation']
+
+    if current_user.save
+      @password_changed = true
+    else
+      @password_changed = false
+    end
+    render :template => 'users/profile'
+  end
 end

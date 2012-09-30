@@ -51,8 +51,7 @@
                     </li>
                     <li class="sub">
                       <ul>
-                        <li><a href="#"><i class="icon-large icon-cog-2"></i> Profile</a></li>
-                        <li><a href="#"><i class="icon-large icon-key"></i> Privacy Settings</a></li>
+                        <li><%=  link_to "Profile", {:controller => "users",:action=>"profile"} %></li>
                         <li class="divider"></li>
                         <li><i class="icon-large icon-logout-1"></i><%= link_to "Logout", destroy_user_session_path, :method => :delete%></li>
                       </ul>
