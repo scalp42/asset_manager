@@ -22,4 +22,10 @@ module ApplicationHelper
 
     ability.can?(:destroy,Asset)
   end
+
+  def can_admin()
+    ability = Ability.new(current_user)
+
+    ability.can?(:admin,nil)
+  end
 end

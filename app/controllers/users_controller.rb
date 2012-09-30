@@ -16,6 +16,12 @@ class UsersController < ApplicationController
       user.active = false
     end
 
+    if params['admin'] == "yes"
+      user.is_admin = true
+    else
+      user.is_admin = false
+    end
+
     user.first_name = params['first_name']['first_name']
     user.last_name = params['last_name']['last_name']
     user.full_name = params['first_name']['first_name']+' '+params['last_name']['last_name']
@@ -36,6 +42,12 @@ class UsersController < ApplicationController
     user.email = params['email']['email']
     user.password = params['password']['password']
     user.password_confirmation = params['password_confirmation']['password_confirmation']
+
+    if params['admin'] == "yes"
+      user.is_admin = true
+    else
+      user.is_admin = false
+    end
 
     user.active = true
 

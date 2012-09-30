@@ -25,6 +25,7 @@ class User
   key :last_name, String
   key :active, Boolean
   key :full_name, String
+  key :is_admin , Boolean
 
   def inactive_message
     "Sorry, this account has been deactivated."

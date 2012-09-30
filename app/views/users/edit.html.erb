@@ -40,9 +40,26 @@
           <% else %>
               <td>
                 <label class="checkbox">
-                <%=  check_box_tag 'active', 'yes', false %>
-                Active
-              </label>
+                  <%=  check_box_tag 'active', 'yes', false %>
+                  Active
+                </label>
+              </td>
+          <% end %>
+        </tr>
+        <tr>
+          <% if user.is_admin != nil && user.is_admin %>
+              <td>
+                <label class="checkbox">
+                  <%=  check_box_tag 'admin', 'yes', true %>
+                  Admin
+                </label>
+              </td>
+          <% else %>
+              <td>
+                <label class="checkbox">
+                  <%=  check_box_tag 'admin', 'yes', false %>
+                  Admin
+                </label>
               </td>
           <% end %>
         </tr>

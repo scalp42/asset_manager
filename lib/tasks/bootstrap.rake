@@ -12,7 +12,7 @@ namespace :bootstrap do
         FieldType.create(:type_name => 'Image Field',:use_image => true,:is_searchable => false,:is_configurable => false)
         FieldType.create(:type_name => 'Password Field',:use_password => true,:is_searchable => false,:is_configurable => false,:hashing_key => 'phMW1MGiF6Ov6wpUOsKpNe3wRi1pGoZrsmBvR30dvSiJj8HSLj3pOvR0')
 
-        user = User.create(:email => 'admin@assetmanager.com' ,:password => 'assetmanager', :password_confirmation => 'assetmanager', :first_name => 'Admin', :last_name => '',:full_name => 'Admin',:active => true)
+        user = User.create(:email => 'admin@assetmanager.com' ,:password => 'assetmanager', :password_confirmation => 'assetmanager', :first_name => 'Admin', :last_name => '',:full_name => 'Admin',:active => true,:is_admin => true)
 
         group = Group.create(:name => 'all@assetmanager',:description => 'Default Group')
         group.membership.build(:user_id => user.id)

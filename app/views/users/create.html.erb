@@ -17,11 +17,19 @@
           <td><%=  text_field('email','email',:placeholder => "Email","data-validation" => "required validate_email") %></td>
         </tr>
         <tr>
+        <tr>
           <td><%= password_field('password','password',:placeholder => "Password") %></td>
         </tr>
         <tr>
           <td><%= password_field('password_confirmation','password_confirmation',:placeholder => "Password Confirmation") %></td>
         </tr>
+        <td>
+          <label class="checkbox">
+            <%=  check_box_tag 'admin', 'yes' %>
+            Admin
+          </label>
+        </td>
+      </tr>
       </table>
       <div class="modal-footer">
         <%= submit_tag "Create" ,:class => 'btn btn-primary'%>

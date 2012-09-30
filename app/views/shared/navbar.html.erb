@@ -31,7 +31,9 @@
                 </ul>
                 </li>
                 <li <% if searchNav  %> class="active" <% end %> ><%= link_to 'Search',  :controller => "search", :action => "index" %></li>
-                <li <% if adminNav %> class="active" <% end %> ><%= link_to 'Admin',  :controller => "admin", :action => "index" %></li>
+                <% if can_admin %>
+                    <li <% if adminNav %> class="active" <% end %> ><%= link_to 'Admin',  :controller => "admin", :action => "index" %></li>
+                <% end %>
               </ul>
             </div>
           </ul>
