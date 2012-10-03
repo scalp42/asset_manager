@@ -25,6 +25,7 @@ namespace :deploy do
 
   task :default do
     sudo 'ls -larth'
+
   end
 
 end
