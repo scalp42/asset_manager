@@ -32,7 +32,7 @@ module CloudVendorsHelper
         case field
           when 'flavor'
             if Field.where(:name => 'RS Flavor').count == 0
-              flavor = Field.create(:field_type_id => FieldType.first(:type_name => "Select Field").id ,:description => 'RS Flavor',:name => 'RS Flavor',:vendor_type => cloudVendor.cloud_vendor_type,:locked => true)
+              flavor = Field.create(:field_type_id => FieldType.first(:type_name => "Select Field").id ,:description => 'RS Flavor',:name => 'RS Flavor',:vendor_type => cloudVendor.cloud_vendor_type,:locked => false)
               cs.flavors.each do |flavor_rs|
                 flavor.field_option.build(:option => flavor_rs[:name],:field_id => flavor.id,:vendor_key => flavor_rs[:id])
               end
